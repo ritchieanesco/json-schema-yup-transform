@@ -66,6 +66,7 @@ describe("convertToYup() string", () => {
       },
       required: ["name"]
     };
+
     let yupschema = convertToYup(schm) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       name: "test"
@@ -74,12 +75,14 @@ describe("convertToYup() string", () => {
 
     valid = yupschema.isValidSync({});
     expect(valid).toBeFalsy();
+
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({});
+      errorMessage = yupschema.validateSync({});
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("This is required");
+    expect(errorMessage).toBe("This is required");
   });
 
   it("should validate minimum character length", () => {
@@ -107,12 +110,13 @@ describe("convertToYup() string", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "abcd" });
+      errorMessage = yupschema.validateSync({ name: "abcd" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("A minimum of 6 characters required");
+    expect(errorMessage).toBe("A minimum of 6 characters required");
   });
 
   it("should validate maximum character length", () => {
@@ -140,12 +144,13 @@ describe("convertToYup() string", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "abcdefgh" });
+      errorMessage = yupschema.validateSync({ name: "abcdefgh" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("A maximum of 6 characters required");
+    expect(errorMessage).toBe("A maximum of 6 characters required");
   });
 
   it("should validate pattern", () => {
@@ -178,12 +183,13 @@ describe("convertToYup() string", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Incorrect format");
+    expect(errorMessage).toBe("Incorrect format");
   });
 
   it("should validate constant", () => {
@@ -211,12 +217,13 @@ describe("convertToYup() string", () => {
     });
     expect(isValid).toBeFalsy();
 
+    let errorMessage;
     try {
-      isValid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      isValid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(isValid).toBe("Value does not match constant");
+    expect(errorMessage).toBe("Value does not match constant");
   });
 
   it("should validate enum", () => {
@@ -249,12 +256,13 @@ describe("convertToYup() string", () => {
     });
     expect(isValid).toBeFalsy();
 
+    let errorMessage;
     try {
-      isValid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      isValid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(isValid).toBe("Value does not match enum");
+    expect(errorMessage).toBe("Value does not match enum");
   });
 
   it("should set default value", () => {
@@ -277,6 +285,7 @@ describe("convertToYup() string", () => {
     expect(isValid).toBeTruthy();
 
     let field = Yup.reach(yupschema, "name");
+    // @ts-ignore
     expect(field._default).toBe("test");
   });
 });

@@ -436,6 +436,7 @@ describe("convertToYup() number", () => {
     expect(isValid).toBeTruthy();
 
     let field = Yup.reach(yupschema, "age");
+    // @ts-ignore
     expect(field._default).toBe(7);
   });
 });

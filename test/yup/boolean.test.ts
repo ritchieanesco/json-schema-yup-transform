@@ -114,6 +114,7 @@ describe("convertToYup() boolean", () => {
     expect(isValid).toBeTruthy();
 
     let field = Yup.reach(yupschema, "consent");
+    // @ts-ignore
     expect(field._default).toBe(true);
   });
 });

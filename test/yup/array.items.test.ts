@@ -345,6 +345,7 @@ describe("convertToYup() array items", () => {
     expect(isValid).toBeTruthy();
 
     let field = Yup.reach(yupschema, "list");
+    // @ts-ignore
     expect(isEqual(field._default, defaults)).toBeTruthy();
   });
 });

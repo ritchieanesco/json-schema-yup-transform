@@ -49,12 +49,13 @@ describe("convertToYup() string format", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Date and time format is invalid");
+    expect(errorMessage).toBe("Date and time format is invalid");
   });
 
   it("should validate time format", () => {
@@ -93,12 +94,13 @@ describe("convertToYup() string format", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Time format is invalid");
+    expect(errorMessage).toBe("Time format is invalid");
   });
 
   it("should validate date format", () => {
@@ -131,12 +133,13 @@ describe("convertToYup() string format", () => {
     valid = yupschema.isValidSync({ name: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Date format is invalid");
+    expect(errorMessage).toBe("Date format is invalid");
   });
 
   it("should validate email format", () => {
@@ -185,12 +188,13 @@ describe("convertToYup() string format", () => {
     valid = yupschema.isValidSync({ email: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ email: "test" });
+      errorMessage = yupschema.validateSync({ email: "test" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Email is invalid");
+    expect(errorMessage).toBe("Email is invalid");
   });
 
   it("should validate IDN email format", () => {
@@ -249,12 +253,13 @@ describe("convertToYup() string format", () => {
     valid = yupschema.isValidSync({ email: null });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ email: "test" });
+      errorMessage = yupschema.validateSync({ email: "test" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("International email is invalid");
+    expect(errorMessage).toBe("International email is invalid");
   });
 
   it("should validate hostname format", () => {
@@ -286,12 +291,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("Hostname format is invalid");
+    expect(errorMessage).toBe("Hostname format is invalid");
   });
 
   it("should validate international hostname format", () => {
@@ -328,12 +334,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("International hostname format is invalid");
+    expect(errorMessage).toBe("International hostname format is invalid");
   });
 
   it("should validate ipv4 format", () => {
@@ -375,12 +382,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("ipv4 format is invalid");
+    expect(errorMessage).toBe("ipv4 format is invalid");
   });
 
   it("should validate ipv6 format", () => {
@@ -422,12 +430,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("ipv6 format is invalid");
+    expect(errorMessage).toBe("ipv6 format is invalid");
   });
 
   it("should validate uri format", () => {
@@ -474,12 +483,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeFalsy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("URI format is invalid");
+    expect(errorMessage).toBe("URI format is invalid");
   });
 
   it("should validate uri relative path format", () => {
@@ -512,12 +522,13 @@ describe("convertToYup() string format", () => {
     });
     expect(valid).toBeTruthy();
 
+    let errorMessage;
     try {
-      valid = yupschema.validateSync({ website: "http://example.org" });
+      errorMessage = yupschema.validateSync({ website: "http://example.org" });
     } catch (e) {
-      valid = e.errors[0];
+      errorMessage = e.errors[0];
     }
-    expect(valid).toBe("URI reference format is invalid");
+    expect(errorMessage).toBe("URI reference format is invalid");
   });
 
   it("should render warning for iri use", () => {

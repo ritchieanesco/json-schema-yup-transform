@@ -48,10 +48,10 @@ const updateThenElseProperties = (
   const conditionProperties = getProperties(conditionSchema);
   let newProperties: JSONSchema7["properties"] = {};
   let newConditionProperties: JSONSchema7["properties"] = {};
-  if (isSchemaObject(schemaProperties) && isSchemaObject(conditionProperties)) {
+  if (schemaProperties && conditionProperties) {
     /** Grab the first item */
     const conditionPropertyItem = getObjectHead(conditionProperties);
-    if (!isArray(conditionPropertyItem)) {
+    if (!conditionPropertyItem) {
       return {
         properties: { ...schemaProperties },
         conditions: { ...conditionSchema }
@@ -147,7 +147,10 @@ const updateIfCondition = (
       return condition;
     }
     const [key, value] = conditionPropertyItem;
-    const props = isSchemaObject(value) && get(schemaProperties, key);
+    if (!isSchemaObject(value)) {
+      return condition;
+    }
+    const props = get(schemaProperties, key);
     if (isSchemaObject(props) && !has(value, "type")) {
       newConditionProperties = {
         ...newConditionProperties,

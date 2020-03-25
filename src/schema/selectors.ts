@@ -195,7 +195,7 @@ export const getConst = (schema: JSONSchema7): JSONSchema7["const"] =>
 
 const get$RefValue = (ref: string): string => {
   // support for both definition key and referencing the $id directly
-  if (ref.includes(DEFINITION_ROOT)) {
+  if (ref.startsWith(DEFINITION_ROOT)) {
     return ref.substring(DEFINITION_ROOT.length).replace(/\//g, ".");
   }
   return ref.substring(1);

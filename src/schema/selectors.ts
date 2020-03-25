@@ -29,7 +29,7 @@ export const getDefinitions = (
 export const getDefinitionItem = (
   schema: JSONSchema7,
   ref: string
-): boolean | JSONSchema7 | undefined => {
+): JSONSchema7Definition | undefined => {
   const definitions = getDefinitions(schema);
   const path = get$RefValue(ref);
   return get(definitions, path);
@@ -54,7 +54,7 @@ export const getProperties = (
 export const getPropertyItem = (
   properties: JSONSchema7["properties"],
   key: string
-): boolean | JSONSchema7 | undefined => get(properties, key);
+): JSONSchema7Definition | undefined => get(properties, key);
 
 export const getPropertyType = (
   propertyItem: JSONSchema7
@@ -90,7 +90,7 @@ export const getConditionProperties = (
  */
 
 export const getIfCondition = (
-  schema: boolean | JSONSchema7 | undefined,
+  schema: JSONSchema7Definition | undefined,
   key: string
 ): false | JSONSchema7 => {
   if (!isSchemaObject(schema)) {
@@ -108,7 +108,7 @@ export const getIfCondition = (
  */
 
 export const getThenCondition = (
-  schema: boolean | JSONSchema7 | undefined,
+  schema: JSONSchema7Definition | undefined,
   key: string
 ): false | JSONSchema7 => {
   if (!isSchemaObject(schema)) {
@@ -126,7 +126,7 @@ export const getThenCondition = (
  */
 
 export const getElseCondition = (
-  schema: boolean | JSONSchema7 | undefined,
+  schema: JSONSchema7Definition | undefined,
   key: string
 ): false | JSONSchema7 => {
   if (!isSchemaObject(schema)) {
@@ -145,7 +145,7 @@ export const getElseCondition = (
 
 export const getConditions = (
   schema: JSONSchema7
-): (boolean | JSONSchema7 | undefined)[] => [
+): (JSONSchema7Definition | undefined)[] => [
   schema.if,
   schema.then,
   schema.else
@@ -208,4 +208,4 @@ const get$RefValue = (ref: string): string => {
 export const getItemsArrayItem = (
   items: JSONSchema7Definition[],
   index: number
-): boolean | JSONSchema7 | undefined => nth(items, index);
+): JSONSchema7Definition | undefined => nth(items, index);

@@ -17,7 +17,7 @@ export type SchemaType =
  */
 
 export const isSchemaObject = (
-  items: boolean | JSONSchema7 | JSONSchema7Definition[] | undefined | unknown
+  items: JSONSchema7Definition | JSONSchema7Definition[] | undefined | unknown
 ): items is JSONSchema7 => isPlainObject(items);
 
 /**
@@ -25,7 +25,7 @@ export const isSchemaObject = (
  */
 
 export const isItemsArray = (
-  items: boolean | JSONSchema7 | JSONSchema7Definition[] | undefined
+  items: JSONSchema7Definition | JSONSchema7Definition[] | undefined
 ): items is JSONSchema7Definition[] =>
   isArray(items) && items.every(item => has(item, "type"));
 

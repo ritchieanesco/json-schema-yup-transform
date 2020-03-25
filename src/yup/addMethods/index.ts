@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { minimumItems, maximumItems, list, contains, tuple } from "./array";
+import { minimumItems, maximumItems, contains, tuple } from "./array";
 import { multipleOf } from "./number";
 import { urlReference } from "./string";
 import { Constant, Enum } from "./mixed";
@@ -16,8 +16,6 @@ Yup.addMethod<Yup.ArraySchema<unknown>>(
   "maximumItems",
   maximumItems
 );
-
-Yup.addMethod<Yup.ArraySchema<unknown>>(Yup.array, "list", list);
 
 Yup.addMethod<Yup.ArraySchema<unknown>>(Yup.array, "contains", contains);
 

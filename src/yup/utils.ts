@@ -4,7 +4,7 @@ import isString from "lodash/isString";
 
 /** Retrieves the first item in an object */
 
-export const getObjectHead = <T>(obj: T): false | [string, T] => {
+export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
   /** Get all keys from obj */
   const arr = Object.keys(obj);
   /** Grab the first key */

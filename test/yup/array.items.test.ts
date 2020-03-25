@@ -41,23 +41,6 @@ describe("convertToYup() array items", () => {
       things: ["a", null]
     });
     expect(valid).toBeFalsy();
-
-    valid = yupschema.isValidSync({
-      things: ["a", false]
-    });
-    expect(valid).toBeFalsy();
-
-    valid = yupschema.isValidSync({
-      things: ["a", 1]
-    });
-    expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: ["a", 1] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate numbers", () => {
@@ -97,13 +80,6 @@ describe("convertToYup() array items", () => {
       things: [3, false]
     });
     expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: [3, false] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate integers", () => {
@@ -148,13 +124,6 @@ describe("convertToYup() array items", () => {
       things: [3.56, 1]
     });
     expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: [3.56, 1] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate booleans", () => {
@@ -189,18 +158,6 @@ describe("convertToYup() array items", () => {
       things: [false, null]
     });
     expect(valid).toBeFalsy();
-
-    valid = yupschema.isValidSync({
-      things: [true, 1]
-    });
-    expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: [true, 1] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate objects", () => {
@@ -240,13 +197,6 @@ describe("convertToYup() array items", () => {
       things: [{ s: "1" }, 1]
     });
     expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: [{ s: "1" }, 1] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate array", () => {
@@ -286,13 +236,6 @@ describe("convertToYup() array items", () => {
       things: [[{ s: "1" }], 1]
     });
     expect(valid).toBeFalsy();
-
-    try {
-      valid = yupschema.validateSync({ things: [[{ s: "1" }], 1] });
-    } catch (e) {
-      valid = e.errors[0];
-    }
-    expect(valid).toBe("All values of this array must be of the same type");
   });
 
   it("should validate tuples", () => {

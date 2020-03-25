@@ -7,6 +7,19 @@ import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConditionSchema } from "../conditions";
 import { SchemaItem } from "../../types";
+import { build } from "../../builder/builder";
+import { DataTypes } from "../../../schema/";
+
+/** Table of item types */
+const itemsType = {
+  [DataTypes.STRING]: () => Yup.string(),
+  [DataTypes.NUMBER]: () => Yup.number(),
+  [DataTypes.BOOLEAN]: () => Yup.boolean(),
+  [DataTypes.OBJECT]: () => Yup.object(),
+  [DataTypes.NULL]: () => Yup.mixed().notRequired(),
+  [DataTypes.ARRAY]: () => Yup.array(),
+  [DataTypes.INTEGER]: () => Yup.number().integer()
+};
 
 /**
  * Initializes a yup array schema derived from a json boolean schema
@@ -34,51 +47,12 @@ const createArraySchema = (
     Schema = createConditionSchema(Schema, jsonSchema, key);
   }
 
-  if (isNumber(minItems)) {
-    // `minimumItems` is a custom yup method. See /yup/addons/index.ts
-    // for implementation
-
-    Schema = Schema.concat(
-      Schema.minimumItems(minItems, `Minimum of ${minItems} items required`)
-    );
-  }
-
-  if (isNumber(maxItems)) {
-    // `maximumItems` is a custom yup method. See /yup/addons/index.ts
-    // for implementation
-
-    Schema = Schema.concat(
-      Schema.maximumItems(maxItems, `Maximum of ${maxItems} items required`)
-    );
-  }
-
   // Items key expects all values to be of same type
   // Contains key expects one of the values to be of a type
   // These rules will conflict with each other so only
   // allow one or the other
-  if (!contains && isSchemaObject(items)) {
-    const { type } = items;
 
-    // `list` is a custom yup method. See /yup/addons/index.ts
-    // for implementation
-
-    Schema = isString(type)
-      ? (Schema = Schema.concat(
-          Schema.list(type, "All values of this array must be of the same type")
-        ))
-      : Schema;
-  }
-
-  if (!contains && isItemsArray(items)) {
-    // `tuple` is a custom yup method. See /yup/addons/index.ts
-    // for implementation
-
-    Schema = Schema.concat(
-      Schema.tuple(items, "Must adhere to the expected data type")
-    );
-  }
-
-  if (!isSchemaObject(items) && contains) {
+  if (contains) {
     const { type } = contains as JSONSchema7;
 
     // `contains` is a custom yup method. See /yup/addons/index.ts
@@ -92,6 +66,51 @@ const createArraySchema = (
           )
         )
       : Schema;
+  } else {
+    // items schema can be either a object or an array
+
+    if (isSchemaObject(items)) {
+      const { type, properties } = items;
+
+      if (isSchemaObject(properties)) {
+        // transform objects
+        const obj = build(items);
+        if (obj) {
+          Schema = Schema.concat(Yup.array(obj));
+        }
+      } else {
+        // items can only support a single type
+        Schema = isString(type)
+          ? Schema.concat(Yup.array().of(itemsType[type]().strict(true)))
+          : Schema;
+      }
+    }
+
+    if (isItemsArray(items)) {
+      // `tuple` is a custom yup method. See /yup/addons/index.ts
+      // for implementation
+
+      Schema = Schema.concat(
+        Schema.tuple(items, "Must adhere to the expected data type")
+      );
+    }
+  }
+
+  if (isNumber(minItems)) {
+    // `minimumItems` is a custom yup method. See /yup/addons/index.ts
+    // for implementation
+
+    Schema = Schema.concat(
+      Schema.minimumItems(minItems, `Minimum of ${minItems} items required`)
+    );
+  }
+
+  if (isNumber(maxItems)) {
+    // `maximumItems` is a custom yup method. See /yup/addons/index.ts
+    // for implementation
+    Schema = Schema.concat(
+      Schema.maximumItems(maxItems, `Maximum of ${maxItems} items required`)
+    );
   }
 
   return Schema;

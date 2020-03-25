@@ -4,8 +4,7 @@
   "description": "Transforms JSON Schema to a Yup Schema",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html",
+    "build": "parcel build src/index.ts --out-dir dist",
     "test": "jest",
     "coverage": "jest --coverage"
   },

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "parcel build src/index.ts --out-dir dist",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "is-relative-url": "3.0.0",

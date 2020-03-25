@@ -26,13 +26,13 @@ import { SchemaItem } from "../types";
  */
 
 export const validateTypeOfValue = {
-  [DataTypes.STRING]: (val: unknown): boolean => isString(val),
-  [DataTypes.NUMBER]: (val: unknown): boolean => isNumber(val),
-  [DataTypes.BOOLEAN]: (val: unknown): boolean => isBoolean(val),
-  [DataTypes.OBJECT]: (val: unknown): boolean => isPlainObject(val),
-  [DataTypes.NULL]: (val: unknown): boolean => isNull(val),
-  [DataTypes.ARRAY]: (val: unknown): boolean => isArray(val),
-  [DataTypes.INTEGER]: (val: unknown): boolean => isInteger(val)
+  [DataTypes.STRING]: isString,
+  [DataTypes.NUMBER]: isNumber,
+  [DataTypes.BOOLEAN]: isBoolean,
+  [DataTypes.OBJECT]: isPlainObject,
+  [DataTypes.NULL]: isNull,
+  [DataTypes.ARRAY]: isArray,
+  [DataTypes.INTEGER]: isInteger
 };
 
 /**

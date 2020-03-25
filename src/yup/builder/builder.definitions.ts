@@ -19,3 +19,21 @@ export const getDefinition = (
   }
   return false;
 };
+
+/** Merge definition schema into array items schema */
+
+export const mergeArrayItemsDefinition = (
+  jsonSchema: JSONSchema7,
+  value: JSONSchema7
+) => {
+  const { items, type } = value;
+  if (type == "array" && isSchemaObject(items)) {
+    /** if $ref found then retrieve the definition */
+    const definition = getDefinition(items, jsonSchema);
+    if (definition) {
+      return { ...value, items: { ...definition } };
+    }
+    return false;
+  }
+  return false;
+};

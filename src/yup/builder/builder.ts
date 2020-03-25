@@ -2,7 +2,10 @@ import { JSONSchema7 } from "json-schema";
 import Yup from "../addMethods/";
 import { getProperties, isSchemaObject } from "../../schema/";
 import { createValidationSchema } from "../schemas/schema";
-import { getDefinition } from "./builder.definitions";
+import {
+  mergeArrayItemsDefinition,
+  getDefinition
+} from "./builder.definitions";
 import { mergeConditions } from "./builder.conditions";
 import { SchemaItem } from "../types";
 
@@ -43,6 +46,17 @@ export const buildValidation = (
   return schema;
 };
 
+/** Merge definition schema */
+
+const mergeDefinition = (jsonSchema: JSONSchema7, value: JSONSchema7) => {
+  /** if $ref found then retrieve the definition */
+  const definition = getDefinition(value, jsonSchema);
+  if (definition) {
+    return { ...definition };
+  }
+  return value;
+};
+
 /**
  * Iterates through a valid JSON Schema and generates yup field level
  * and object level schema
@@ -71,6 +85,15 @@ export const build = (
     const definition = getDefinition(value, jsonSchema);
     if (definition) {
       value = { ...definition };
+    }
+
+    /** Update schema with definition */
+    value = mergeDefinition(jsonSchema, value);
+
+    /** Update array items schema with definition */
+    const newValue = mergeArrayItemsDefinition(jsonSchema, value);
+    if (newValue) {
+      value = { ...newValue };
     }
 
     const { properties, type } = value;

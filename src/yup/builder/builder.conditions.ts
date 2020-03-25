@@ -4,7 +4,10 @@ import has from "lodash/has";
 import isArray from "lodash/isArray";
 import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
-import { getDefinition } from "./builder.definitions";
+import {
+  getDefinition,
+  mergeArrayItemsDefinition
+} from "./builder.definitions";
 
 /** Take the current condition properties and update with new type property */
 
@@ -33,22 +36,22 @@ const updateConditionProperties = (
  * Get array items schema from definitions and add to condition schema
  */
 
-const mergeArrayItemsDefinition = (
+const updateArrayItemsDefinition = (
   [key, value]: [string, JSONSchema7],
   jsonSchema: JSONSchema7,
   newConditionProperties: JSONSchema7["properties"]
 ): JSONSchema7["properties"] => {
-  const { items } = value;
-  const definition = isSchemaObject(items) && getDefinition(items, jsonSchema);
+  const definition = mergeArrayItemsDefinition(jsonSchema, value);
   if (!isSchemaObject(definition)) {
     return newConditionProperties;
   }
+  const { items } = definition;
   return {
     ...newConditionProperties,
     [key]: {
       ...value,
       items: {
-        ...definition
+        ...items
       }
     }
   };
@@ -127,7 +130,7 @@ const updateThenElseProperties = (
   const [key, value] = conditionItem;
 
   /** Update condition schema if array items schema has $ref */
-  newConditionProperties = mergeArrayItemsDefinition(
+  newConditionProperties = updateArrayItemsDefinition(
     conditionItem,
     jsonSchema,
     newConditionProperties

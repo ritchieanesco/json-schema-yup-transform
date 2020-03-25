@@ -3,6 +3,10 @@ import { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
 
 describe("convertToYup() string format", () => {
+  beforeEach(() => {
+    jest.spyOn(console, "warn").mockImplementation(() => {});
+  });
+
   it("should validate date-time format", () => {
     const schm: JSONSchema7 = {
       type: "object",

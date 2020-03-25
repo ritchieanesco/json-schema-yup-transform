@@ -44,43 +44,6 @@ export function maximumItems(
 }
 
 /**
- * Validates the schema items array equates to the data type of
- * that schema type
- */
-
-export function list(
-  this: Yup.ArraySchema<unknown>,
-  value: string,
-  message: string
-): Yup.ArraySchema<unknown> {
-  return this.test("test-list", message, function(input: unknown[]) {
-    const { path, createError } = this;
-    let isValid = false;
-    if (isArray(input)) {
-      if (value === DataTypes.NUMBER) {
-        isValid = input.every(isNumber);
-      }
-      if (value === DataTypes.INTEGER) {
-        isValid = input.every(isInteger);
-      }
-      if (value === DataTypes.STRING) {
-        isValid = input.every(isString);
-      }
-      if (value === DataTypes.BOOLEAN) {
-        isValid = input.every(isBoolean);
-      }
-      if (value === DataTypes.OBJECT) {
-        isValid = input.every(isObject);
-      }
-      if (value === DataTypes.ARRAY) {
-        isValid = input.every(isArray);
-      }
-    }
-    return isValid || createError({ path, message });
-  });
-}
-
-/**
  * Validates the `contains` schema has one or more items in the array
  * equates to the data type of the schema type property
  */

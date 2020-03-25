@@ -5,6 +5,7 @@ import has from "lodash/has";
 import isArray from "lodash/isArray";
 import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
+import { getDefinition } from "./builder.definitions";
 
 /** Take the current condition properties and update with new type property */
 
@@ -63,30 +64,58 @@ const updateThenElseProperties = (
         conditions: { ...conditionSchema }
       };
     }
-
     const schemaPropertyItem = get(schemaProperties, key);
-    const { type } = value;
-    if (isSchemaObject(schemaPropertyItem)) {
-      if (isUndefined(type)) {
-        const schemaPropertyType = get(schemaPropertyItem, "type");
-        newConditionProperties = updateConditionProperties(
-          newConditionProperties,
-          schemaPropertyType,
-          [key, value]
-        );
+    const { type, items } = value;
+
+    //TODO: Break all these conditions into own functions
+
+    if (isSchemaObject(items)) {
+      const definition = getDefinition(items, jsonSchema);
+      if (isSchemaObject(definition)) {
+        newConditionProperties = {
+          ...newConditionProperties,
+          [key]: {
+            ...value,
+            items: {
+              ...definition
+            }
+          }
+        };
       }
-    } else {
-      // if key does not exist in schema properties then generate one
-      // using the condition property
-      newProperties = {
-        ...newProperties,
+    }
+
+    const definition = getDefinition(value, jsonSchema);
+    if (isSchemaObject(definition)) {
+      newConditionProperties = {
+        ...newConditionProperties,
         [key]: {
-          type,
-          $comment: "dynamic"
+          ...definition
         }
       };
+    } else {
+      if (isSchemaObject(schemaPropertyItem)) {
+        if (isUndefined(type)) {
+          const schemaPropertyType = get(schemaPropertyItem, "type");
+          newConditionProperties = updateConditionProperties(
+            newConditionProperties,
+            schemaPropertyType,
+            [key, value]
+          );
+        }
+      } else {
+        // if key does not exist in schema properties then generate one
+        // using the condition property
+        newProperties = {
+          ...newProperties,
+          [key]: {
+            type,
+            $comment: "dynamic"
+          }
+        };
+      }
     }
   }
+
   return {
     properties: { ...schemaProperties, ...newProperties },
     conditions: {
@@ -176,6 +205,5 @@ export const mergeConditions = (jsonSchema: JSONSchema7): JSONSchema7 => {
       else: { ...conditions }
     };
   }
-
   return jsonSchema;
 };

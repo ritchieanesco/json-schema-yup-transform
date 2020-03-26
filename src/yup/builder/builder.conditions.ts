@@ -2,12 +2,10 @@ import { JSONSchema7 } from "json-schema";
 import get from "lodash/get";
 import has from "lodash/has";
 import isArray from "lodash/isArray";
+import isEmpty from "lodash/isEmpty";
 import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
-import {
-  getDefinition,
-  mergeArrayItemsDefinition
-} from "./builder.definitions";
+import { getDefinition } from "./builder.definitions";
 
 /** Take the current condition properties and update with new type property */
 
@@ -36,22 +34,22 @@ const updateConditionProperties = (
  * Get array items schema from definitions and add to condition schema
  */
 
-const updateArrayItemsDefinition = (
+const mergeArrayItemsDefinition = (
   [key, value]: [string, JSONSchema7],
   jsonSchema: JSONSchema7,
   newConditionProperties: JSONSchema7["properties"]
 ): JSONSchema7["properties"] => {
-  const definition = mergeArrayItemsDefinition(jsonSchema, value);
+  const { items } = value;
+  const definition = isSchemaObject(items) && getDefinition(items, jsonSchema);
   if (!isSchemaObject(definition)) {
     return newConditionProperties;
   }
-  const { items } = definition;
   return {
     ...newConditionProperties,
     [key]: {
       ...value,
       items: {
-        ...items
+        ...definition
       }
     }
   };
@@ -130,7 +128,7 @@ const updateThenElseProperties = (
   const [key, value] = conditionItem;
 
   /** Update condition schema if array items schema has $ref */
-  newConditionProperties = updateArrayItemsDefinition(
+  newConditionProperties = mergeArrayItemsDefinition(
     conditionItem,
     jsonSchema,
     newConditionProperties
@@ -192,14 +190,14 @@ const updateIfCondition = (
   const schemaProperties = getProperties(jsonSchema);
   const conditionProperties = getProperties(condition);
   let newConditionProperties: JSONSchema7["properties"] = {};
-  if (isSchemaObject(schemaProperties) && isSchemaObject(conditionProperties)) {
+  if (schemaProperties && conditionProperties) {
     const conditionPropertyItem = getObjectHead(conditionProperties);
     if (!isArray(conditionPropertyItem)) {
-      return condition;
+      throw new Error("If schema property is empty");
     }
     const [key, value] = conditionPropertyItem;
-    if (!isSchemaObject(value)) {
-      return condition;
+    if (!isSchemaObject(value) || isEmpty(value)) {
+      throw new Error("Type property not present in If Schema");
     }
     const props = get(schemaProperties, key);
     if (isSchemaObject(props) && !has(value, "type")) {

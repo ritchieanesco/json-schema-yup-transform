@@ -34,6 +34,91 @@ describe("convertToYup() string conditions", () => {
     );
   });
 
+  it("should throw error when property and condition key are missing", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        }
+      },
+      required: ["country"],
+      if: {
+        properties: {
+          test: { const: "test" }
+        }
+      },
+      then: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      }
+    };
+    expect(() => {
+      convertToYup(schm);
+    }).toThrowError(
+      "Unable to find the schema property related to the if schema"
+    );
+  });
+
+  it("should throw error empty condition", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        }
+      },
+      required: ["country"],
+      if: {
+        properties: {}
+      },
+      then: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      }
+    };
+    expect(() => {
+      convertToYup(schm);
+    }).toThrowError("If schema property is empty");
+  });
+
+  it("should throw error when empty value", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        }
+      },
+      required: ["country"],
+      if: {
+        properties: { country: {} }
+      },
+      then: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      }
+    };
+    expect(() => {
+      convertToYup(schm);
+    }).toThrowError("Type property not present in If Schema");
+  });
+
   it("should throw error when missing schema properties and then schema type property", () => {
     const schm: JSONSchema7 = {
       type: "object",

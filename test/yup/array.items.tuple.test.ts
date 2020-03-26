@@ -354,4 +354,35 @@ describe("convertToYup() array items tuple", () => {
     });
     expect(valid).toBeFalsy();
   });
+
+  it("should not validate multiple types", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        things: {
+          type: "array",
+          items: [
+            {
+              type: ["string", "null"]
+            }
+          ]
+        }
+      }
+    };
+    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let valid;
+
+    valid = yupschema.isValidSync({
+      things: ["a"]
+    });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({
+      things: [null]
+    });
+    expect(valid).toBeFalsy();
+  });
 });

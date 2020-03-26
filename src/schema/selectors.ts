@@ -61,15 +61,6 @@ export const getProperties = (
     }
   | undefined => schema.properties;
 
-/**
- * Retrieve property value
- */
-
-export const getPropertyItem = (
-  properties: JSONSchema7["properties"],
-  key: string
-): JSONSchema7Definition | undefined => get(properties, key);
-
 export const getPropertyType = (
   propertyItem: JSONSchema7
 ): JSONSchema7["type"] => propertyItem.type;
@@ -164,30 +155,6 @@ export const getConditions = (
   schema.then,
   schema.else
 ];
-
-/**
- * Retrieve getAllOf property value
- */
-
-export const getAllOf = (
-  schema: JSONSchema7
-): JSONSchema7Definition[] | undefined => schema.allOf;
-
-/**
- * Retrieve oneOf property value
- */
-
-export const getOneOf = (
-  schema: JSONSchema7
-): JSONSchema7Definition[] | undefined => schema.oneOf;
-
-/**
- * Retrieve anyOf property value
- */
-
-export const getAnyOf = (
-  schema: JSONSchema7
-): JSONSchema7Definition[] | undefined => schema.anyOf;
 
 /**
  * Retrieve enums property value

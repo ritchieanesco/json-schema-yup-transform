@@ -4,6 +4,43 @@ import isEqual from "lodash/isEqual";
 import convertToYup from "../../src";
 
 describe("convertToYup() array items", () => {
+  it("should validate definitions", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      definitions: {
+        thing: {
+          type: "string"
+        }
+      },
+      properties: {
+        things: {
+          type: "array",
+          items: {
+            $ref: "#/definitions/thing"
+          }
+        }
+      }
+    };
+    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let valid = yupschema.isValidSync({
+      things: ["1"]
+    });
+    expect(valid).toBeTruthy();
+
+    yupschema.isValidSync({
+      things: []
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      things: ["a", null]
+    });
+    expect(valid).toBeFalsy();
+  });
+
   it("should validate strings", () => {
     const schm: JSONSchema7 = {
       type: "object",

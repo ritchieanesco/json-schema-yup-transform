@@ -3,6 +3,7 @@ import get from "lodash/get";
 import has from "lodash/has";
 import isArray from "lodash/isArray";
 import isEmpty from "lodash/isEmpty";
+import omit from "lodash/omit";
 import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
 import { getDefinition } from "./builder.definitions";
@@ -68,6 +69,7 @@ const mergePropertiesDefinition = (
   if (!isSchemaObject(definition)) {
     return newConditionProperties;
   }
+  console.log("merge def");
   return {
     ...newConditionProperties,
     [key]: {
@@ -83,7 +85,8 @@ const mergePropertiesDefinition = (
 const getThenElsePropertyItem = (
   conditionProperties: JSONSchema7["properties"]
 ): false | [string, JSONSchema7] => {
-  const conditionPropertyItem = getObjectHead(conditionProperties);
+  const conditionPropertyItem =
+    !isEmpty(conditionProperties) && getObjectHead(conditionProperties);
   if (!conditionPropertyItem) {
     return false;
   }
@@ -104,14 +107,16 @@ const getThenElsePropertyItem = (
 const updateThenElseProperties = (
   jsonSchema: JSONSchema7,
   conditionSchema: JSONSchema7
-): {
-  properties: JSONSchema7["properties"];
-  conditions: JSONSchema7;
-} => {
+):
+  | false
+  | {
+      properties: JSONSchema7["properties"];
+      conditions: JSONSchema7;
+    } => {
   const schemaProperties = getProperties(jsonSchema);
   const conditionProperties = getProperties(conditionSchema);
-  if (!schemaProperties && !conditionProperties) {
-    return { properties: schemaProperties, conditions: conditionSchema };
+  if (!schemaProperties || !conditionProperties) {
+    return false;
   }
 
   let newProperties: JSONSchema7["properties"] = {};
@@ -120,10 +125,7 @@ const updateThenElseProperties = (
   /** Get the first condition property */
   const conditionItem = getThenElsePropertyItem(conditionProperties);
   if (!isArray(conditionItem)) {
-    return {
-      properties: { ...schemaProperties },
-      conditions: { ...conditionSchema }
-    };
+    return false;
   }
   const [key, value] = conditionItem;
 
@@ -245,10 +247,11 @@ const mergeThenCondition = (
   _then: JSONSchema7["then"]
 ): JSONSchema7 => {
   if (isSchemaObject(_then)) {
-    const { properties, conditions } = updateThenElseProperties(
-      jsonSchema,
-      _then
-    );
+    const result = updateThenElseProperties(jsonSchema, _then);
+    if (!result) {
+      return omit(jsonSchema, ["then"]);
+    }
+    const { properties, conditions } = result;
     jsonSchema = {
       ...jsonSchema,
       properties: { ...properties },
@@ -267,10 +270,11 @@ const mergeElseCondition = (
   _else: JSONSchema7["else"]
 ): JSONSchema7 => {
   if (isSchemaObject(_else)) {
-    const { properties, conditions } = updateThenElseProperties(
-      jsonSchema,
-      _else
-    );
+    const result = updateThenElseProperties(jsonSchema, _else);
+    if (!result) {
+      return omit(jsonSchema, ["else"]);
+    }
+    const { properties, conditions } = result;
     jsonSchema = {
       ...jsonSchema,
       properties: { ...properties },

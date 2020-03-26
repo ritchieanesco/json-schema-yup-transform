@@ -8,6 +8,7 @@ import {
 } from "./builder.definitions";
 import { mergeConditions } from "./builder.conditions";
 import { SchemaItem } from "../types";
+import isEmpty from "lodash/isEmpty";
 
 /**
  * Recursive function that builds out object type schemas
@@ -35,15 +36,12 @@ export const buildValidation = (
   schema: {},
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
-): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
+): { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
   const validationSchema = createValidationSchema([key, value], jsonSchema);
-  if (validationSchema) {
-    return {
-      ...schema,
-      [key]: validationSchema
-    };
-  }
-  return schema;
+  return {
+    ...schema,
+    [key]: validationSchema
+  };
 };
 
 /** Merge definition schema */
@@ -78,7 +76,7 @@ export const build = (
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
-    if (!isSchemaObject(value)) {
+    if (!isSchemaObject(value) || isEmpty(value)) {
       continue;
     }
     /** if $ref found then retrieve the definition */

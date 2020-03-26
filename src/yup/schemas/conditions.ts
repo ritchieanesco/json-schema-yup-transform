@@ -143,7 +143,6 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
   if (!properties) {
     return Schema;
   }
-
   /** Destructure the if schema to key and value */
   const propertyItem = getObjectHead(properties);
   if (!isArray(propertyItem)) {
@@ -153,14 +152,12 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
   if (!isSchemaObject(value)) {
     return Schema;
   }
-
   let builder: Builder | {} = {};
 
   const thenBuilder = getThenPropertyBuilder([head, value], jsonSchema, key);
   if (!isBuilder(thenBuilder)) {
     return Schema;
   }
-
   builder = { ...thenBuilder };
 
   if (isBuilder(builder)) {

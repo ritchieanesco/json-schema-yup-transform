@@ -53,6 +53,26 @@ describe("convertToYup() string", () => {
     expect(isValid).toBeTruthy();
   });
 
+  it("should throw error if value type is not one of multiple types", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: ["string", "null"]
+        }
+      }
+    };
+    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    expect(() => {
+      yupschema.isValidSync({
+        name: []
+      });
+    }).toThrowError("object data type is not supported");
+  });
+
   it("should validate required", () => {
     const schm: JSONSchema7 = {
       type: "object",

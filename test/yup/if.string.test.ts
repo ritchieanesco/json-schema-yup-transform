@@ -130,6 +130,34 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
 
+  it("should throw error when condition and property schema is missing type", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        },
+        postal_code: {}
+      },
+      required: ["country"],
+      if: {
+        properties: { country: { const: "Australia" } }
+      },
+      then: {
+        properties: {
+          postal_code: { pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      }
+    };
+    expect(() => {
+      convertToYup(schm);
+    }).toThrowError("Type attribute is missing");
+  });
+
   it("should use property type if condition type is unavailable", () => {
     const schm: JSONSchema7 = {
       type: "object",

@@ -69,7 +69,6 @@ const mergePropertiesDefinition = (
   if (!isSchemaObject(definition)) {
     return newConditionProperties;
   }
-  console.log("merge def");
   return {
     ...newConditionProperties,
     [key]: {
@@ -86,7 +85,7 @@ const getThenElsePropertyItem = (
   conditionProperties: JSONSchema7["properties"]
 ): false | [string, JSONSchema7] => {
   const conditionPropertyItem =
-    !isEmpty(conditionProperties) && getObjectHead(conditionProperties);
+    isSchemaObject(conditionProperties) && getObjectHead(conditionProperties);
   if (!conditionPropertyItem) {
     return false;
   }

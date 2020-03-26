@@ -41,10 +41,7 @@ export const getDefinitionItem = (
       definitions,
       item => isSchemaObject(item) && item.$id === path
     );
-    if (key) {
-      return get(definitions, key);
-    }
-    return;
+    return key ? get(definitions, key) : undefined;
   }
   return get(definitions, path);
 };
@@ -95,7 +92,7 @@ export const getConditionProperties = (
  */
 
 export const getIfCondition = (
-  schema: JSONSchema7Definition | undefined,
+  schema: JSONSchema7 | undefined,
   key: string
 ): false | JSONSchema7 => {
   if (!isSchemaObject(schema)) {
@@ -162,13 +159,6 @@ export const getConditions = (
 
 export const getEnum = (schema: JSONSchema7): JSONSchema7Type[] | undefined =>
   schema.enum;
-
-/**
- * Retrieve const property value
- */
-
-export const getConst = (schema: JSONSchema7): JSONSchema7["const"] =>
-  schema.const;
 
 /**
  * Retrieve reference id from `$ref` attribute

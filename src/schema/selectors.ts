@@ -7,6 +7,7 @@ import get from "lodash/get";
 import isArray from "lodash/isArray";
 import nth from "lodash/nth";
 import has from "lodash/has";
+import findKey from "lodash/findKey";
 import { DEFINITION_ROOT } from "./constants";
 import { isSchemaObject } from "./types";
 
@@ -29,9 +30,22 @@ export const getDefinitions = (
 export const getDefinitionItem = (
   schema: JSONSchema7,
   ref: string
-): JSONSchema7Definition | undefined => {
+): boolean | JSONSchema7 | undefined => {
   const definitions = getDefinitions(schema);
+  if (!definitions) {
+    return;
+  }
   const path = get$RefValue(ref);
+  if (path.startsWith("#")) {
+    const key = findKey(
+      definitions,
+      item => isSchemaObject(item) && item.$id === path
+    );
+    if (key) {
+      return get(definitions, key);
+    }
+    return;
+  }
   return get(definitions, path);
 };
 
@@ -198,7 +212,7 @@ const get$RefValue = (ref: string): string => {
   if (ref.startsWith(DEFINITION_ROOT)) {
     return ref.substring(DEFINITION_ROOT.length).replace(/\//g, ".");
   }
-  return ref.substring(1);
+  return ref;
 };
 
 /**

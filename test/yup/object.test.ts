@@ -200,4 +200,49 @@ describe("convertToYup() object", () => {
       convertToYup(schm);
     }).toThrowError("Type key is missing");
   });
+
+  it("should validate fields using definition id", () => {
+    let schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      definitions: {
+        address: {
+          $id: "#address",
+          type: "object",
+          properties: {
+            street_address: { type: "string" },
+            city: { type: "string" },
+            state: { type: "string" }
+          },
+          required: ["street_address", "city", "state"]
+        }
+      },
+      properties: {
+        mailingAddress: {
+          $ref: "#address"
+        }
+      }
+    };
+    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      mailingAddress: {
+        street_address: "test",
+        city: "Melbourne",
+        state: "VIC"
+      }
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      mailingAddress: {
+        street_address: "test",
+        city: "Melbourne",
+        state: null
+      }
+    });
+    expect(isValid).toBeFalsy();
+  });
 });

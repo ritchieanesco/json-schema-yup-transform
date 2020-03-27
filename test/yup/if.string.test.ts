@@ -72,6 +72,38 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
 
+  it("should ignore then and else schema when if schema is missing", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        }
+      },
+      required: ["country"],
+      then: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      },
+      else: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        }
+      }
+    };
+    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      country: "Canada"
+    });
+    expect(isValid).toBeTruthy();
+  });
+
   it("should continue to validate fields with empty if schema", () => {
     const schm: JSONSchema7 = {
       type: "object",
@@ -135,6 +167,82 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
 
+  it("should validate schema when if schema has no type property", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        }
+      },
+      required: ["country"],
+      if: {
+        properties: { country: { const: "Australia" } }
+      },
+      then: {
+        properties: {
+          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
+        },
+        required: ["postal_code"]
+      }
+    };
+    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      country: "Australia",
+      postal_code: "00000"
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      country: "Australia"
+    });
+    expect(isValid).toBeFalsy();
+  });
+
+  it("should validate schema when then schema has no type property", () => {
+    const schm: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string",
+          enum: ["Australia", "Canada"]
+        },
+        postal_code: {
+          type: "string"
+        }
+      },
+      required: ["country"],
+      if: {
+        properties: { country: { const: "Australia" } }
+      },
+      then: {
+        properties: {
+          postal_code: { pattern: "[0-9]{5}(-[0-9]{4})?" }
+        },
+        required: ["postal_code"]
+      }
+    };
+    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      country: "Australia",
+      postal_code: "00000"
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      country: "Australia"
+    });
+    expect(isValid).toBeFalsy();
+  });
   it("should validate all fields with exception to conditional fields", () => {
     const schm: JSONSchema7 = {
       type: "object",

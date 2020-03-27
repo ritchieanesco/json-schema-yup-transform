@@ -143,6 +143,7 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
   if (!properties) {
     return Schema;
   }
+
   /** Destructure the if schema to key and value */
   const propertyItem = getObjectHead(properties);
   if (!isArray(propertyItem)) {

@@ -1,8 +1,6 @@
 import { JSONSchema7 } from "json-schema";
 import get from "lodash/get";
-import has from "lodash/has";
 import isArray from "lodash/isArray";
-import isEmpty from "lodash/isEmpty";
 import omit from "lodash/omit";
 import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
@@ -26,9 +24,7 @@ const updateConditionProperties = (
       }
     };
   }
-  // if no type attribute found in schema properties and
-  // condition properties throw error
-  throw new Error("Type attribute is missing");
+  return;
 };
 
 /**
@@ -187,39 +183,45 @@ const updateThenElseProperties = (
 const updateIfCondition = (
   jsonSchema: JSONSchema7,
   condition: JSONSchema7
-): JSONSchema7 => {
-  const schemaProperties = getProperties(jsonSchema);
+): JSONSchema7 | false => {
   const conditionProperties = getProperties(condition);
-  let newConditionProperties: JSONSchema7["properties"] = {};
-  if (schemaProperties && conditionProperties) {
-    const conditionPropertyItem = getObjectHead(conditionProperties);
-    if (!isArray(conditionPropertyItem)) {
-      throw new Error("If schema property is empty");
-    }
-    const [key, value] = conditionPropertyItem;
-    if (!isSchemaObject(value) || isEmpty(value)) {
-      throw new Error("Type property not present in If Schema");
-    }
-    const props = get(schemaProperties, key);
-    if (isSchemaObject(props) && !has(value, "type")) {
-      newConditionProperties = {
-        ...newConditionProperties,
-        [key]: {
-          ...value,
-          type: get(props, "type")
-        }
-      };
-    }
-    if (!isSchemaObject(props) && !has(value, "type")) {
-      throw new Error(
-        "Unable to find the schema property related to the if schema"
-      );
+  if (!conditionProperties) {
+    return false;
+  }
+  const schemaProperties = getProperties(jsonSchema);
+  const conditionPropertyItem = getObjectHead(conditionProperties);
+  if (!isArray(conditionPropertyItem)) {
+    return false;
+  }
+  const [key, value] = conditionPropertyItem;
+  if (!isSchemaObject(value)) {
+    return false;
+  }
+
+  const { type } = value;
+
+  if (schemaProperties) {
+    const schemaPropertyItem = get(schemaProperties, key);
+    if (isSchemaObject(schemaPropertyItem)) {
+      if (!type) {
+        return {
+          ...jsonSchema,
+          if: {
+            ...conditionProperties,
+            properties: {
+              [key]: {
+                ...value,
+                type: get(schemaPropertyItem, "type")
+              }
+            }
+          }
+        };
+      }
+    } else {
+      return false;
     }
   }
-  return {
-    ...condition,
-    properties: { ...conditionProperties, ...newConditionProperties }
-  };
+  return jsonSchema;
 };
 
 /**
@@ -231,8 +233,11 @@ const mergeIfCondition = (
   _if: JSONSchema7["if"]
 ): JSONSchema7 => {
   if (isSchemaObject(_if)) {
-    const ifSchema = updateIfCondition(jsonSchema, _if);
-    jsonSchema = { ...jsonSchema, if: { ...ifSchema } };
+    const result = updateIfCondition(jsonSchema, _if);
+    if (!result) {
+      return omit(jsonSchema, ["if"]);
+    }
+    return result;
   }
   return jsonSchema;
 };
@@ -291,8 +296,12 @@ const mergeElseCondition = (
 export const mergeConditions = (jsonSchema: JSONSchema7): JSONSchema7 => {
   /** get then, else properties and determine are they dynamic or exist in properties */
   const [_if, _then, _else] = getConditions(jsonSchema);
-  jsonSchema = mergeIfCondition(jsonSchema, _if);
-  jsonSchema = mergeThenCondition(jsonSchema, _then);
-  jsonSchema = mergeElseCondition(jsonSchema, _else);
+  if (_if) {
+    jsonSchema = mergeIfCondition(jsonSchema, _if);
+    jsonSchema = mergeThenCondition(jsonSchema, _then);
+    jsonSchema = mergeElseCondition(jsonSchema, _else);
+  } else {
+    jsonSchema = omit(jsonSchema, ["if", "then", "else"]);
+  }
   return jsonSchema;
 };

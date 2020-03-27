@@ -1,3 +1,1 @@
-import build from "./builder";
-
-export default build;
+export { cleanSchema } from "./builder";

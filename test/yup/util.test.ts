@@ -1,6 +1,90 @@
 import { JSONSchema7 } from "json-schema";
-import { getObjectHead } from "../../src/yup/utils";
+import { getObjectHead, removeEmptyObjects } from "../../src/yup/utils";
 import { validateItemsArray } from "../../src/yup/addMethods/utils";
+
+describe("removeEmptyObjects()", () => {
+  it("should remove empty objects", () => {
+    expect(
+      removeEmptyObjects({
+        type: "object",
+        $schema: "http://json-schema.org/draft-07/schema#",
+        $id: "test",
+        title: "Test",
+        properties: {
+          name: {
+            type: "string"
+          }
+        },
+        if: {},
+        then: { properties: {} }
+      })
+    ).toEqual({
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: "string"
+        }
+      }
+    });
+
+    expect(
+      removeEmptyObjects({
+        type: "object",
+        $schema: "http://json-schema.org/draft-07/schema#",
+        $id: "test",
+        title: "Test",
+        properties: {
+          name: {
+            type: "array",
+            items: [{ type: "string" }]
+          }
+        },
+        if: {},
+        then: { properties: {} }
+      })
+    ).toEqual({
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: "array",
+          items: [{ type: "string" }]
+        }
+      }
+    });
+
+    expect(
+      removeEmptyObjects({
+        type: "object",
+        $schema: "http://json-schema.org/draft-07/schema#",
+        $id: "test",
+        title: "Test",
+        properties: {
+          name: {
+            type: "array",
+            items: []
+          }
+        }
+      })
+    ).toEqual({
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: "array",
+          items: []
+        }
+      }
+    });
+  });
+});
 
 describe("getObjectHead()", () => {
   it("should return first item in object as an array", () => {

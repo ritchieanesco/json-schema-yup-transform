@@ -1,6 +1,6 @@
 import { JSONSchema7 } from "json-schema";
 import Yup from "./yup/addMethods";
-import build from "./yup";
+import { cleanSchema as build } from "./yup";
 
 /**
  * Converts a valid schema to a yup schema

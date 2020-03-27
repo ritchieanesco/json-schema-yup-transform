@@ -8,7 +8,7 @@ import {
 } from "./builder.definitions";
 import { mergeConditions } from "./builder.conditions";
 import { SchemaItem } from "../types";
-import isEmpty from "lodash/isEmpty";
+import { removeEmptyObjects } from "../utils";
 
 /**
  * Recursive function that builds out object type schemas
@@ -76,7 +76,7 @@ export const build = (
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
-    if (!isSchemaObject(value) || isEmpty(value)) {
+    if (!isSchemaObject(value)) {
       continue;
     }
     /** if $ref found then retrieve the definition */
@@ -104,4 +104,9 @@ export const build = (
     }
   }
   return Yup.object().shape(schema);
+};
+
+export const cleanSchema = (schema: JSONSchema7) => {
+  const normalizedSchema = removeEmptyObjects(schema);
+  return build(normalizedSchema);
 };

@@ -1,11 +1,11 @@
 import { JSONSchema7 } from "json-schema";
-import get from "lodash/get";
+//import get from "lodash/get";
 import Yup from "../addMethods";
 import {
   getConditions,
   getProperties,
-  getThenCondition,
-  getElseCondition,
+  //getThenCondition,
+  //getElseCondition,
   isSchemaObject
 } from "../../schema";
 import { createValidationSchema } from "./schema";
@@ -22,106 +22,70 @@ const isValidator = (
   [key, value]: [string, JSONSchema7],
   jsonSchema: JSONSchema7
 ) => (val: unknown): boolean => {
-  const conditionalSchema = createValidationSchema(
-    [key, value],
-    jsonSchema,
-    true
-  );
+  const conditionalSchema = createValidationSchema([key, value], jsonSchema);
   const result: boolean = conditionalSchema.isValidSync(val);
-  return result === true;
+  return result;
 };
-
-/**
- * Get then schema item property with given key
- */
-
-const getThenPropertyItem = (
-  schema: JSONSchema7,
-  key: string
-): false | JSONSchema7 => {
-  const properties = getProperties(schema);
-  if (!isSchemaObject(properties)) {
-    return false;
-  }
-  const schemaItem = get(properties, key);
-  if (!isSchemaObject(schemaItem)) {
-    return false;
-  }
-  return schemaItem;
-};
-
-/**
- * Get else schema item property with given key
- */
-
-const getElsePropertyItem = (
-  schema: JSONSchema7,
-  key: string
-): false | JSONSchema7 => {
-  const properties = getProperties(schema);
-  if (!properties) {
-    return false;
-  }
-  const schemaItem = get(properties, key);
-  if (!isSchemaObject(schemaItem)) {
-    return false;
-  }
-  return schemaItem;
-};
-
-/**
- * Create a builder object for then schema that validates
- * the dependency
- */
 
 const getThenPropertyBuilder = (
   [head, value]: [string, JSONSchema7],
-  jsonSchema: JSONSchema7,
-  key: string
+  jsonSchema: JSONSchema7
 ): false | Builder => {
   /** Get then schema and extract out properties */
-  const thenSchema = getThenCondition(jsonSchema, key);
-  if (!thenSchema) {
-    return false;
-  }
-  const thenSchemaItem = getThenPropertyItem(thenSchema, key);
-  if (!thenSchemaItem) {
-    return false;
-  }
-  /** Set up a HOF that will validate the field dependency */
+  const conditions = getConditions(jsonSchema);
+  if (!conditions) return false;
+  if (!isSchemaObject(conditions[1])) return false;
+
+  const { properties } = conditions[1];
+  if (!properties) return false;
+
+  const thenItem = getObjectHead(properties);
+  if (!thenItem) return false;
+
+  const [k, v] = thenItem;
+  if (!isSchemaObject(v)) return false;
+
+  // /** Set up a HOF that will validate the field dependency */
   const isValid = isValidator([head, value], jsonSchema);
+
   /** Create a builder object for the yup when schema */
   return {
-    is: isValid,
-    then: createValidationSchema([key, thenSchemaItem], thenSchema, true)
+    is: val => {
+      return isValid(val) === true;
+    },
+    then: createValidationSchema([k, v], conditions[1])
   };
 };
-
-/**
- * Create a builder object for else schema that validates
- * the dependency
- */
 
 const getElsePropertyBuilder = (
-  builder: Builder,
-  jsonSchema: JSONSchema7,
-  key: string
+  [head, value]: [string, JSONSchema7],
+  jsonSchema: JSONSchema7
 ): false | Builder => {
-  /** Get else schema and extract out properties */
-  const elseSchema = getElseCondition(jsonSchema, key);
-  if (!elseSchema) {
-    return false;
-  }
-  const elseSchemaItem =
-    isSchemaObject(elseSchema) && getElsePropertyItem(elseSchema, key);
-  if (!elseSchemaItem) {
-    return false;
-  }
+  const conditions = getConditions(jsonSchema);
+  if (!conditions) return false;
+  if (!isSchemaObject(conditions[2])) return false;
+
+  const { properties } = conditions[2];
+  if (!properties) return false;
+
+  const elseItem = getObjectHead(properties);
+  if (!elseItem) return false;
+
+  const [k, v] = elseItem;
+  if (!isSchemaObject(v)) return false;
+  console.log("else", k, v);
+
+  const isValid = isValidator([head, value], jsonSchema);
+
+  /** Create a builder object for the yup when schema */
   return {
-    ...builder,
-    otherwise: createValidationSchema([key, elseSchemaItem], elseSchema, true)
+    is: val => {
+      return isValid(val) === false;
+    },
+    then: createValidationSchema([k, v], conditions[2])
   };
 };
+
 /**
  * Initialise a yup when schema using the if,then,else sub-schema
  */
@@ -135,38 +99,72 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
    * falsy the return the given Schema
    */
 
-  const [_if] = getConditions(jsonSchema);
-  if (!isSchemaObject(_if)) {
+  const [_if, _then, _else] = getConditions(jsonSchema);
+
+  if (!isSchemaObject(_if) || !isSchemaObject(_then)) {
     return Schema;
   }
-  const properties = getProperties(_if);
-  if (!properties) {
+
+  const ifProperties = getProperties(_if);
+  if (!ifProperties) {
     return Schema;
   }
 
   /** Destructure the if schema to key and value */
-  const propertyItem = getObjectHead(properties);
-  if (!isArray(propertyItem)) {
+  const ifPropertyItem = getObjectHead(ifProperties);
+  if (!isArray(ifPropertyItem)) {
     return Schema;
   }
-  const [head, value] = propertyItem;
-  if (!isSchemaObject(value)) {
+  const [ifKey, ifValue] = ifPropertyItem;
+  if (!isSchemaObject(ifValue)) {
     return Schema;
   }
-  let builder: Builder | {} = {};
 
-  const thenBuilder = getThenPropertyBuilder([head, value], jsonSchema, key);
-  if (!isBuilder(thenBuilder)) {
+  const thenProperties = getProperties(_then);
+  if (!thenProperties) {
     return Schema;
   }
-  builder = { ...thenBuilder };
 
-  if (isBuilder(builder)) {
-    const elseBuilder = getElsePropertyBuilder(builder, jsonSchema, key);
-    if (elseBuilder) {
-      builder = { ...elseBuilder };
+  /** Destructure the if schema to key and value */
+  const thenPropertyItem = getObjectHead(thenProperties);
+  if (!isArray(thenPropertyItem)) {
+    return Schema;
+  }
+  const [thenKey, thenValue] = thenPropertyItem;
+  if (!isSchemaObject(thenValue)) {
+    return Schema;
+  }
+
+  if (key === thenKey) {
+    const thenBuilder = getThenPropertyBuilder([ifKey, ifValue], jsonSchema);
+    if (isBuilder(thenBuilder)) {
+      Schema = Schema.concat(Schema.when(ifKey, thenBuilder));
     }
   }
 
-  return Schema.concat(Schema.when(head, builder));
+  const elseProperties = isSchemaObject(_else) && getProperties(_else);
+  if (!elseProperties) {
+    return Schema;
+  }
+
+  /** Destructure the if schema to key and value */
+  const elsePropertyItem = getObjectHead(elseProperties);
+  if (!isArray(elsePropertyItem)) {
+    return Schema;
+  }
+  const [elseKey, elseValue] = elsePropertyItem;
+
+  if (!isSchemaObject(elseValue)) {
+    return Schema;
+  }
+
+  if (key === elseKey) {
+    const elseBuilder = getElsePropertyBuilder([ifKey, ifValue], jsonSchema);
+    if (isBuilder(elseBuilder)) {
+      console.log("sfsd", key);
+      Schema = Schema.concat(Schema.when(ifKey, elseBuilder));
+    }
+  }
+
+  return Schema;
 };

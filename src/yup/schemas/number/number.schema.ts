@@ -13,10 +13,9 @@ import { createConditionSchema } from "../conditions";
 
 const createNumberSchema = (
   item: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> =>
-  createBaseNumberSchema(Yup.number(), item, jsonSchema, recursive);
+  createBaseNumberSchema(Yup.number(), item, jsonSchema);
 
 /**
  * Generates a yup number schema instance that is used for both number and integer schema
@@ -25,8 +24,7 @@ const createNumberSchema = (
 export const createBaseNumberSchema = (
   Schema: Yup.NumberSchema,
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean
+  jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
   const {
     default: defaults,
@@ -119,9 +117,7 @@ export const createBaseNumberSchema = (
 
   // Recursive parameter prevents infinite loops when
   // initialised from conditional schema
-  if (!recursive) {
-    Schema = createConditionSchema(Schema, jsonSchema, key);
-  }
+  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   return Schema;
 };

@@ -11,8 +11,7 @@ import { createConditionSchema } from "../conditions";
 
 const createBooleanSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.BooleanSchema<boolean> => {
   const { default: defaults } = value;
 
@@ -25,9 +24,7 @@ const createBooleanSchema = (
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, key);
 
-  if (!recursive) {
-    Schema = createConditionSchema(Schema, jsonSchema, key);
-  }
+  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   return Schema;
 };

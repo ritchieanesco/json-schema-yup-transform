@@ -25,8 +25,7 @@ import { createConditionSchema } from "../conditions";
 
 const createStringSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.StringSchema<string> => {
   const {
     default: defaults,
@@ -49,9 +48,7 @@ const createStringSchema = (
 
   // Recursive parameter prevents infinite loops when
   // initialised from conditional schema
-  if (!recursive) {
-    Schema = createConditionSchema(Schema, jsonSchema, key);
-  }
+  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   if (!isUndefined(consts)) {
     Schema = Schema.concat(

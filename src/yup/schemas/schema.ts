@@ -60,22 +60,21 @@ const getTypeOfValue = (
 
 const getValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.MixedSchema<any> => {
   const { type } = value;
   if (isString(type)) {
     switch (type) {
       case DataTypes.STRING:
-        return createStringSchema([key, value], jsonSchema, recursive);
+        return createStringSchema([key, value], jsonSchema);
       case DataTypes.NUMBER:
-        return createNumberSchema([key, value], jsonSchema, recursive);
+        return createNumberSchema([key, value], jsonSchema);
       case DataTypes.INTEGER:
-        return createIntegerSchema([key, value], jsonSchema, recursive);
+        return createIntegerSchema([key, value], jsonSchema);
       case DataTypes.ARRAY:
-        return createArraySchema([key, value], jsonSchema, recursive);
+        return createArraySchema([key, value], jsonSchema);
       case DataTypes.BOOLEAN:
-        return createBooleanSchema([key, value], jsonSchema, recursive);
+        return createBooleanSchema([key, value], jsonSchema);
       case DataTypes.NULL:
         return createNullSchema();
       case DataTypes.OBJECT:
@@ -104,7 +103,7 @@ const getLazyValidationSchema = (
       throw new Error(`${typeof inputValue} data type is not supported`);
     }
     const newItem: SchemaItem = [key, { ...value, type: typeOfValue }];
-    return getValidationSchema(newItem, jsonSchema, recursive);
+    return getValidationSchema(newItem, jsonSchema);
   });
 
 /**
@@ -119,10 +118,10 @@ export const createValidationSchema = (
 ): Yup.Lazy | Yup.MixedSchema<any> => {
   const type = getPropertyType(value);
   if (isArray(type)) {
-    return getLazyValidationSchema([key, value], jsonSchema, recursive);
+    return getLazyValidationSchema([key, value], jsonSchema);
   }
   if (isString(type)) {
-    return getValidationSchema([key, value], jsonSchema, recursive);
+    return getValidationSchema([key, value], jsonSchema);
   }
   throw new Error("Type key is missing");
 };

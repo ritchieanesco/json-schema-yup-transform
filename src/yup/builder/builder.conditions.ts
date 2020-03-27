@@ -1,4 +1,4 @@
-import { JSONSchema7 } from "json-schema";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import get from "lodash/get";
 import isArray from "lodash/isArray";
 import omit from "lodash/omit";
@@ -6,13 +6,19 @@ import { getProperties, isSchemaObject, getConditions } from "../../schema/";
 import { getObjectHead } from "../utils";
 import { getDefinition } from "./builder.definitions";
 
+export type SchemaProperties = {
+  [key: string]: JSONSchema7Definition;
+};
+
 /** Take the current condition properties and update with new type property */
 
 const updateConditionProperties = (
-  conditionProperties: JSONSchema7["properties"],
+  conditionProperties: SchemaProperties,
   schemaPropertyType: JSONSchema7["type"],
   [key, value]: [string, JSONSchema7]
-): JSONSchema7["properties"] => {
+): {
+  [key: string]: JSONSchema7Definition;
+} => {
   // should condition properties not have type attribute
   // retrieve from schema properties
   if (schemaPropertyType) {
@@ -24,7 +30,7 @@ const updateConditionProperties = (
       }
     };
   }
-  return;
+  return conditionProperties;
 };
 
 /**
@@ -34,8 +40,10 @@ const updateConditionProperties = (
 const mergeArrayItemsDefinition = (
   [key, value]: [string, JSONSchema7],
   jsonSchema: JSONSchema7,
-  newConditionProperties: JSONSchema7["properties"]
-): JSONSchema7["properties"] => {
+  newConditionProperties: SchemaProperties
+): {
+  [key: string]: JSONSchema7Definition;
+} => {
   const { items } = value;
   const definition = isSchemaObject(items) && getDefinition(items, jsonSchema);
   if (!isSchemaObject(definition)) {
@@ -59,8 +67,10 @@ const mergeArrayItemsDefinition = (
 const mergePropertiesDefinition = (
   [key, value]: [string, JSONSchema7],
   jsonSchema: JSONSchema7,
-  newConditionProperties: JSONSchema7["properties"]
-): JSONSchema7["properties"] => {
+  newConditionProperties: SchemaProperties
+): {
+  [key: string]: JSONSchema7Definition;
+} => {
   const definition = getDefinition(value, jsonSchema);
   if (!isSchemaObject(definition)) {
     return newConditionProperties;
@@ -110,12 +120,12 @@ const updateThenElseProperties = (
     } => {
   const schemaProperties = getProperties(jsonSchema);
   const conditionProperties = getProperties(conditionSchema);
-  if (!schemaProperties || !conditionProperties) {
+  if (!conditionProperties) {
     return false;
   }
 
-  let newProperties: JSONSchema7["properties"] = {};
-  let newConditionProperties: JSONSchema7["properties"] = {};
+  let newProperties: SchemaProperties = {};
+  let newConditionProperties: SchemaProperties = {};
 
   /** Get the first condition property */
   const conditionItem = getThenElsePropertyItem(conditionProperties);
@@ -138,6 +148,9 @@ const updateThenElseProperties = (
     newConditionProperties
   );
 
+  if (!schemaProperties) {
+    return false;
+  }
   // Get schema property item using condition schema key
   const schemaPropertyItem = get(schemaProperties, key);
   const { type } = value;
@@ -185,11 +198,9 @@ const updateIfCondition = (
   condition: JSONSchema7
 ): JSONSchema7 | false => {
   const conditionProperties = getProperties(condition);
-  if (!conditionProperties) {
-    return false;
-  }
   const schemaProperties = getProperties(jsonSchema);
-  const conditionPropertyItem = getObjectHead(conditionProperties);
+  const conditionPropertyItem =
+    conditionProperties && getObjectHead(conditionProperties);
   if (!isArray(conditionPropertyItem)) {
     return false;
   }
@@ -197,31 +208,26 @@ const updateIfCondition = (
   if (!isSchemaObject(value)) {
     return false;
   }
-
   const { type } = value;
-
-  if (schemaProperties) {
-    const schemaPropertyItem = get(schemaProperties, key);
-    if (isSchemaObject(schemaPropertyItem)) {
-      if (!type) {
-        return {
-          ...jsonSchema,
-          if: {
-            ...conditionProperties,
-            properties: {
-              [key]: {
-                ...value,
-                type: get(schemaPropertyItem, "type")
-              }
-            }
+  const schemaPropertyItem = schemaProperties && get(schemaProperties, key);
+  if (isSchemaObject(schemaPropertyItem) && !type) {
+    return {
+      ...jsonSchema,
+      if: {
+        ...condition,
+        properties: {
+          [key]: {
+            ...value,
+            type: get(schemaPropertyItem, "type")
           }
-        };
+        }
       }
-    } else {
-      return false;
-    }
+    };
+  } else if (!isSchemaObject(schemaPropertyItem)) {
+    return false;
+  } else {
+    return jsonSchema;
   }
-  return jsonSchema;
 };
 
 /**
@@ -230,16 +236,13 @@ const updateIfCondition = (
 
 const mergeIfCondition = (
   jsonSchema: JSONSchema7,
-  _if: JSONSchema7["if"]
+  _if: JSONSchema7
 ): JSONSchema7 => {
-  if (isSchemaObject(_if)) {
-    const result = updateIfCondition(jsonSchema, _if);
-    if (!result) {
-      return omit(jsonSchema, ["if"]);
-    }
-    return result;
+  const result = updateIfCondition(jsonSchema, _if);
+  if (!result) {
+    return omit(jsonSchema, ["if"]);
   }
-  return jsonSchema;
+  return result;
 };
 
 /**
@@ -250,19 +253,19 @@ const mergeThenCondition = (
   jsonSchema: JSONSchema7,
   _then: JSONSchema7["then"]
 ): JSONSchema7 => {
-  if (isSchemaObject(_then)) {
-    const result = updateThenElseProperties(jsonSchema, _then);
-    if (!result) {
-      return omit(jsonSchema, ["then"]);
-    }
-    const { properties, conditions } = result;
-    jsonSchema = {
-      ...jsonSchema,
-      properties: { ...properties },
-      then: { ...conditions }
-    };
+  if (!isSchemaObject(_then)) {
+    return jsonSchema;
   }
-  return jsonSchema;
+  const result = updateThenElseProperties(jsonSchema, _then);
+  if (!result) {
+    return omit(jsonSchema, ["then"]);
+  }
+  const { properties, conditions } = result;
+  return {
+    ...jsonSchema,
+    properties: { ...properties },
+    then: { ...conditions }
+  };
 };
 
 /**
@@ -273,19 +276,19 @@ const mergeElseCondition = (
   jsonSchema: JSONSchema7,
   _else: JSONSchema7["else"]
 ): JSONSchema7 => {
-  if (isSchemaObject(_else)) {
-    const result = updateThenElseProperties(jsonSchema, _else);
-    if (!result) {
-      return omit(jsonSchema, ["else"]);
-    }
-    const { properties, conditions } = result;
-    jsonSchema = {
-      ...jsonSchema,
-      properties: { ...properties },
-      else: { ...conditions }
-    };
+  if (!isSchemaObject(_else)) {
+    return jsonSchema;
   }
-  return jsonSchema;
+  const result = updateThenElseProperties(jsonSchema, _else);
+  if (!result) {
+    return omit(jsonSchema, ["else"]);
+  }
+  const { properties, conditions } = result;
+  return {
+    ...jsonSchema,
+    properties: { ...properties },
+    else: { ...conditions }
+  };
 };
 
 /**
@@ -296,7 +299,7 @@ const mergeElseCondition = (
 export const mergeConditions = (jsonSchema: JSONSchema7): JSONSchema7 => {
   /** get then, else properties and determine are they dynamic or exist in properties */
   const [_if, _then, _else] = getConditions(jsonSchema);
-  if (_if) {
+  if (isSchemaObject(_if)) {
     jsonSchema = mergeIfCondition(jsonSchema, _if);
     jsonSchema = mergeThenCondition(jsonSchema, _then);
     jsonSchema = mergeElseCondition(jsonSchema, _else);

@@ -150,6 +150,7 @@ describe("convertToYup() array conditions", () => {
           countries: {
             type: "array",
             items: {
+              type: "object",
               properties: {
                 taxResidentCountry: {
                   type: "string",

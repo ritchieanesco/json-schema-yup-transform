@@ -27,8 +27,7 @@ const itemsType = {
 
 const createArraySchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.ArraySchema<unknown> => {
   const { default: defaults, minItems, maxItems, items, contains } = value;
 
@@ -43,9 +42,7 @@ const createArraySchema = (
 
   // Recursive parameter prevents infinite loops when
   // initialised from conditional schema
-  if (!recursive) {
-    Schema = createConditionSchema(Schema, jsonSchema, key);
-  }
+  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   // Items key expects all values to be of same type
   // Contains key expects one of the values to be of a type

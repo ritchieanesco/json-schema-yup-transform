@@ -9,16 +9,14 @@ import { SchemaItem } from "../../types";
 
 const createIntegerSchema = (
   item: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> =>
   createBaseNumberSchema(
     Yup.number()
       .integer()
       .strict(true),
     item,
-    jsonSchema,
-    recursive
+    jsonSchema
   );
 
 export default createIntegerSchema;

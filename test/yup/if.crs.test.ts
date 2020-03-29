@@ -46,6 +46,23 @@ const schema: JSONSchema7 = {
           }
         },
         required: ["tinUnavailableReason"]
+        // if: {
+        //   properties: {
+        //     tinUnavailableReason: {
+        //       const: "Z-TIN UNOBTAINABLE"
+        //     }
+        //   }
+        // },
+        // then: {
+        //   properties: {
+        //     tinUnavailableExplanation: {
+        //       type: "string",
+        //       minLength: 1,
+        //       maxLength: 8
+        //     }
+        //   },
+        //   required: ["tinUnavailableExplanation"]
+        // }
       }
     }
   },
@@ -77,7 +94,7 @@ const schema: JSONSchema7 = {
   }
 };
 
-describe("convertToYup() CRS", () => {
+describe.skip("convertToYup() CRS", () => {
   it("should validatate australia tax resident only ", () => {
     const yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
@@ -138,5 +155,34 @@ describe("convertToYup() CRS", () => {
       ]
     });
     expect(isValid).toBeFalsy();
+  });
+
+  it("should validatate Tin Unavailable Explanataion when reason equals value", () => {
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    console.log(JSON.stringify(yupschema));
+    let isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "dfdsfsdf",
+          hasTin: "false",
+          tinUnavailableReason: "Z-TIN UNOBTAINABLE"
+        }
+      ]
+    });
+    expect(isValid).toBeFalsy();
+
+    // isValid = yupschema.isValidSync({
+    //   isAustralianTaxResidentOnly: "false",
+    //   countries: [
+    //     {
+    //       taxResidentCountry: "dfdsfsdf",
+    //       hasTin: "false",
+    //       tinUnavailableReason: "Z-TIN UNOBTAINABLE",
+    //       tinUnavailableExplanation: "test"
+    //     }
+    //   ]
+    // });
+    // expect(isValid).toBeTruthy();
   });
 });

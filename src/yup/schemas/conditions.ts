@@ -67,7 +67,6 @@ const getElseSchema = (
   if (!elseProperties) {
     return false;
   }
-
   const elsePropertyItem = getObjectHead(elseProperties);
   if (!isArray(elsePropertyItem)) {
     return false;
@@ -111,11 +110,9 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
 
   if (key === thenSchema[0]) {
     const isValid = isValidator([ifKey, ifValue], jsonSchema);
-    const thenBuilder = buildConditionOptions(
-      _then,
-      thenSchema,
-      val => isValid(val) === true
-    );
+    const thenBuilder = buildConditionOptions(_then, thenSchema, val => {
+      return isValid(val) === true;
+    });
     if (isBuilder(thenBuilder)) {
       Schema = Schema.concat(Schema.when(ifKey, thenBuilder));
     }
@@ -123,17 +120,16 @@ export const createConditionSchema = <T extends Yup.Schema<any>>(
 
   if (!isSchemaObject(_else)) return Schema;
 
+  //const { if: ifs, then: thens } = _else;
   const elseSchema = getElseSchema(_else);
   if (!elseSchema) return Schema;
 
   if (key === elseSchema[0]) {
     const isValid = isValidator([ifKey, ifValue], jsonSchema);
     /** Create a builder object for the yup when schema */
-    const elseBuilder = buildConditionOptions(
-      _else,
-      elseSchema,
-      val => isValid(val) === false
-    );
+    const elseBuilder = buildConditionOptions(_else, elseSchema, val => {
+      return isValid(val) === false;
+    });
     if (isBuilder(elseBuilder)) {
       Schema = Schema.concat(Schema.when(ifKey, elseBuilder));
     }

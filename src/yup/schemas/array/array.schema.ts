@@ -68,7 +68,6 @@ const createArraySchema = (
 
     if (isSchemaObject(items)) {
       const { type, properties } = items;
-
       if (isSchemaObject(properties)) {
         // transform objects
         const obj = build(items);

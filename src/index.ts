@@ -1,6 +1,7 @@
 import { JSONSchema7 } from "json-schema";
 import Yup from "./yup/addMethods";
-import { cleanSchema as build } from "./yup";
+import build from "./yup";
+import { normalize } from "./yup/utils";
 
 /**
  * Converts a valid schema to a yup schema
@@ -8,7 +9,8 @@ import { cleanSchema as build } from "./yup";
 const convertToYup = (
   schema: JSONSchema7
 ): Yup.ObjectSchema<object> | undefined => {
-  return build(schema);
+  const normalizedSchema = normalize(schema);
+  return build(normalizedSchema);
 };
 
 export default convertToYup;

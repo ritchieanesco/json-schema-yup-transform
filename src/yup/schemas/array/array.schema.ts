@@ -5,7 +5,6 @@ import isArray from "lodash/isArray";
 import { isSchemaObject, isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
-import { createConditionSchema } from "../conditions";
 import { SchemaItem } from "../../types";
 import { build } from "../../builder/builder";
 import { DataTypes } from "../../../schema/";
@@ -40,10 +39,6 @@ const createArraySchema = (
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, key);
 
-  // Recursive parameter prevents infinite loops when
-  // initialised from conditional schema
-  Schema = createConditionSchema(Schema, jsonSchema, key);
-
   // Items key expects all values to be of same type
   // Contains key expects one of the values to be of a type
   // These rules will conflict with each other so only
@@ -67,6 +62,8 @@ const createArraySchema = (
     // items schema can be either a object or an array
 
     if (isSchemaObject(items)) {
+      console.log("handle array items");
+
       const { type, properties } = items;
       if (isSchemaObject(properties)) {
         // transform objects

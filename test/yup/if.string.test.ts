@@ -20,7 +20,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -53,7 +53,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {}
@@ -118,7 +118,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {}
@@ -151,7 +151,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -165,83 +165,6 @@ describe("convertToYup() string conditions", () => {
       country: "Canada"
     });
     expect(isValid).toBeTruthy();
-  });
-
-  it("should validate schema when if schema has no type property", () => {
-    const schm: JSONSchema7 = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        country: {
-          type: "string",
-          enum: ["Australia", "Canada"]
-        }
-      },
-      required: ["country"],
-      if: {
-        properties: { country: { const: "Australia" } }
-      },
-      then: {
-        properties: {
-          postal_code: { type: "string", pattern: "[0-9]{5}(-[0-9]{4})?" }
-        },
-        required: ["postal_code"]
-      }
-    };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
-
-    let isValid = yupschema.isValidSync({
-      country: "Australia",
-      postal_code: "00000"
-    });
-    expect(isValid).toBeTruthy();
-
-    isValid = yupschema.isValidSync({
-      country: "Australia"
-    });
-    expect(isValid).toBeFalsy();
-  });
-
-  it("should validate schema when then schema has no type property", () => {
-    const schm: JSONSchema7 = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        country: {
-          type: "string",
-          enum: ["Australia", "Canada"]
-        },
-        postal_code: {
-          type: "string"
-        }
-      },
-      required: ["country"],
-      if: {
-        properties: { country: { const: "Australia" } }
-      },
-      then: {
-        properties: {
-          postal_code: { pattern: "[0-9]{5}(-[0-9]{4})?" }
-        },
-        required: ["postal_code"]
-      }
-    };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
-
-    let isValid = yupschema.isValidSync({
-      country: "Australia",
-      postal_code: "00000"
-    });
-    expect(isValid).toBeTruthy();
-
-    isValid = yupschema.isValidSync({
-      country: "Australia"
-    });
-    expect(isValid).toBeFalsy();
   });
   it("should validate all fields with exception to conditional fields", () => {
     const schm: JSONSchema7 = {
@@ -257,7 +180,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -298,7 +221,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -341,7 +264,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { enum: ["Australia"] } }
+        properties: { country: { type: "string", enum: ["Australia"] } }
       },
       then: {
         properties: {
@@ -384,7 +307,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { pattern: "Australia" } }
+        properties: { country: { type: "string", pattern: "Australia" } }
       },
       then: {
         properties: {
@@ -427,7 +350,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { minLength: 7 } }
+        properties: { country: { type: "string", minLength: 7 } }
       },
       then: {
         properties: {
@@ -470,7 +393,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { minLength: 6 } }
+        properties: { country: { type: "string", minLength: 6 } }
       },
       then: {
         properties: {
@@ -513,7 +436,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Canada" } }
+        properties: { country: { type: "string", const: "Canada" } }
       },
       then: {
         properties: {
@@ -550,7 +473,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -593,7 +516,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -642,7 +565,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -685,7 +608,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {
@@ -728,7 +651,7 @@ describe("convertToYup() string conditions", () => {
       },
       required: ["country"],
       if: {
-        properties: { country: { const: "Australia" } }
+        properties: { country: { type: "string", const: "Australia" } }
       },
       then: {
         properties: {

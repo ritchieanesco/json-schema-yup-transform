@@ -11,34 +11,43 @@ describe("convertToYup() array items", () => {
       $id: "test",
       title: "Test",
       definitions: {
-        thing: {
-          type: "string"
+        country: {
+          type: "object",
+          properties: {
+            taxResidentCountry: {
+              type: "string",
+              minLength: 1,
+              maxLength: 30,
+              description: "The country of the resident"
+            },
+            hasTin: {
+              type: "string",
+              minLength: 1,
+              maxLength: 8
+            }
+          },
+          required: ["taxResidentCountry", "hasTin"]
         }
       },
       properties: {
-        things: {
+        countries: {
           type: "array",
           items: {
-            $ref: "#/definitions/thing"
+            $ref: "#/definitions/country"
           }
         }
       }
     };
     let yupschema = convertToYup(schm) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
-      things: ["1"]
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "true"
+        }
+      ]
     });
     expect(valid).toBeTruthy();
-
-    yupschema.isValidSync({
-      things: []
-    });
-    expect(valid).toBeTruthy();
-
-    valid = yupschema.isValidSync({
-      things: ["a", null]
-    });
-    expect(valid).toBeFalsy();
   });
 
   it("should validate strings", () => {
@@ -274,36 +283,6 @@ describe("convertToYup() array items", () => {
     });
     expect(valid).toBeFalsy();
   });
-
-  it("should validate tuples", () => {
-    const schm: JSONSchema7 = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        things: {
-          type: "array",
-          items: [
-            {
-              type: "string",
-              const: "test"
-            },
-            { type: "number", enum: [1, 2] },
-            { type: "boolean" }
-          ]
-        }
-      }
-    };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
-    let valid;
-
-    valid = yupschema.isValidSync({
-      things: ["test", 1, true]
-    });
-    expect(valid).toBeTruthy();
-  });
-
   it("should set default value", () => {
     const defaults = ["a"];
     const schm: JSONSchema7 = {

@@ -16,7 +16,7 @@ describe("convertToYup() boolean conditions", () => {
       },
       required: ["consent"],
       if: {
-        properties: { consent: { const: true } }
+        properties: { consent: { type: "boolean", const: true } }
       },
       then: {
         properties: {
@@ -50,7 +50,7 @@ describe("convertToYup() boolean conditions", () => {
       },
       required: ["consent"],
       if: {
-        properties: { consent: { const: true } }
+        properties: { consent: { type: "boolean", const: true } }
       },
       then: {
         properties: {
@@ -89,7 +89,7 @@ describe("convertToYup() boolean conditions", () => {
       },
       required: ["consent"],
       if: {
-        properties: { consent: { const: true } }
+        properties: { consent: { type: "boolean", const: true } }
       },
       then: {
         properties: {
@@ -125,7 +125,7 @@ describe("convertToYup() boolean conditions", () => {
       },
       required: ["consent"],
       if: {
-        properties: { consent: { const: true } }
+        properties: { consent: { type: "boolean", const: true } }
       },
       then: {
         properties: {

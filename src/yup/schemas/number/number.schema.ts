@@ -5,7 +5,6 @@ import isArray from "lodash/isArray";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { SchemaItem } from "../../types";
-import { createConditionSchema } from "../conditions";
 
 /**
  * Initializes a yup number schema derived from a json number schema
@@ -114,10 +113,6 @@ export const createBaseNumberSchema = (
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, key);
-
-  // Recursive parameter prevents infinite loops when
-  // initialised from conditional schema
-  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   return Schema;
 };

@@ -334,4 +334,169 @@ describe("convertToYup() array conditions", () => {
     });
     expect(isValid).toBeFalsy();
   });
+
+  it("should validate nested conditions", () => {
+    const schm: JSONSchema7 = {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "crs",
+      description: "CRS",
+      type: "object",
+      definitions: {
+        country: {
+          type: "object",
+          properties: {
+            taxResidentCountry: {
+              type: "string",
+              minLength: 1,
+              maxLength: 30,
+              description: "The country of the resident"
+            },
+            hasTin: {
+              type: "string",
+              minLength: 1,
+              maxLength: 8
+            }
+          },
+          required: ["taxResidentCountry", "hasTin"],
+          if: {
+            properties: {
+              hasTin: {
+                const: "true"
+              }
+            }
+          },
+          then: {
+            properties: {
+              tin: {
+                type: "string",
+                minLength: 1,
+                maxLength: 8
+              }
+            },
+            required: ["tin"]
+          },
+          else: {
+            properties: {
+              tinUnavailableReason: {
+                type: "string",
+                minLength: 1,
+                maxLength: 50
+              }
+            },
+            required: ["tinUnavailableReason"],
+            if: {
+              properties: {
+                tinUnavailableReason: {
+                  const: "Z-TIN UNOBTAINABLE"
+                }
+              }
+            },
+            then: {
+              properties: {
+                tinUnavailableExplanation: {
+                  type: "string",
+                  minLength: 1,
+                  maxLength: 8
+                }
+              },
+              required: ["tinUnavailableExplanation"]
+            }
+          }
+        }
+      },
+      properties: {
+        isAustralianTaxResidentOnly: {
+          type: "string"
+        }
+      },
+      required: ["isAustralianTaxResidentOnly"],
+      if: {
+        properties: {
+          isAustralianTaxResidentOnly: {
+            type: "string",
+            const: "false"
+          }
+        }
+      },
+      then: {
+        properties: {
+          countries: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/country"
+            },
+            minItems: 1,
+            maxItems: 5
+          }
+        },
+        required: ["countries"]
+      }
+    };
+
+    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "true",
+          tin: "TEST"
+        }
+      ]
+    });
+
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false",
+          tinUnavailableReason: "TEST"
+        }
+      ]
+    });
+
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false"
+        }
+      ]
+    });
+
+    expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false",
+          tinUnavailableReason: "Z-TIN UNOBTAINABLE"
+        }
+      ]
+    });
+
+    expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false",
+          tinUnavailableReason: "Z-TIN UNOBTAINABLE",
+          tinUnavailableExplanation: "TEST"
+        }
+      ]
+    });
+
+    expect(isValid).toBeTruthy();
+  });
 });

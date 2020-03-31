@@ -131,17 +131,18 @@ export const buildCondition = (
     const thenSchema = get(jsonSchema, "then");
     const elseSchema = get(jsonSchema, "else");
 
-    let ConditionSchema = {};
+    let conditionSchema = {};
 
     if (isSchemaObject(thenSchema)) {
       const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
-      ConditionSchema = buildConditionItem(thenSchema, [
+      const thenConditionSchema = buildConditionItem(thenSchema, [
         ifSchemaKey,
         val => {
           return isValid(val) === true;
         }
       ]);
-      if (!ConditionSchema) return false;
+      if (!thenConditionSchema) return false;
+      conditionSchema = { ...thenConditionSchema };
     }
 
     if (isSchemaObject(elseSchema)) {
@@ -151,10 +152,10 @@ export const buildCondition = (
         val => isValid(val) === false
       ]);
       if (!elseConditionSchema) return false;
-      ConditionSchema = { ...ConditionSchema, ...elseConditionSchema };
+      conditionSchema = { ...conditionSchema, ...elseConditionSchema };
     }
 
-    return ConditionSchema;
+    return conditionSchema;
   }
 
   return false;
@@ -168,35 +169,36 @@ const buildConditionItem = (
   schema: JSONSchema7,
   [ifSchemaKey, callback]: [string, (val: unknown) => boolean]
 ): false | { [key: string]: Yup.MixedSchema } => {
-  const { properties, if: ifSchema } = schema;
+  const { properties } = schema;
+  if (!properties) return false;
 
-  let thenSchemaData = properties && buildProperties(properties, schema);
-  if (!thenSchemaData) return false;
+  const schemaHead = getObjectHead(properties);
+  if (!schemaHead) return false;
+  const key = schemaHead[0];
 
-  thenSchemaData = getObjectHead(thenSchemaData);
-  if (!thenSchemaData) return false;
+  /**
+   * Returns a key ( field name ) and value (generated schema) pair.
+   * Note: This will contain any nested conditions!!
+   * The recursion in `buildProperties` means the nested conditions
+   * will already have been transformed to a when schema
+   */
+  const schemaData = buildProperties(properties, schema);
+  if (!schemaData) return false;
+
+  /**
+   * Make a copy of schemaData and omit the current schema
+   */
+  const omitData = omit(schemaData, key);
 
   /** Get the correct schema type to concat the when schema to */
-  let Schema = thenSchemaData[1];
-
-  // is there a if schema here
-  const ChildConditionSchema =
-    isSchemaObject(ifSchema) && buildCondition(schema);
-
-  if (ChildConditionSchema) {
-    Schema = Schema.concat(Yup.object().shape(ChildConditionSchema));
-  }
-
-  const conditionSchemaHead = getObjectHead(properties);
-  if (!conditionSchemaHead) return false;
-
-  const conditionSchemaHeadKey = conditionSchemaHead[0];
+  let Schema = schemaData[key];
 
   return {
-    [conditionSchemaHeadKey]: Yup.mixed().when(ifSchemaKey, {
+    [key]: Yup.mixed().when(ifSchemaKey, {
       is: callback,
       then: Schema
-    })
+    }),
+    ...omitData
   };
 };
 

@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isBoolean from "lodash/isBoolean";
-import isObject from "lodash/isObject";
+import isPlainObject from "lodash/isPlainObject";
 import isArray from "lodash/isArray";
 import isInteger from "lodash/isInteger";
 import { JSONSchema7Definition } from "json-schema";
@@ -70,7 +70,7 @@ export function contains(
         isValid = input.some(isBoolean);
       }
       if (value === DataTypes.OBJECT) {
-        isValid = input.some(isObject);
+        isValid = input.some(isPlainObject);
       }
       if (value === DataTypes.ARRAY) {
         isValid = input.some(isArray);

@@ -4,6 +4,7 @@ import {
   removeEmptyObjects,
   transformRefs,
   applyIfTypes,
+  applyPaths,
   normalize
 } from "../../src/yup/utils";
 import { validateItemsArray } from "../../src/yup/addMethods/utils";
@@ -87,6 +88,202 @@ describe("removeEmptyObjects()", () => {
           type: "array",
           items: []
         }
+      }
+    });
+  });
+});
+
+describe("applyPaths()", () => {
+  it("should add node paths to all fields", () => {
+    const schema: JSONSchema7 = {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "vehicles",
+      description: "Vehicles",
+      type: "object",
+      definitions: {
+        vehicle: {
+          type: "object",
+          properties: {
+            model: {
+              type: "string",
+              minLength: 1,
+              maxLength: 30
+            },
+            isImported: {
+              type: "boolean",
+              minLength: 1,
+              maxLength: 8
+            }
+          },
+          required: ["model", "isImported"],
+          if: {
+            properties: {
+              isImported: {
+                const: true
+              }
+            }
+          },
+          then: {
+            properties: {
+              country: {
+                type: "string",
+                minLength: 1,
+                maxLength: 8
+              }
+            },
+            required: ["country"]
+          },
+          else: {
+            properties: {
+              year: {
+                type: "number"
+              }
+            },
+            required: ["year"],
+            if: {
+              properties: {
+                year: {
+                  const: 1980
+                }
+              }
+            },
+            then: {
+              properties: {
+                dealer: {
+                  type: "string",
+                  minLength: 1,
+                  maxLength: 8
+                }
+              },
+              required: ["dealer"]
+            }
+          }
+        }
+      },
+      properties: {
+        isCommercial: {
+          type: "boolean"
+        }
+      },
+      required: ["isCommercial"],
+      if: {
+        properties: {
+          isCommercial: {
+            const: false
+          }
+        }
+      },
+      then: {
+        properties: {
+          vehicles: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/vehicle"
+            },
+            minItems: 1,
+            maxItems: 5
+          }
+        },
+        required: ["vehicles"]
+      }
+    };
+    expect(applyPaths(schema)).toEqual({
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "vehicles",
+      description: "Vehicles",
+      type: "object",
+      definitions: {
+        vehicle: {
+          type: "object",
+          properties: {
+            model: {
+              type: "string",
+              minLength: 1,
+              maxLength: 30,
+              description: "vehicle.model"
+            },
+            isImported: {
+              type: "boolean",
+              minLength: 1,
+              maxLength: 8,
+              description: "vehicle.isImported"
+            }
+          },
+          required: ["model", "isImported"],
+          if: {
+            properties: {
+              isImported: {
+                const: true
+              }
+            }
+          },
+          then: {
+            properties: {
+              country: {
+                type: "string",
+                minLength: 1,
+                maxLength: 8,
+                description: "vehicle.country"
+              }
+            },
+            required: ["country"]
+          },
+          else: {
+            properties: {
+              year: {
+                type: "number",
+                description: "vehicle.year"
+              }
+            },
+            required: ["year"],
+            if: {
+              properties: {
+                year: {
+                  const: 1980
+                }
+              }
+            },
+            then: {
+              properties: {
+                dealer: {
+                  type: "string",
+                  minLength: 1,
+                  maxLength: 8,
+                  description: "vehicle.dealer"
+                }
+              },
+              required: ["dealer"]
+            }
+          }
+        }
+      },
+      properties: {
+        isCommercial: {
+          type: "boolean",
+          description: "isCommercial"
+        }
+      },
+      required: ["isCommercial"],
+      if: {
+        properties: {
+          isCommercial: {
+            const: false
+          }
+        }
+      },
+      then: {
+        properties: {
+          vehicles: {
+            description: "vehicles",
+            type: "array",
+            items: {
+              $ref: "#/definitions/vehicle"
+            },
+            minItems: 1,
+            maxItems: 5
+          }
+        },
+        required: ["vehicles"]
       }
     });
   });
@@ -479,18 +676,20 @@ describe("normalize()", () => {
       title: "Test",
       definitions: {
         employment: {
-          type: "string"
+          type: "string",
+          description: "career"
         }
       },
       properties: {
         name: {
-          type: "string"
+          type: "string",
+          description: "name"
         }
       },
       if: { properties: { name: { type: "string", const: "Jane" } } },
       then: {
         properties: {
-          career: { type: "string" }
+          career: { type: "string", description: "career" }
         }
       }
     });

@@ -2,7 +2,7 @@ import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import has from "lodash/has";
 import get from "lodash/get";
 import omit from "lodash/omit";
-import isObject from "lodash/isObject";
+import isPlainObject from "lodash/isPlainObject";
 import Yup from "../addMethods/";
 import { getProperties, isSchemaObject } from "../../schema/";
 import createValidationSchema from "../schemas/";
@@ -91,7 +91,7 @@ const hasIfSchema = (jsonSchema: JSONSchema7, key: string) => {
   const { if: ifSchema } = jsonSchema;
   if (isSchemaObject(ifSchema)) {
     const { properties } = ifSchema;
-    return isObject(properties) && has(properties, key);
+    return isPlainObject(properties) && has(properties, key);
   }
   return false;
 };

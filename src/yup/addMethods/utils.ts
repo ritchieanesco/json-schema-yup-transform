@@ -2,7 +2,7 @@ import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import isArray from "lodash/isArray";
 import isUndefined from "lodash/isUndefined";
 import isString from "lodash/isString";
-import { validateTypeOfValue } from "../schemas/schema";
+import { validateTypeOfValue } from "../schemas/";
 import { DataTypes, isSchemaObject, getItemsArrayItem } from "../../schema";
 import { isEnum } from "../../schema";
 

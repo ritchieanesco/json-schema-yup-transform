@@ -5,7 +5,7 @@ import omit from "lodash/omit";
 import isObject from "lodash/isObject";
 import Yup from "../addMethods/";
 import { getProperties, isSchemaObject } from "../../schema/";
-import { createValidationSchema } from "../schemas/schema";
+import createValidationSchema from "../schemas/";
 import { SchemaItem } from "../types";
 import { getObjectHead } from "../utils";
 

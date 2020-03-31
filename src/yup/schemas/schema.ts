@@ -113,8 +113,7 @@ const getLazyValidationSchema = (
 
 export const createValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.Lazy | Yup.MixedSchema<any> => {
   const type = getPropertyType(value);
   if (isArray(type)) {

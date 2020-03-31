@@ -184,21 +184,6 @@ describe("convertToYup() object", () => {
       }
     });
     expect(isValid).toBeFalsy();
-
-    schm = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        mailingAddress: {
-          $ref: "#/definitions/address"
-        }
-      }
-    };
-    expect(() => {
-      convertToYup(schm);
-    }).toThrowError("Type key is missing");
   });
 
   it("should validate fields using definition id", () => {

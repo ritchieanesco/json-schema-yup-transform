@@ -17,7 +17,6 @@ import {
 import { isPattern } from "../../../schema";
 import { createRequiredSchema } from "../required";
 import { SchemaItem } from "../../types";
-import { createConditionSchema } from "../conditions";
 
 /**
  * Initializes a yup string schema derived from a json string schema
@@ -45,10 +44,6 @@ const createStringSchema = (
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, key);
-
-  // Recursive parameter prevents infinite loops when
-  // initialised from conditional schema
-  Schema = createConditionSchema(Schema, jsonSchema, key);
 
   if (!isUndefined(consts)) {
     Schema = Schema.concat(

@@ -16,7 +16,7 @@ describe("convertToYup() array conditions", () => {
       },
       required: ["list"],
       if: {
-        properties: { list: { minItems: 3 } }
+        properties: { list: { minItems: 3, type: "array" } }
       },
       then: {
         properties: {
@@ -45,7 +45,7 @@ describe("convertToYup() array conditions", () => {
       },
       required: ["list"],
       if: {
-        properties: { list: { minItems: 3 } }
+        properties: { list: { minItems: 3, type: "array" } }
       },
       then: {
         properties: {
@@ -76,7 +76,7 @@ describe("convertToYup() array conditions", () => {
       list: ["a", "b"],
       otherList: "A"
     });
-    expect(isValid).toBeFalsy();
+    expect(isValid).toBeTruthy();
   });
 
   it("should validate conditional when dependency matches maximum items", () => {
@@ -92,7 +92,7 @@ describe("convertToYup() array conditions", () => {
       },
       required: ["list"],
       if: {
-        properties: { list: { maxItems: 3 } }
+        properties: { list: { maxItems: 3, type: "array" } }
       },
       then: {
         properties: {
@@ -123,7 +123,7 @@ describe("convertToYup() array conditions", () => {
       list: ["a", "b", "c", "d", "e"],
       otherList: "A"
     });
-    expect(isValid).toBeFalsy();
+    expect(isValid).toBeTruthy();
   });
 
   it("should validate an item of objects", () => {
@@ -141,6 +141,7 @@ describe("convertToYup() array conditions", () => {
       if: {
         properties: {
           isAustralianTaxResidentOnly: {
+            type: "string",
             const: "false"
           }
         }
@@ -220,8 +221,7 @@ describe("convertToYup() array conditions", () => {
           type: "object",
           properties: {
             taxResidentCountry: {
-              type: "string",
-              description: "The country of the resident"
+              type: "string"
             },
             hasTin: {
               type: "string"
@@ -239,6 +239,7 @@ describe("convertToYup() array conditions", () => {
       if: {
         properties: {
           isAustralianTaxResidentOnly: {
+            type: "string",
             const: "false"
           }
         }
@@ -263,9 +264,24 @@ describe("convertToYup() array conditions", () => {
       isAustralianTaxResidentOnly: "true",
       countries: [
         {
+          taxResidentCountry: "Singapore"
+        }
+      ]
+    });
+
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "true"
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
           taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: ""
+          hasTin: "TEST"
         }
       ]
     });
@@ -276,12 +292,159 @@ describe("convertToYup() array conditions", () => {
       countries: [
         {
           taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
+          hasTin: "TEST"
+        },
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "TEST"
+        },
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "TEST"
+        },
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "TEST"
+        },
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "TEST"
+        },
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "TEST"
         }
       ]
     });
+    expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: []
+    });
+    expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore"
+        }
+      ]
+    });
+    expect(isValid).toBeFalsy();
+  });
+
+  it("should validate nested conditions", () => {
+    const schm: JSONSchema7 = {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "crs",
+      description: "CRS",
+      type: "object",
+      definitions: {
+        country: {
+          type: "object",
+          properties: {
+            taxResidentCountry: {
+              type: "string",
+              minLength: 1,
+              maxLength: 30,
+              description: "The country of the resident"
+            },
+            hasTin: {
+              type: "string",
+              minLength: 1,
+              maxLength: 8
+            }
+          },
+          required: ["taxResidentCountry", "hasTin"],
+          if: {
+            properties: {
+              hasTin: {
+                const: "true"
+              }
+            }
+          },
+          then: {
+            properties: {
+              tin: {
+                type: "string",
+                minLength: 1,
+                maxLength: 8
+              }
+            },
+            required: ["tin"]
+          },
+          else: {
+            properties: {
+              tinUnavailableReason: {
+                type: "string",
+                minLength: 1,
+                maxLength: 50
+              }
+            },
+            required: ["tinUnavailableReason"],
+            if: {
+              properties: {
+                tinUnavailableReason: {
+                  const: "Z-TIN UNOBTAINABLE"
+                }
+              }
+            },
+            then: {
+              properties: {
+                tinUnavailableExplanation: {
+                  type: "string",
+                  minLength: 1,
+                  maxLength: 8
+                }
+              },
+              required: ["tinUnavailableExplanation"]
+            }
+          }
+        }
+      },
+      properties: {
+        isAustralianTaxResidentOnly: {
+          type: "string"
+        }
+      },
+      required: ["isAustralianTaxResidentOnly"],
+      if: {
+        properties: {
+          isAustralianTaxResidentOnly: {
+            type: "string",
+            const: "false"
+          }
+        }
+      },
+      then: {
+        properties: {
+          countries: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/country"
+            },
+            minItems: 1,
+            maxItems: 5
+          }
+        },
+        required: ["countries"]
+      }
+    };
+
+    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "true",
+          tin: "TEST"
+        }
+      ]
+    });
+
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
@@ -289,42 +452,24 @@ describe("convertToYup() array conditions", () => {
       countries: [
         {
           taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
-        },
-        {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
-        },
-        {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
-        },
-        {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
-        },
-        {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
-        },
-        {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
+          hasTin: "false",
+          tinUnavailableReason: "TEST"
         }
       ]
     });
+
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false"
+        }
+      ]
+    });
+
     expect(isValid).toBeFalsy();
 
     isValid = yupschema.isValidSync({
@@ -332,11 +477,26 @@ describe("convertToYup() array conditions", () => {
       countries: [
         {
           taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: ""
+          hasTin: "false",
+          tinUnavailableReason: "Z-TIN UNOBTAINABLE"
         }
       ]
     });
+
     expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      isAustralianTaxResidentOnly: "false",
+      countries: [
+        {
+          taxResidentCountry: "Singapore",
+          hasTin: "false",
+          tinUnavailableReason: "Z-TIN UNOBTAINABLE",
+          tinUnavailableExplanation: "TEST"
+        }
+      ]
+    });
+
+    expect(isValid).toBeTruthy();
   });
 });

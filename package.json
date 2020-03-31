@@ -6,6 +6,7 @@
   "scripts": {
     "build": "parcel build src/index.ts --out-dir dist",
     "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
@@ -25,5 +26,8 @@
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
   },
-  "keywords": []
+  "keywords": [],
+  "jest": {
+    "testEnvironment": "node"
+  }
 }

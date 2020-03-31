@@ -133,14 +133,14 @@ describe("convertToYup() array conditions", () => {
       description: "CRS",
       type: "object",
       properties: {
-        isAustralianTaxResidentOnly: {
+        isTaxResidentOnly: {
           type: "string"
         }
       },
-      required: ["isAustralianTaxResidentOnly"],
+      required: ["isTaxResidentOnly"],
       if: {
         properties: {
-          isAustralianTaxResidentOnly: {
+          isTaxResidentOnly: {
             type: "string",
             const: "false"
           }
@@ -153,15 +153,15 @@ describe("convertToYup() array conditions", () => {
             items: {
               type: "object",
               properties: {
-                taxResidentCountry: {
+                country: {
                   type: "string",
                   description: "The country of the resident"
                 },
-                hasTin: {
+                hasID: {
                   type: "string"
                 }
               },
-              required: ["taxResidentCountry", "hasTin"]
+              required: ["country", "hasID"]
             },
             minItems: 1,
             maxItems: 5
@@ -173,37 +173,37 @@ describe("convertToYup() array conditions", () => {
 
     let yupschema = convertToYup(schm) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "true",
+      isTaxResidentOnly: "true",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: ""
+          country: "Singapore",
+          idReason: "",
+          idNoExplanation: ""
         }
       ]
     });
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: "",
-          hasTin: "asdasdasd"
+          country: "Singapore",
+          idReason: "",
+          idNoExplanation: "",
+          hasID: "asdasdasd"
         }
       ]
     });
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          tinUnavailableReason: "",
-          tinUnavailableExplanation: ""
+          country: "Singapore",
+          idReason: "",
+          idNoExplanation: ""
         }
       ]
     });
@@ -220,25 +220,25 @@ describe("convertToYup() array conditions", () => {
         country: {
           type: "object",
           properties: {
-            taxResidentCountry: {
+            country: {
               type: "string"
             },
-            hasTin: {
+            hasID: {
               type: "string"
             }
           },
-          required: ["taxResidentCountry", "hasTin"]
+          required: ["country", "hasID"]
         }
       },
       properties: {
-        isAustralianTaxResidentOnly: {
+        isTaxResidentOnly: {
           type: "string"
         }
       },
-      required: ["isAustralianTaxResidentOnly"],
+      required: ["isTaxResidentOnly"],
       if: {
         properties: {
-          isAustralianTaxResidentOnly: {
+          isTaxResidentOnly: {
             type: "string",
             const: "false"
           }
@@ -261,10 +261,10 @@ describe("convertToYup() array conditions", () => {
 
     let yupschema = convertToYup(schm) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "true",
+      isTaxResidentOnly: "true",
       countries: [
         {
-          taxResidentCountry: "Singapore"
+          country: "Singapore"
         }
       ]
     });
@@ -272,63 +272,63 @@ describe("convertToYup() array conditions", () => {
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "true"
+      isTaxResidentOnly: "true"
     });
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         }
       ]
     });
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         },
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         },
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         },
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         },
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         },
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "TEST"
+          country: "Singapore",
+          hasID: "TEST"
         }
       ]
     });
     expect(isValid).toBeFalsy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: []
     });
     expect(isValid).toBeFalsy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore"
+          country: "Singapore"
         }
       ]
     });
@@ -345,74 +345,73 @@ describe("convertToYup() array conditions", () => {
         country: {
           type: "object",
           properties: {
-            taxResidentCountry: {
+            country: {
               type: "string",
               minLength: 1,
-              maxLength: 30,
-              description: "The country of the resident"
+              maxLength: 30
             },
-            hasTin: {
+            hasID: {
               type: "string",
               minLength: 1,
               maxLength: 8
             }
           },
-          required: ["taxResidentCountry", "hasTin"],
+          required: ["country", "hasID"],
           if: {
             properties: {
-              hasTin: {
+              hasID: {
                 const: "true"
               }
             }
           },
           then: {
             properties: {
-              tin: {
+              id: {
                 type: "string",
                 minLength: 1,
                 maxLength: 8
               }
             },
-            required: ["tin"]
+            required: ["id"]
           },
           else: {
             properties: {
-              tinUnavailableReason: {
+              idReason: {
                 type: "string",
                 minLength: 1,
                 maxLength: 50
               }
             },
-            required: ["tinUnavailableReason"],
+            required: ["idReason"],
             if: {
               properties: {
-                tinUnavailableReason: {
-                  const: "Z-TIN UNOBTAINABLE"
+                idReason: {
+                  const: "UNOBTAINABLE"
                 }
               }
             },
             then: {
               properties: {
-                tinUnavailableExplanation: {
+                idNoExplanation: {
                   type: "string",
                   minLength: 1,
                   maxLength: 8
                 }
               },
-              required: ["tinUnavailableExplanation"]
+              required: ["idNoExplanation"]
             }
           }
         }
       },
       properties: {
-        isAustralianTaxResidentOnly: {
+        isTaxResidentOnly: {
           type: "string"
         }
       },
-      required: ["isAustralianTaxResidentOnly"],
+      required: ["isTaxResidentOnly"],
       if: {
         properties: {
-          isAustralianTaxResidentOnly: {
+          isTaxResidentOnly: {
             type: "string",
             const: "false"
           }
@@ -435,12 +434,12 @@ describe("convertToYup() array conditions", () => {
 
     let yupschema = convertToYup(schm) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "true",
-          tin: "TEST"
+          country: "Singapore",
+          hasID: "true",
+          id: "TEST"
         }
       ]
     });
@@ -448,12 +447,12 @@ describe("convertToYup() array conditions", () => {
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "false",
-          tinUnavailableReason: "TEST"
+          country: "Singapore",
+          hasID: "false",
+          idReason: "TEST"
         }
       ]
     });
@@ -461,11 +460,11 @@ describe("convertToYup() array conditions", () => {
     expect(isValid).toBeTruthy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "false"
+          country: "Singapore",
+          hasID: "false"
         }
       ]
     });
@@ -473,12 +472,12 @@ describe("convertToYup() array conditions", () => {
     expect(isValid).toBeFalsy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "false",
-          tinUnavailableReason: "Z-TIN UNOBTAINABLE"
+          country: "Singapore",
+          hasID: "false",
+          idReason: "UNOBTAINABLE"
         }
       ]
     });
@@ -486,13 +485,13 @@ describe("convertToYup() array conditions", () => {
     expect(isValid).toBeFalsy();
 
     isValid = yupschema.isValidSync({
-      isAustralianTaxResidentOnly: "false",
+      isTaxResidentOnly: "false",
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "false",
-          tinUnavailableReason: "Z-TIN UNOBTAINABLE",
-          tinUnavailableExplanation: "TEST"
+          country: "Singapore",
+          hasID: "false",
+          idReason: "UNOBTAINABLE",
+          idNoExplanation: "TEST"
         }
       ]
     });

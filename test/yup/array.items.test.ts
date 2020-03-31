@@ -14,19 +14,19 @@ describe("convertToYup() array items", () => {
         country: {
           type: "object",
           properties: {
-            taxResidentCountry: {
+            country: {
               type: "string",
               minLength: 1,
               maxLength: 30,
               description: "The country of the resident"
             },
-            hasTin: {
+            hasID: {
               type: "string",
               minLength: 1,
               maxLength: 8
             }
           },
-          required: ["taxResidentCountry", "hasTin"]
+          required: ["country", "hasID"]
         }
       },
       properties: {
@@ -42,8 +42,8 @@ describe("convertToYup() array items", () => {
     let valid = yupschema.isValidSync({
       countries: [
         {
-          taxResidentCountry: "Singapore",
-          hasTin: "true"
+          country: "Singapore",
+          hasID: "true"
         }
       ]
     });

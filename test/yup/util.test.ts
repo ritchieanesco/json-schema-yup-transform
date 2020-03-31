@@ -2,6 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import {
   getObjectHead,
   removeEmptyObjects,
+  transformRefs,
   applyIfTypes,
   normalize
 } from "../../src/yup/utils";
@@ -390,6 +391,56 @@ describe("applyIfTypes()", () => {
           }
         },
         required: ["vehicles"]
+      }
+    });
+  });
+});
+
+describe("transformRefs()", () => {
+  it("should replace $ref property with definition", () => {
+    expect(
+      transformRefs({
+        type: "object",
+        $schema: "http://json-schema.org/draft-07/schema#",
+        $id: "test",
+        title: "Test",
+        definitions: {
+          employment: {
+            type: "string"
+          }
+        },
+        properties: {
+          name: {
+            type: "string"
+          }
+        },
+        if: { properties: { name: { type: "string", const: "Jane" } } },
+        then: {
+          properties: {
+            career: { $ref: "#/definitions/employment" }
+          }
+        }
+      })
+    ).toEqual({
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      definitions: {
+        employment: {
+          type: "string"
+        }
+      },
+      properties: {
+        name: {
+          type: "string"
+        }
+      },
+      if: { properties: { name: { type: "string", const: "Jane" } } },
+      then: {
+        properties: {
+          career: { type: "string" }
+        }
       }
     });
   });

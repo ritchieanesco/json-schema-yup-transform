@@ -37,7 +37,7 @@ export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
 
 /** Recursively removes any empty objects */
 
-export const removeEmptyObjects = (el: JSONSchema7) => {
+export const removeEmptyObjects = (schema: JSONSchema7) => {
   const cleaner = (result: JSONSchema7, value: any, key: string) => {
     var isCollection = isPlainObject(value);
     var cleaned = isCollection ? cleanObject(value) : value;
@@ -46,19 +46,18 @@ export const removeEmptyObjects = (el: JSONSchema7) => {
     }
     isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
   };
-  const cleanObject = (el: JSONSchema7) => transform(el, cleaner);
-  return isPlainObject(el) ? cleanObject(el) : el;
+  const cleanObject = (schema: JSONSchema7) => transform(schema, cleaner);
+  return isPlainObject(schema) ? cleanObject(schema) : schema;
 };
 
 /** Replace all $ref instances with their definition */
 
 export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
   const replaceRefs = (result: JSONSchema7, value: any, key: string) => {
-    var isCollection = isPlainObject(value);
-    var hasRef = has(value, "$ref");
-    var replaced = hasRef
+    const hasRef = get(value, "$ref");
+    const replaced = hasRef
       ? getDefinitionItem(schema, get(value, "$ref"))
-      : isCollection
+      : isPlainObject(value)
       ? replaceAllRefs(value)
       : value;
     result[key] = replaced;
@@ -122,21 +121,23 @@ export const applyPaths = (schema: JSONSchema7): JSONSchema7 => {
     "else",
     "items"
   ];
-  const addPaths = (item: JSONSchema7, path: string = ""): JSONSchema7 => {
-    for (let [key, value] of Object.entries(item)) {
-      // apply the $comments property to field elements only
-      if (has(value, "type") && !has(value, "properties")) {
-        item[key].description = `${path}${key}`;
+  const addPath = (schema: JSONSchema7, path: string = ""): JSONSchema7 =>
+    transform(schema, (result: JSONSchema7, value: any, key: string) => {
+      /** Target field node only */
+      const isField = has(value, "type") && !has(value, "properties");
+      if (isField) {
+        value = {
+          ...value,
+          description: `${path}${key}`
+        };
       }
-      if (isPlainObject(value)) {
-        /** capture path of the field id only */
-        const id = invalidKeys.includes(key) ? "" : `${key}.`;
-        addPaths(value, `${path}${id}`);
-      }
-    }
-    return item;
-  };
-  return addPaths(schema);
+      /** Capture path of the field id only */
+      const id = invalidKeys.includes(key) ? "" : `${key}.`;
+      result[key] = isPlainObject(value)
+        ? addPath(value, `${path}${id}`)
+        : value;
+    });
+  return isPlainObject(schema) ? addPath(schema) : schema;
 };
 
 /**

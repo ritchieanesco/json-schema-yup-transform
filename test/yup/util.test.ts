@@ -677,7 +677,7 @@ describe("normalize()", () => {
       definitions: {
         employment: {
           type: "string",
-          description: "career"
+          description: "employment"
         }
       },
       properties: {

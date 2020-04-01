@@ -52,23 +52,20 @@ export const removeEmptyObjects = (el: JSONSchema7) => {
 
 /** Replace all $ref instances with their definition */
 
-// TODO: Update this function to use lodash transform
 export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
-  const replaceRefs = (item: any) => {
-    for (let [key, value] of Object.entries(item)) {
-      if (has(value, "$ref")) {
-        const definition = getDefinitionItem(schema, get(value, "$ref"));
-        if (isPlainObject(item[key])) {
-          item[key] = definition;
-        }
-      }
-      if (isPlainObject(value)) {
-        replaceRefs(value);
-      }
-    }
-    return item;
+  const replaceRefs = (result: JSONSchema7, value: any, key: string) => {
+    var isCollection = isPlainObject(value);
+    var hasRef = has(value, "$ref");
+    var replaced = hasRef
+      ? getDefinitionItem(schema, get(value, "$ref"))
+      : isCollection
+      ? replaceAllRefs(value)
+      : value;
+    result[key] = replaced;
   };
-  return replaceRefs(schema);
+  const replaceAllRefs = (schema: JSONSchema7): JSONSchema7 =>
+    transform(schema, replaceRefs);
+  return isPlainObject(schema) ? replaceAllRefs(schema) : schema;
 };
 
 /**

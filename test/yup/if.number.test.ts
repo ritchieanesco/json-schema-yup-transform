@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() number conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -25,7 +25,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000
@@ -39,7 +39,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -60,7 +60,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -76,7 +76,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches enum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -97,7 +97,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -130,7 +130,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches minimum number", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -150,7 +150,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       products: 101,
@@ -171,7 +171,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches maximum number", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -191,7 +191,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       products: 99,
@@ -212,7 +212,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches a multiple of", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -232,7 +232,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       products: 100,
@@ -253,7 +253,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate required conditionals", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -274,7 +274,7 @@ describe("convertToYup() number conditions", () => {
         required: ["productId"]
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       products: 100,
@@ -289,7 +289,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional constant when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -310,7 +310,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -326,7 +326,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional enum when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -347,7 +347,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -369,7 +369,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional minimum number when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -390,7 +390,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -411,7 +411,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional maximum number when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -432,7 +432,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -453,7 +453,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional multiple of number when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -474,7 +474,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       postcode: 3000,
@@ -495,7 +495,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it.only("should validate other conditional", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -521,7 +521,7 @@ describe("convertToYup() number conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     // let isValid = yupschema.isValidSync({
     //   postcode: 3000,

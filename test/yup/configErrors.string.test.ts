@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
 
-describe("convertToYup() errors", () => {
+describe("convertToYup() string configuration errors", () => {
   it("should show configuration error for incorrect data type", () => {
     const schema: JSONSchema7 = {
       type: "object",

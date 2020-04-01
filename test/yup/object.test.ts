@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() object", () => {
   it("should validate object type", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -16,7 +16,7 @@ describe("convertToYup() object", () => {
       }
     };
 
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
       items: {}
     });
@@ -34,7 +34,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate nested object type", () => {
-    let schm: JSONSchema7 = {
+    let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -50,7 +50,7 @@ describe("convertToYup() object", () => {
       }
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       address: {
@@ -68,7 +68,7 @@ describe("convertToYup() object", () => {
     });
     expect(isValid).toBeFalsy();
 
-    schm = {
+    schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -89,7 +89,7 @@ describe("convertToYup() object", () => {
       }
     };
 
-    yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     isValid = yupschema.isValidSync({
       address: {
@@ -113,7 +113,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate multiple types", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -127,7 +127,7 @@ describe("convertToYup() object", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       address: {
@@ -143,7 +143,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate fields from definitions", () => {
-    let schm: JSONSchema7 = {
+    let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -165,7 +165,7 @@ describe("convertToYup() object", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       mailingAddress: {
@@ -187,7 +187,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate fields using definition id", () => {
-    let schm: JSONSchema7 = {
+    let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -210,7 +210,7 @@ describe("convertToYup() object", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       mailingAddress: {
@@ -232,7 +232,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should bypass field if not an object", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -244,7 +244,7 @@ describe("convertToYup() object", () => {
         test: true
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       name: "test"

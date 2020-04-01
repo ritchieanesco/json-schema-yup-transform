@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() boolean", () => {
   it("should validate boolean type", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -15,7 +15,7 @@ describe("convertToYup() boolean", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       enable: true
@@ -39,7 +39,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should validate multiple types", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -50,7 +50,7 @@ describe("convertToYup() boolean", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       terms: true
@@ -64,7 +64,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should validate required", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -76,7 +76,7 @@ describe("convertToYup() boolean", () => {
       },
       required: ["enable"]
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -95,7 +95,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should set default value", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -109,7 +109,7 @@ describe("convertToYup() boolean", () => {
       required: ["consent"]
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({});
     expect(isValid).toBeTruthy();
 

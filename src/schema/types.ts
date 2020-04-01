@@ -51,7 +51,9 @@ export enum SchemaKeywords {
   EXCLUSIVE_MAXIMUM = "exclusiveMaximum",
   MULTIPLE_OF = "multipleOf",
   MINIMUM_ITEMS = "minItems",
-  MAXIMUM_ITEMS = "maxItems"
+  MAXIMUM_ITEMS = "maxItems",
+  CONTAINS = "contains",
+  TUPLE = "tuple"
 }
 
 /**

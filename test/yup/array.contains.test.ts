@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() array contains", () => {
   it("should validate strings", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -18,7 +18,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -62,7 +62,7 @@ describe("convertToYup() array contains", () => {
   });
 
   it("should validate numbers", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -76,7 +76,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -110,7 +110,7 @@ describe("convertToYup() array contains", () => {
   });
 
   it("should validate integers", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -124,7 +124,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -163,7 +163,7 @@ describe("convertToYup() array contains", () => {
   });
 
   it("should validate booleans", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -177,7 +177,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -211,7 +211,7 @@ describe("convertToYup() array contains", () => {
   });
 
   it("should validate objects", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -225,7 +225,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -259,7 +259,7 @@ describe("convertToYup() array contains", () => {
   });
 
   it("should validate array", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -273,7 +273,7 @@ describe("convertToYup() array contains", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({

@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() boolean conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -24,7 +24,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       consent: false
@@ -38,7 +38,7 @@ describe("convertToYup() boolean conditions", () => {
   });
 
   it("should validate conditional when dependency matches constant", () => {
-    let schm: JSONSchema7 = {
+    let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -58,7 +58,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       consent: false
@@ -77,7 +77,7 @@ describe("convertToYup() boolean conditions", () => {
     });
     expect(isValid).toBeFalsy();
 
-    schm = {
+    schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -97,7 +97,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     isValid = yupschema.isValidSync({
       consent: true,
@@ -113,7 +113,7 @@ describe("convertToYup() boolean conditions", () => {
   });
 
   it("should validate required conditional", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -134,7 +134,7 @@ describe("convertToYup() boolean conditions", () => {
         required: ["phone"]
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       consent: true,

@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() integer", () => {
   it("should validate integer type", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -15,7 +15,7 @@ describe("convertToYup() integer", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       phone: 123

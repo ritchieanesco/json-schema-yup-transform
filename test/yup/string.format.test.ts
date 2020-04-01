@@ -8,7 +8,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate date-time format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -20,7 +20,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       name: "2018-11-13T20:20:39+00:00"
     });
@@ -63,7 +63,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate time format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -75,7 +75,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({ name: "20:20:39+00:00" });
     expect(valid).toBeTruthy();
 
@@ -108,7 +108,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate date format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -120,7 +120,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       name: "2018-11-13"
     });
@@ -147,7 +147,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate email format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -159,7 +159,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       email: "test@test.com"
     });
@@ -202,7 +202,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate IDN email format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -214,7 +214,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       email: "用户@maimail.com"
     });
@@ -267,7 +267,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate hostname format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -279,7 +279,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       website: "example.org"
     });
@@ -305,7 +305,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate international hostname format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -317,7 +317,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       website: "xn-fsqu00a.xn-0zwm56d"
     });
@@ -348,7 +348,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate ipv4 format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -360,7 +360,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       website: "8.8.8.8"
     });
@@ -396,7 +396,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate ipv6 format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -408,7 +408,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       website: "1200:0000:AB00:1234:0000:2552:7777:1313"
     });
@@ -444,7 +444,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate uri format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -456,7 +456,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
       website: "http://example.org/test?id=123"
     });
@@ -497,7 +497,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate uri relative path format", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -509,7 +509,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let valid = yupschema.isValidSync({
       website: "/tutorial1/"
@@ -538,7 +538,7 @@ describe("convertToYup() string format", () => {
   it("should render warning for iri use", () => {
     const spy = jest.spyOn(console, "warn");
 
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -550,7 +550,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     yupschema.isValidSync({
       website: "/tutorial1/"
     });
@@ -560,7 +560,7 @@ describe("convertToYup() string format", () => {
   it("should render warning for iri use", () => {
     const spy = jest.spyOn(console, "warn");
 
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -572,7 +572,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     yupschema.isValidSync({
       website: "/tutorial1/"
     });

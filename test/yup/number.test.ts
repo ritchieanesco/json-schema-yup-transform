@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() number", () => {
   it("should validate number type", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -15,7 +15,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
       name: 123
     });
@@ -27,7 +27,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate multiple types", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -38,7 +38,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       name: 123
@@ -52,7 +52,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate required", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -64,7 +64,7 @@ describe("convertToYup() number", () => {
       },
       required: ["years"]
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -83,7 +83,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate minimum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -95,7 +95,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -116,7 +116,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive minimum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -128,7 +128,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -149,7 +149,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate maximum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -161,7 +161,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     // testing rule is inclusive
@@ -182,7 +182,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive maximum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -194,7 +194,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -215,7 +215,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate minimum and maximum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -228,7 +228,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -241,7 +241,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive minimum and exclusive maximum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -254,7 +254,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -275,7 +275,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should throw error when maximum and exclusive maximum are used together", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -289,14 +289,14 @@ describe("convertToYup() number", () => {
       }
     };
     expect(() => {
-      convertToYup(schm);
+      convertToYup(schema);
     }).toThrowError(
       "Maximum and exclusive maximum keys can not be used together"
     );
   });
 
   it("should throw error when minimum and exclusive minimum are used together", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -310,14 +310,14 @@ describe("convertToYup() number", () => {
       }
     };
     expect(() => {
-      convertToYup(schm);
+      convertToYup(schema);
     }).toThrowError(
       "Minimum and exclusive minimum keys can not be used together"
     );
   });
 
   it("should validate multiple of", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -329,7 +329,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     // testing rule is inclusive
@@ -350,7 +350,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -362,7 +362,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -381,7 +381,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate enum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -393,7 +393,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -417,7 +417,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should set default value", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -431,7 +431,7 @@ describe("convertToYup() number", () => {
       required: ["age"]
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({});
     expect(isValid).toBeTruthy();
 

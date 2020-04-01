@@ -4,7 +4,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() array conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -24,7 +24,7 @@ describe("convertToYup() array conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       list: ["a", "b", "c"]
@@ -33,7 +33,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate conditional when dependency matches minimum items", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -53,7 +53,7 @@ describe("convertToYup() array conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       list: ["a", "b", "c"],
@@ -80,7 +80,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate conditional when dependency matches maximum items", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -100,7 +100,7 @@ describe("convertToYup() array conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       list: ["a", "b", "c"],
@@ -127,7 +127,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate an item of objects", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -171,7 +171,7 @@ describe("convertToYup() array conditions", () => {
       }
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
       isTaxResidentOnly: "true",
       countries: [
@@ -211,7 +211,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate $ref items", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -259,7 +259,7 @@ describe("convertToYup() array conditions", () => {
       }
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
       isTaxResidentOnly: "true",
       countries: [
@@ -336,7 +336,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate nested conditions", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -432,7 +432,7 @@ describe("convertToYup() array conditions", () => {
       }
     };
 
-    let yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let isValid = yupschema.isValidSync({
       isTaxResidentOnly: "false",
       countries: [

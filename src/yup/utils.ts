@@ -10,6 +10,16 @@ import { JSONSchema7 } from "json-schema";
 import has from "lodash/has";
 import { getDefinitionItem } from "../schema/";
 
+/**
+ * Concatenates the schema field path and schema key in order to retrieve error message
+ * from configuration
+ */
+
+export const joinPath = (
+  description: string | undefined,
+  schemaKey: string
+): string | false => (description ? `${description}.${schemaKey}` : false);
+
 /** Retrieves the first item in an object */
 
 export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
@@ -102,12 +112,48 @@ export const applyIfTypes = (schema: JSONSchema7): JSONSchema7 => {
 };
 
 /**
+ * Iterate through schema and adds description property with the associated node path
+ * This will remove any existing description values!
+ */
+
+export const applyPaths = (schema: JSONSchema7): JSONSchema7 => {
+  const invalidKeys = [
+    "properties",
+    "then",
+    "if",
+    "definitions",
+    "else",
+    "items"
+  ];
+  const addPaths = (item: JSONSchema7, path: string = ""): JSONSchema7 => {
+    for (let [key, value] of Object.entries(item)) {
+      // apply the $comments property to field elements only
+      if (has(value, "type") && !has(value, "properties")) {
+        item[key].description = `${path}${key}`;
+      }
+      if (isPlainObject(value)) {
+        /** capture path of the field id only */
+        const id = invalidKeys.includes(key) ? "" : `${key}.`;
+        addPaths(value, `${path}${id}`);
+      }
+    }
+    return item;
+  };
+  return addPaths(schema);
+};
+
+/**
  * Normalizes schema to the required shape. Removes empty objects,
  * replaces $ref values with the related definition and adds
  * missing type properties to if schemas
  */
 
 export const normalize = (schema: JSONSchema7): JSONSchema7 => {
-  const normalizer = flow([removeEmptyObjects, applyIfTypes, transformRefs]);
+  const normalizer = flow([
+    removeEmptyObjects,
+    transformRefs,
+    applyPaths, // this needs to be before if injection or it will apply the path there
+    applyIfTypes
+  ]);
   return normalizer(schema);
 };

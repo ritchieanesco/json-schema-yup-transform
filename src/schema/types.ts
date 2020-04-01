@@ -3,6 +3,20 @@ import isPlainObject from "lodash/isPlainObject";
 import has from "lodash/has";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
+/**
+ * Schema Types
+ */
+
+export enum DataTypes {
+  STRING = "string",
+  NUMBER = "number",
+  ARRAY = "array",
+  BOOLEAN = "boolean",
+  OBJECT = "object",
+  NULL = "null",
+  INTEGER = "integer"
+}
+
 export type SchemaType =
   | "string"
   | "number"
@@ -11,6 +25,36 @@ export type SchemaType =
   | "integer"
   | "array"
   | "null";
+
+export enum SchemaKeywords {
+  REQUIRED = "required",
+  ENUM = "enum",
+  CONST = "const",
+  FORMAT = "format",
+  DATE_TIME_FORMAT = "dateTime",
+  DATE_FORMAT = "date",
+  TIME_FORMAT = "time",
+  EMAIL_FORMAT = "email",
+  IDN_EMAIL_FORMAT = "idnEmail",
+  HOSTNAME_FORMAT = "hostname",
+  IDN_HOSTNAME_FORMAT = "idnHostname",
+  IPV4_FORMAT = "ipv4",
+  IPV6_FORMAT = "ipv6",
+  URI_FORMAT = "uri",
+  URI_REFERENCE_FORMAT = "uriReference",
+  MAXIMUM_LENGTH = "maxLength",
+  MINIMUM_LENGTH = "minLength",
+  PATTERN = "pattern",
+  MAXIMUM = "maximum",
+  MINIMUM = "minimum",
+  EXCLUSIVE_MINIMUM = "exclusiveMinimum",
+  EXCLUSIVE_MAXIMUM = "exclusiveMaximum",
+  MULTIPLE_OF = "multipleOf",
+  MINIMUM_ITEMS = "minItems",
+  MAXIMUM_ITEMS = "maxItems",
+  CONTAINS = "contains",
+  TUPLE = "tuple"
+}
 
 /**
  *  Object type guard array items key

@@ -19,7 +19,7 @@ Yup.addMethod<Yup.ArraySchema<unknown>>(
 
 Yup.addMethod<Yup.ArraySchema<unknown>>(Yup.array, "contains", contains);
 
-Yup.addMethod<Yup.ArraySchema<any>>(Yup.array, "tuple", tuple);
+Yup.addMethod<Yup.ArraySchema<unknown>>(Yup.array, "tuple", tuple);
 
 // Number methods
 

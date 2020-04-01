@@ -5,6 +5,8 @@ import isArray from "lodash/isArray";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { SchemaItem } from "../../types";
+import { getError } from "../../config/";
+import { joinPath } from "../../utils";
 
 /**
  * Initializes a yup number schema derived from a json number schema
@@ -13,9 +15,18 @@ import { SchemaItem } from "../../types";
 const createNumberSchema = (
   item: SchemaItem,
   jsonSchema: JSONSchema7
-): Yup.NumberSchema<number> =>
-  createBaseNumberSchema(Yup.number(), item, jsonSchema);
+): Yup.NumberSchema<number> => {
+  const defaultMessage = getError(
+    "defaults.number",
+    "The value is not of type number"
+  );
 
+  return createBaseNumberSchema(
+    Yup.number().typeError(defaultMessage),
+    item,
+    jsonSchema
+  );
+};
 /**
  * Generates a yup number schema instance that is used for both number and integer schema
  */
@@ -26,6 +37,7 @@ export const createBaseNumberSchema = (
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
   const {
+    description,
     default: defaults,
     minimum,
     maximum,
@@ -59,60 +71,60 @@ export const createBaseNumberSchema = (
 
   // Minimum value is inclusive
   if (isMinNumber) {
-    Schema = Schema.concat(
-      Schema.min(minimum as number, "Minimum value is required")
-    );
+    const path = joinPath(description, "minimum");
+    const message = getError(path, "Minimum value is required");
+    Schema = Schema.concat(Schema.min(minimum as number, message));
   }
 
   if (isExclusiveMinNumber) {
+    const path = joinPath(description, "exclusiveMinimum");
+    const message = getError(path, "Exclusive minimum value is required");
     Schema = Schema.concat(
-      Schema.min(
-        (exclusiveMinimum as number) + 1,
-        "Exclusive minimum value is required"
-      )
+      Schema.min((exclusiveMinimum as number) + 1, message)
     );
   }
 
   // Maximum value is inclusive
   if (isMaxNumber) {
-    Schema = Schema.concat(
-      Schema.max(maximum as number, "Maximum value is required")
-    );
+    const path = joinPath(description, "maximum");
+    const message = getError(path, "Maximum value is required");
+    Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 
   if (isExclusiveMaxNumber) {
+    const path = joinPath(description, "exclusiveMaximum");
+    const message = getError(path, "Exclusive maximum value is required");
     Schema = Schema.concat(
-      Schema.max(
-        (exclusiveMaximum as number) - 1,
-        "Exclusive maximum value is required"
-      )
+      Schema.max((exclusiveMaximum as number) - 1, message)
     );
   }
 
   if (multipleOf) {
+    const path = joinPath(description, "multipleOf");
+    const message = getError(
+      path,
+      `This value is not a multiple of ${multipleOf}`
+    );
     // `multipleOf` is a custom yup method. See /yup/addons/index.ts
     // for implementation
 
-    Schema = Schema.concat(
-      Schema.multipleOf(
-        multipleOf,
-        `This value is not a multiple of ${multipleOf}`
-      )
-    );
+    Schema = Schema.concat(Schema.multipleOf(multipleOf, message));
   }
 
   if (!isUndefined(consts)) {
-    Schema = Schema.concat(
-      Schema.constant(consts, "Value does not match constant")
-    );
+    const path = joinPath(description, "const");
+    const message = getError(path, "Value does not match constant");
+    Schema = Schema.concat(Schema.constant(consts, message));
   }
 
   if (isArray(enums)) {
-    Schema = Schema.concat(Schema.enum(enums, "Value does not match enum"));
+    const path = joinPath(description, "enum");
+    const message = getError(path, "Value does not match enum");
+    Schema = Schema.concat(Schema.enum(enums, message));
   }
 
   /** Set required if ID is in required schema */
-  Schema = createRequiredSchema(Schema, jsonSchema, key);
+  Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);
 
   return Schema;
 };

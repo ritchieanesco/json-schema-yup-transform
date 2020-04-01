@@ -7,7 +7,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() string conditions", () => {
   it("should continue to validate fields with empty else schema", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -31,7 +31,7 @@ describe("convertToYup() string conditions", () => {
         properties: {}
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -40,7 +40,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should continue to validate fields with empty then schema", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -64,7 +64,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -73,7 +73,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should ignore then and else schema when if schema is missing", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -96,7 +96,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -105,7 +105,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should continue to validate fields with empty if schema", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -129,7 +129,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -138,7 +138,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should use property type if condition type is unavailable", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -159,7 +159,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -167,7 +167,7 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
   it("should validate all fields with exception to conditional fields", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -188,7 +188,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -208,7 +208,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional pattern when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -229,7 +229,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -251,7 +251,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional pattern when dependency matches enum", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -272,7 +272,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -294,7 +294,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional pattern when dependency matches pattern", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -315,7 +315,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -337,7 +337,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional pattern when dependency matches minimum character length", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -358,7 +358,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -380,7 +380,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional pattern when dependency matches maximum character length", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -401,7 +401,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -423,7 +423,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate required conditional", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -445,7 +445,7 @@ describe("convertToYup() string conditions", () => {
         required: ["postal_code"]
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -460,7 +460,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional constant when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -481,7 +481,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -503,7 +503,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional enum when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -524,7 +524,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -552,7 +552,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional minimum character length when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -573,7 +573,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -595,7 +595,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate conditional maximum character length when dependency matches constant", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -616,7 +616,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -638,7 +638,7 @@ describe("convertToYup() string conditions", () => {
   });
 
   it("should validate other conditional", () => {
-    const schm: JSONSchema7 = {
+    const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -664,7 +664,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schm) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",

@@ -1,8 +1,10 @@
 {
   "name": "json-schema-yup-transformer",
+  "author": "Ritchie Anesco <info@ritchieanesco.com>",
   "version": "1.0.0",
-  "description": "Transforms JSON Schema to a Yup Schema",
-  "main": "index.html",
+  "description": "Transforms a draft 7 specification JSON Schema to a Yup Schema",
+  "license": "MIT",
+  "main": "src/index.ts",
   "scripts": {
     "build": "parcel build src/index.ts --out-dir dist",
     "test": "jest",

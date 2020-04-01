@@ -10,6 +10,16 @@ import { JSONSchema7 } from "json-schema";
 import has from "lodash/has";
 import { getDefinitionItem } from "../schema/";
 
+/**
+ * Concatenates the schema field path and schema key in order to retrieve error message
+ * from configuration
+ */
+
+export const joinPath = (
+  description: string | undefined,
+  schemaKey: string
+): string | false => (description ? `${description}.${schemaKey}` : false);
+
 /** Retrieves the first item in an object */
 
 export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {

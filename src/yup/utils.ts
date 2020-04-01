@@ -39,8 +39,8 @@ export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
 
 export const removeEmptyObjects = (schema: JSONSchema7) => {
   const cleaner = (result: JSONSchema7, value: any, key: string) => {
-    var isCollection = isPlainObject(value);
-    var cleaned = isCollection ? cleanObject(value) : value;
+    const isCollection = isPlainObject(value);
+    const cleaned = isCollection ? cleanObject(value) : value;
     if (isCollection && isEmpty(cleaned)) {
       return;
     }

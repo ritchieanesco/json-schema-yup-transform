@@ -402,7 +402,7 @@ describe("applyIfTypes()", () => {
     };
     expect(applyIfTypes(schema)).toEqual(schema);
   });
-  it("should add types to all if schemas", () => {
+  it.only("should add types to all if schemas", () => {
     const schema: JSONSchema7 = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "vehicles",

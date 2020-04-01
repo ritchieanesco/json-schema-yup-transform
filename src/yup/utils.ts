@@ -72,39 +72,34 @@ export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
  * to lookup the type in the properties schema
  * */
 
-// TODO: Update this function to use lodash transform
 export const applyIfTypes = (schema: JSONSchema7): JSONSchema7 => {
-  const addTypes = (item: any) => {
-    for (let [key, value] of Object.entries(item)) {
-      if (key === "if") {
-        const properties = get(value, "properties");
-        if (!properties) continue;
-        const ifSchema = getObjectHead(properties);
-        if (!ifSchema) continue;
-        const ifSchemaKey = ifSchema[0];
-        if (!has(properties[ifSchemaKey], "type")) {
-          /** Get related schema properties type */
-          const type = get(item.properties[ifSchemaKey], "type");
-          if (!type) continue;
-          item.if = {
-            ...item.if,
-            properties: {
-              ...item.if.properties,
-              [ifSchemaKey]: {
-                ...item.if.properties[ifSchemaKey],
-                type
+  const addType = (schema: JSONSchema7): JSONSchema7 =>
+    transform(schema, (result: JSONSchema7, value: any, key: string) => {
+      if (key === "if" && !isEmpty(value)) {
+        const properties = get(schema, "properties");
+        const ifProperties = get(value, "properties");
+        const ifSchema = ifProperties && getObjectHead(ifProperties);
+        if (ifSchema) {
+          const [ifSchemaKey, ifSchemaValue] = ifSchema;
+          const type =
+            ifSchemaKey &&
+            !has(ifProperties, [ifSchemaKey, "type"]) &&
+            has(properties, ifSchemaKey) &&
+            get(properties, [ifSchemaKey, "type"]);
+          value = type
+            ? {
+                ...value,
+                properties: {
+                  ...ifProperties,
+                  [ifSchemaKey]: { ...ifSchemaValue, type }
+                }
               }
-            }
-          };
+            : value;
         }
       }
-      if (isPlainObject(value)) {
-        addTypes(value);
-      }
-    }
-    return item;
-  };
-  return addTypes(schema);
+      result[key] = isPlainObject(value) ? addType(value) : value;
+    });
+  return isPlainObject(schema) ? addType(schema) : schema;
 };
 
 /**

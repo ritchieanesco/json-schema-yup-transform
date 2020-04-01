@@ -87,13 +87,11 @@ export const buildProperties = (
  * Determine schema has a if schema
  */
 
-const hasIfSchema = (jsonSchema: JSONSchema7, key: string) => {
+const hasIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
   const { if: ifSchema } = jsonSchema;
-  if (isSchemaObject(ifSchema)) {
-    const { properties } = ifSchema;
-    return isPlainObject(properties) && has(properties, key);
-  }
-  return false;
+  if (!isSchemaObject(ifSchema)) return false;
+  const { properties } = ifSchema;
+  return isPlainObject(properties) && has(properties, key);
 };
 
 /**
@@ -116,49 +114,46 @@ export const buildCondition = (
   jsonSchema: JSONSchema7
 ): false | { [key: string]: Yup.MixedSchema } => {
   const ifSchema = get(jsonSchema, "if");
+  if (!isSchemaObject(ifSchema)) return false;
 
-  if (isSchemaObject(ifSchema)) {
-    const { properties } = ifSchema;
-    if (!properties) return false;
+  const { properties } = ifSchema;
+  if (!properties) return false;
 
-    const ifSchemaHead = getObjectHead(properties);
+  const ifSchemaHead = getObjectHead(properties);
 
-    if (!ifSchemaHead) return false;
-    const [ifSchemaKey, ifSchemaValue] = ifSchemaHead;
+  if (!ifSchemaHead) return false;
+  const [ifSchemaKey, ifSchemaValue] = ifSchemaHead;
 
-    if (!isSchemaObject(ifSchemaValue)) return false;
+  if (!isSchemaObject(ifSchemaValue)) return false;
 
-    const thenSchema = get(jsonSchema, "then");
-    const elseSchema = get(jsonSchema, "else");
+  const thenSchema = get(jsonSchema, "then");
+  const elseSchema = get(jsonSchema, "else");
 
-    let conditionSchema = {};
+  let conditionSchema = {};
 
-    if (isSchemaObject(thenSchema)) {
-      const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
-      const thenConditionSchema = buildConditionItem(thenSchema, [
-        ifSchemaKey,
-        val => {
-          return isValid(val) === true;
-        }
-      ]);
-      if (!thenConditionSchema) return false;
-      conditionSchema = { ...thenConditionSchema };
-    }
-
-    if (isSchemaObject(elseSchema)) {
-      const isValid = isValidator([ifSchemaKey, ifSchemaValue], elseSchema);
-      const elseConditionSchema = buildConditionItem(elseSchema, [
-        ifSchemaKey,
-        val => isValid(val) === false
-      ]);
-      if (!elseConditionSchema) return false;
-      conditionSchema = { ...conditionSchema, ...elseConditionSchema };
-    }
-
-    return conditionSchema;
+  if (isSchemaObject(thenSchema)) {
+    const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
+    const thenConditionSchema = buildConditionItem(thenSchema, [
+      ifSchemaKey,
+      val => {
+        return isValid(val) === true;
+      }
+    ]);
+    if (!thenConditionSchema) return false;
+    conditionSchema = { ...thenConditionSchema };
   }
 
-  return false;
+  if (isSchemaObject(elseSchema)) {
+    const isValid = isValidator([ifSchemaKey, ifSchemaValue], elseSchema);
+    const elseConditionSchema = buildConditionItem(elseSchema, [
+      ifSchemaKey,
+      val => isValid(val) === false
+    ]);
+    if (!elseConditionSchema) return false;
+    conditionSchema = { ...conditionSchema, ...elseConditionSchema };
+  }
+
+  return conditionSchema;
 };
 
 /**
@@ -212,9 +207,7 @@ export const build = (
 ): Yup.ObjectSchema<object> | undefined => {
   const properties = getProperties(jsonSchema);
 
-  if (!properties) {
-    return properties;
-  }
+  if (!properties) return properties;
 
   let Schema = buildProperties(properties, jsonSchema);
   return Yup.object().shape(Schema);

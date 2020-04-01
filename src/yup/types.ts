@@ -14,7 +14,6 @@ export type ConfigErrorTypes = {
 export interface ConfigErrors {
   [key: string]: ConfigErrors | ConfigErrorTypes;
 }
-
 export interface Config {
   errors?: ConfigErrors;
 }

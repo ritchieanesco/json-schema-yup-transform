@@ -34,90 +34,90 @@ The tables below outline which keywords each schema type supports.
 
 ### String types
 
-| Keyword                | Supported |
-| ---------------------- | --------- |
-| const                  | Yes       |
-| enum                   | Yes       |
-| minLength              | Yes       |
-| maxLength              | Yes       |
-| pattern                | Yes       |
-| date-time (format)     | Yes       |
-| time (format)          | Yes       |
-| date (format)          | Yes       |
-| email (format)         | Yes       |
-| idn-email (format)     | Yes       |
-| hostname (format)      | Yes       |
-| idn-hostname (format)  | Yes       |
-| ipv4 (format)          | Yes       |
-| ipv6 (format)          | Yes       |
-| uri (format)           | Yes       |
-| uri-reference (format) | Yes       |
-| iri (format)           | No        |
-| iri-reference (format) | No        |
-| uri-template (format)  | No        |
-| json-pointer           | No        |
-| relative-json-pointer  | No        |
-| regex                  | No        |
+| Keyword                | Supported                |
+| ---------------------- | ------------------------ |
+| const                  | :heavy_check_mark:       |
+| enum                   | :heavy_check_mark:       |
+| minLength              | :heavy_check_mark:       |
+| maxLength              | :heavy_check_mark:       |
+| pattern                | :heavy_check_mark:       |
+| date-time (format)     | :heavy_check_mark:       |
+| time (format)          | :heavy_check_mark:       |
+| date (format)          | :heavy_check_mark:       |
+| email (format)         | :heavy_check_mark:       |
+| idn-email (format)     | :heavy_check_mark:       |
+| hostname (format)      | :heavy_check_mark:       |
+| idn-hostname (format)  | :heavy_check_mark:       |
+| ipv4 (format)          | :heavy_check_mark:       |
+| ipv6 (format)          | :heavy_check_mark:       |
+| uri (format)           | :heavy_check_mark:       |
+| uri-reference (format) | :heavy_check_mark:       |
+| iri (format)           | :heavy_multiplication_x: |
+| iri-reference (format) | :heavy_multiplication_x: |
+| uri-template (format)  | :heavy_multiplication_x: |
+| json-pointer           | :heavy_multiplication_x: |
+| relative-json-pointer  | :heavy_multiplication_x: |
+| regex                  | :heavy_multiplication_x: |
 
 ### Number and Integer types
 
-| Keyword          | Supported |
-| ---------------- | --------- |
-| const            | Yes       |
-| enum             | Yes       |
-| multipleOf       | Yes       |
-| minimum          | Yes       |
-| exclusiveMaximum | Yes       |
-| maximum          | Yes       |
-| exclusiveMaximum | Yes       |
+| Keyword          | Supported          |
+| ---------------- | ------------------ |
+| const            | :heavy_check_mark: |
+| enum             | :heavy_check_mark: |
+| multipleOf       | :heavy_check_mark: |
+| minimum          | :heavy_check_mark: |
+| exclusiveMaximum | :heavy_check_mark: |
+| maximum          | :heavy_check_mark: |
+| exclusiveMaximum | :heavy_check_mark: |
 
 ### Array types
 
-| Keyword         | Supported |
-| --------------- | --------- |
-| items           | Yes       |
-| contains        | Yes       |
-| tuple           | Yes       |
-| additionalItems | No        |
-| minItems        | Yes       |
-| maxItems        | Yes       |
-| uniqueItems     | No        |
+| Keyword         | Supported                |
+| --------------- | ------------------------ |
+| items           | :heavy_check_mark:       |
+| contains        | :heavy_check_mark:       |
+| tuple           | :heavy_check_mark:       |
+| additionalItems | :heavy_multiplication_x: |
+| minItems        | :heavy_check_mark:       |
+| maxItems        | :heavy_check_mark:       |
+| uniqueItems     | :heavy_multiplication_x: |
 
 ### Object types
 
-| Keyword              | Supported |
-| -------------------- | --------- |
-| required             | Yes       |
-| properties           | Yes       |
-| additionalProperties | No        |
-| propertyNames        | No        |
-| size                 | No        |
-| dependencies         | No        |
-| patternProperties    | No        |
+| Keyword              | Supported                |
+| -------------------- | ------------------------ |
+| required             | :heavy_check_mark:       |
+| properties           | :heavy_check_mark:       |
+| additionalProperties | :heavy_multiplication_x: |
+| propertyNames        | :heavy_multiplication_x: |
+| size                 | :heavy_multiplication_x: |
+| dependencies         | :heavy_multiplication_x: |
+| patternProperties    | :heavy_multiplication_x: |
 
 ### Generic keywords
 
-| Keyword                               | Supported |
-| ------------------------------------- | --------- |
-| default                               | Yes       |
-| enum (String, Integer, Number)        | Yes       |
-| const (String, Integer, Number)       | Yes       |
-| title                                 | No        |
-| description (used to store node path) | Yes       |
-| if                                    | Yes       |
-| then                                  | Yes       |
-| else                                  | Yes       |
-| definitions                           | Yes       |
-| $id                                   | Yes       |
+| Keyword                               | Supported                |
+| ------------------------------------- | ------------------------ |
+| default                               | :heavy_check_mark:       |
+| enum (String, Integer, Number)        | :heavy_check_mark:       |
+| const (String, Integer, Number)       | :heavy_check_mark:       |
+| title                                 | :heavy_multiplication_x: |
+| description (used to store node path) | :heavy_check_mark:       |
+| if                                    | :heavy_check_mark:       |
+| then                                  | :heavy_check_mark:       |
+| else                                  | :heavy_check_mark:       |
+| definitions                           | :heavy_check_mark:       |
+| $id                                   | :heavy_check_mark:       |
 
 ### Extending Schemas
 
-| Keyword | Supported |
-| ------- | --------- |
-| allOf   | No        |
-| anyOf   | No        |
-| oneOf   | No        |
-| not     | No        |
+| Keyword | Supported                |
+| ------- | ------------------------ |
+| allOf   | :heavy_multiplication_x: |
+| anyOf   | :heavy_multiplication_x: |
+| oneOf   | :heavy_multiplication_x: |
+| not     | :heavy_multiplication_x: |
 
 ## Usage
 

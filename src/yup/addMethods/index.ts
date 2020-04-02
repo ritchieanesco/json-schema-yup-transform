@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { minimumItems, maximumItems, contains, tuple } from "./array";
 import { multipleOf } from "./number";
 import { urlReference } from "./string";
-import { Constant, Enum } from "./mixed";
+import { constant, enums } from "./mixed";
 // Array methods
 
 Yup.addMethod<Yup.ArraySchema<unknown>>(
@@ -31,8 +31,8 @@ Yup.addMethod<Yup.StringSchema>(Yup.string, "urlReference", urlReference);
 
 // Mixed methods
 
-Yup.addMethod<Yup.MixedSchema>(Yup.mixed, "constant", Constant);
+Yup.addMethod<Yup.MixedSchema>(Yup.mixed, "constant", constant);
 
-Yup.addMethod<Yup.MixedSchema>(Yup.mixed, "enum", Enum);
+Yup.addMethod<Yup.MixedSchema>(Yup.mixed, "enum", enums);
 
 export default Yup;

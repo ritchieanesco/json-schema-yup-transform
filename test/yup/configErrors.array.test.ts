@@ -263,4 +263,34 @@ describe("convertToYup() array configuration errors", () => {
     }
     expect(errorMessage).toBe(config.errors.countries.country.maxLength);
   });
+
+  it("should show configuration error when value does not match constant", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        list: {
+          type: "array",
+          const: ["a", "b"]
+        }
+      }
+    };
+    const config = {
+      errors: {
+        list: {
+          const: "Incorrect constant"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ list: ["c"] });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.list.const);
+  });
 });

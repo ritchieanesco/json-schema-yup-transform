@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Transforms a draft 7 specification JSON Schema to a Yup Schema",
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "build": "parcel build src/index.ts --out-dir dist",
     "test": "jest",

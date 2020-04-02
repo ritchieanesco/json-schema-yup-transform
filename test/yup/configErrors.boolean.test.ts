@@ -61,4 +61,34 @@ describe("convertToYup() boolean configuration errors", () => {
     }
     expect(errorMessage).toBe(config.errors.termsConditions.required);
   });
+
+  it("should show configuration error when value does not match constant", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        isActive: {
+          type: "boolean",
+          const: true
+        }
+      }
+    };
+    const config = {
+      errors: {
+        isActive: {
+          const: "Incorrect constant"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ isActive: false });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.isActive.const);
+  });
 });

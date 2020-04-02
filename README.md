@@ -75,6 +75,7 @@ The tables below outline which keywords each schema type supports.
 
 | Keyword         | Supported                |
 | --------------- | ------------------------ |
+| const           | :heavy_check_mark:       |
 | items           | :heavy_check_mark:       |
 | contains        | :heavy_check_mark:       |
 | tuple           | :heavy_check_mark:       |
@@ -82,6 +83,12 @@ The tables below outline which keywords each schema type supports.
 | minItems        | :heavy_check_mark:       |
 | maxItems        | :heavy_check_mark:       |
 | uniqueItems     | :heavy_multiplication_x: |
+
+### Boolean types
+
+| Keyword | Supported          |
+| ------- | ------------------ |
+| const   | :heavy_check_mark: |
 
 ### Object types
 

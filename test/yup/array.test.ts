@@ -167,4 +167,38 @@ describe("convertToYup() array", () => {
     }
     expect(valid).toBe("Maximum of 6 items required");
   });
+
+  it("should validate constant", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        list: {
+          type: "array",
+          const: ["a", "b"]
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      list: ["a", "b"]
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      list: ["a"]
+    });
+    expect(isValid).toBeFalsy();
+
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ list: ["b"] });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe("Value does not match constant");
+  });
 });

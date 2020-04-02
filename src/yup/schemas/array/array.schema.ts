@@ -2,6 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
+import isUndefined from "lodash/isUndefined";
 import { isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
@@ -23,7 +24,8 @@ const createArraySchema = (
     minItems,
     maxItems,
     items,
-    contains
+    contains,
+    const: consts
   } = value;
 
   const defaultMessage = getError(
@@ -90,6 +92,12 @@ const createArraySchema = (
     // for implementation
 
     Schema = Schema.concat(Schema.maximumItems(maxItems, message));
+  }
+
+  if (!isUndefined(consts)) {
+    const path = joinPath(description, "const");
+    const message = getError(path, "Value does not match constant");
+    Schema = Schema.concat(Schema.constant(consts, message));
   }
 
   return Schema;

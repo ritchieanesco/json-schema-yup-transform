@@ -1,12 +1,13 @@
 import * as Yup from "yup";
 import { JSONSchema7 } from "json-schema";
-import { isValueConstant, isValueEnum } from "./utils";
+import isEqual from "lodash/isEqual";
+import { isValueEnum } from "./utils";
 
 /**
  * Validates whether input value matches const
  */
 
-export function Constant(
+export function constant(
   this: Yup.MixedSchema,
   value: JSONSchema7["const"],
   message: string
@@ -15,7 +16,7 @@ export function Constant(
     input: JSONSchema7["const"]
   ) {
     const { path, createError } = this;
-    return isValueConstant(value, input) || createError({ path, message });
+    return isEqual(value, input) || createError({ path, message });
   });
 }
 
@@ -23,7 +24,7 @@ export function Constant(
  * Validates whetherinput value is an enum
  */
 
-export function Enum(
+export function enums(
   this: Yup.MixedSchema,
   value: JSONSchema7["enum"],
   message: string

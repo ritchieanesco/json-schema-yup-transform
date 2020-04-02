@@ -2,23 +2,16 @@ import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import isArray from "lodash/isArray";
 import isUndefined from "lodash/isUndefined";
 import isString from "lodash/isString";
+import isEqual from "lodash/isEqual";
 import { validateTypeOfValue } from "../schemas/";
 import { DataTypes, isSchemaObject, getItemsArrayItem } from "../../schema";
 import { isEnum } from "../../schema";
 
 /**
- * Checks if input matches constant
- */
-export const isValueConstant = (
-  consts: JSONSchema7["const"],
-  value: any
-): boolean => consts === value;
-
-/**
  * Checks if input is one of enum
  */
 export const isValueEnum = (enums: JSONSchema7["enum"], value: any): boolean =>
-  isArray(enums) && enums.includes(value);
+  isArray(enums) && enums.some(item => isEqual(item, value));
 
 /**
  * Validates the value from the schema items property. In addition,

@@ -117,4 +117,38 @@ describe("convertToYup() boolean", () => {
     // @ts-ignore
     expect(field._default).toBe(true);
   });
+
+  it("should validate constant", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        isActive: {
+          type: "boolean",
+          const: true
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      isActive: true
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      isActive: false
+    });
+    expect(isValid).toBeFalsy();
+
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ isActive: false });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe("Value does not match constant");
+  });
 });

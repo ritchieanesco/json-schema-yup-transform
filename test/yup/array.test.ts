@@ -201,4 +201,41 @@ describe("convertToYup() array", () => {
     }
     expect(errorMessage).toBe("Value does not match constant");
   });
+
+  it("should validate enum", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        list: {
+          type: "array",
+          enum: [
+            ["a", "b"],
+            ["c", "d"]
+          ]
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      list: ["a", "b"]
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      list: ["a"]
+    });
+    expect(isValid).toBeFalsy();
+
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ list: ["b"] });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe("Value does not match enum");
+  });
 });

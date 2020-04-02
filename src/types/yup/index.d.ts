@@ -28,6 +28,7 @@ declare module "yup" {
     minimumItems(count: number, message: string): this;
     maximumItems(count: number, message: string): this;
     constant(value: JSONSchema7Type, message?: string): this;
+    enum(value: JSONSchema7Type[], message?: string): this;
   }
 
   interface Schema<T> {

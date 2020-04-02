@@ -25,7 +25,8 @@ const createArraySchema = (
     maxItems,
     items,
     contains,
-    const: consts
+    const: consts,
+    enum: enums
   } = value;
 
   const defaultMessage = getError(
@@ -98,6 +99,12 @@ const createArraySchema = (
     const path = joinPath(description, "const");
     const message = getError(path, "Value does not match constant");
     Schema = Schema.concat(Schema.constant(consts, message));
+  }
+
+  if (isArray(enums)) {
+    const path = joinPath(description, "enum");
+    const message = getError(path, "Value does not match enum");
+    Schema = Schema.concat(Schema.enum(enums, message));
   }
 
   return Schema;

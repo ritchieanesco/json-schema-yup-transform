@@ -76,6 +76,7 @@ The tables below outline which keywords each schema type supports.
 | Keyword         | Supported                |
 | --------------- | ------------------------ |
 | const           | :heavy_check_mark:       |
+| enum            | :heavy_check_mark:       |
 | items           | :heavy_check_mark:       |
 | contains        | :heavy_check_mark:       |
 | tuple           | :heavy_check_mark:       |
@@ -107,8 +108,6 @@ The tables below outline which keywords each schema type supports.
 | Keyword                               | Supported                |
 | ------------------------------------- | ------------------------ |
 | default                               | :heavy_check_mark:       |
-| enum (String, Integer, Number)        | :heavy_check_mark:       |
-| const (String, Integer, Number)       | :heavy_check_mark:       |
 | title                                 | :heavy_multiplication_x: |
 | description (used to store node path) | :heavy_check_mark:       |
 | if                                    | :heavy_check_mark:       |

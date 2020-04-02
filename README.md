@@ -306,8 +306,7 @@ Setting default error messages for a type
                 }
             }
         }
-      },
-      required: ["name"]
+      }
     };
 
     // set default error message for type of string
@@ -324,7 +323,11 @@ Setting default error messages for a type
     const yupschema = convertToYup(schema, config)
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync();
+      errorMessage = yupschema.validateSync({
+            team: {
+                name: null
+            }
+        });
     } catch (e) {
       errorMessage = e.errors[0];
     }

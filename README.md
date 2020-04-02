@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/ritchieanesco/json-schema-yup-transform.svg?branch=master)](https://travis-ci.com/ritchieanesco/json-schema-yup-transform)
 [![Coverage Status](https://coveralls.io/repos/github/ritchieanesco/json-schema-yup-transform/badge.svg?branch=master)](https://coveralls.io/github/ritchieanesco/json-schema-yup-transform?branch=master)
+[![npm version](https://badge.fury.io/js/json-schema-yup-transformer.svg)](https://badge.fury.io/js/json-schema-yup-transformer)
 
 A utility to generate a Yup Schema from a valid JSON Schema.
 

@@ -5,12 +5,15 @@
   "description": "Transforms a draft 7 specification JSON Schema to a Yup Schema",
   "license": "MIT",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ritchieanesco/json-schema-yup-transform"
   },
   "scripts": {
-    "build": "parcel build src/index.ts --out-dir dist",
+    "build": "tsc",
     "test": "jest",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
@@ -30,7 +33,6 @@
     "canvas": "^2.5.0",
     "coveralls": "^3.0.11",
     "jest": "^25.1.0",
-    "parcel-bundler": "^1.12.4",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3",
     "utf-8-validate": "^5.0.2"

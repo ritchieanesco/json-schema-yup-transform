@@ -13,17 +13,19 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "declaration": false,
+    "declaration": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "lib": ["dom", "es5", "es6", "es7", "es2017"],
     "rootDir": "src",
+    "outDir": "dist",
     "moduleResolution": "node",
     "typeRoots": ["node_modules/@types", "types"]
-  }
+  },
+  "include": ["src"]
 }

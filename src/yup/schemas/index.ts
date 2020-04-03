@@ -45,7 +45,7 @@ const getTypeOfValue = (
   value: unknown
 ): false | SchemaType => {
   const filteredType: JSONSchema7TypeName[] = types.filter(
-    item => has(validateTypeOfValue, item) && validateTypeOfValue[item](value)
+    (item) => has(validateTypeOfValue, item) && validateTypeOfValue[item](value)
   );
   if (filteredType.length) {
     const index = types.indexOf(filteredType[0]);
@@ -96,9 +96,10 @@ const getLazyValidationSchema = (
   jsonSchema: JSONSchema7,
   recursive: boolean = false
 ): Yup.Lazy =>
-  Yup.lazy(inputValue => {
+  Yup.lazy((inputValue) => {
     const type = get(value, "type") as JSONSchema7TypeName[];
-    const typeOfValue = getTypeOfValue(type, inputValue);
+    const valueType = inputValue || null;
+    const typeOfValue = getTypeOfValue(type, valueType);
     if (!typeOfValue) {
       throw new Error(`${typeof inputValue} data type is not supported`);
     }

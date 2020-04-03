@@ -308,4 +308,30 @@ describe("convertToYup() string", () => {
     // @ts-ignore
     expect(field._default).toBe("test");
   });
+
+  it.only("should not validate empty value if field has multiple types", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: ["string", "null"],
+          pattern: "[\\-0-9A-Za-z]"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      name: ""
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      name: null
+    });
+    expect(isValid).toBeTruthy();
+  });
 });

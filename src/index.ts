@@ -15,4 +15,5 @@ const convertToYup = (
   return build(normalizedSchema);
 };
 
+export type { Config };
 export default convertToYup;

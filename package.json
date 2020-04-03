@@ -8,6 +8,7 @@
   "files": [
     "dist"
   ],
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ritchieanesco/json-schema-yup-transform"

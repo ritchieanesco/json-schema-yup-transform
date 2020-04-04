@@ -28,6 +28,9 @@ Tests and code coverage are run with [Jest](https://github.com/facebook/jest).
 $ yarn test
 ```
 
+## Useful Tools
+* [JSON Schema Validator](https://www.jsonschemavalidator.net/)
+
 ## Supported features
 
 String, Number, Integer, Array, Object, Boolean and Null types are supported.
@@ -106,16 +109,15 @@ The tables below outline which keywords each schema type supports.
 
 ### Generic keywords
 
-| Keyword                               | Supported                |
-| ------------------------------------- | ------------------------ |
-| default                               | :heavy_check_mark:       |
-| title                                 | :heavy_multiplication_x: |
-| description (used to store node path) | :heavy_check_mark:       |
-| if                                    | :heavy_check_mark:       |
-| then                                  | :heavy_check_mark:       |
-| else                                  | :heavy_check_mark:       |
-| definitions                           | :heavy_check_mark:       |
-| $id                                   | :heavy_check_mark:       |
+| Keyword                               | Supported          |
+| ------------------------------------- | ------------------ |
+| default                               | :heavy_check_mark: |
+| description (used to store node path) | :heavy_check_mark: |
+| if                                    | :heavy_check_mark: |
+| then                                  | :heavy_check_mark: |
+| else                                  | :heavy_check_mark: |
+| definitions                           | :heavy_check_mark: |
+| $id                                   | :heavy_check_mark: |
 
 ### Extending Schemas
 
@@ -135,8 +137,8 @@ The tables below outline which keywords each schema type supports.
     const schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
+      $id: "example",
+      title: "Example",
       properties: {
         name: {
           type: "string"
@@ -165,8 +167,8 @@ The tables below outline which keywords each schema type supports.
     const schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
+      $id: "example-conditional-rules",
+      title: "Example of conditional rules",
       properties: {
         country: {
           type: "string"
@@ -216,8 +218,8 @@ The tables below outline which keywords each schema type supports.
     const schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
+      $id: "example-multiple-types",
+      title: "Example of multiple types",
       properties: {
         name: {
           type: ["string", "null"]
@@ -257,8 +259,8 @@ The structure of the configuration error messages need to adhere to the path of 
     const schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
+      $id: "example-custom-error-messages",
+      title: "Exampel of custom error messages",
       properties: {
         team: {
             type: "object",
@@ -302,8 +304,8 @@ Setting default error messages for a type
     const schema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
+      $id: "example-default-error-messages",
+      title: "Example of default error messages",
       properties: {
         team: {
             type: "object",
@@ -339,4 +341,43 @@ Setting default error messages for a type
       errorMessage = e.errors[0];
     }
     // => "Custom error message"
+```
+
+Applying definitions and $ref
+
+```js
+    import { convertToYup } from "json-schema-yup-transformer";
+    let schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "example-definitions",
+      title: "Example of definitions",
+      definitions: {
+        address: {
+          type: "object",
+          properties: {
+            street_address: { type: "string" },
+            city: { type: "string" },
+            state: { type: "string" }
+          },
+          required: ["street_address", "city", "state"]
+        }
+      },
+      properties: {
+        mailingAddress: {
+          $ref: "#/definitions/address"
+        }
+      }
+    };
+
+    // check validity
+    const yupschema = convertToYup(schema)
+    const isValid = yupschema.isValidsync({
+      mailingAddress: {
+          street_address: "18 Rover street",
+          city: "New York City",
+          state: "New York"
+      }
+    })
+    // => true
 ```

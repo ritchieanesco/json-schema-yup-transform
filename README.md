@@ -58,7 +58,7 @@ The tables below outline which keywords each schema type supports.
 | uri-template (format)  | :heavy_multiplication_x: |
 | json-pointer           | :heavy_multiplication_x: |
 | relative-json-pointer  | :heavy_multiplication_x: |
-| regex                  | :heavy_multiplication_x: |
+| regex                  | :heavy_check_mark:       |
 
 ### Number and Integer types
 

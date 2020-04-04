@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
+import { JSONSchema7Extended } from "../../src/schema";
 
 describe("convertToYup() string", () => {
   it("should validate string type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -29,7 +29,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -54,7 +54,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should throw error if value type is not one of multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -74,7 +74,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -106,7 +106,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate minimum character length", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -140,7 +140,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate maximum character length", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -174,7 +174,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate pattern", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -213,7 +213,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -247,7 +247,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -286,7 +286,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should set default value", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -310,7 +310,7 @@ describe("convertToYup() string", () => {
   });
 
   it.only("should not validate empty value if field has multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -333,5 +333,44 @@ describe("convertToYup() string", () => {
       name: null
     });
     expect(isValid).toBeTruthy();
+  });
+
+  it("should validate regex", () => {
+    const schema: JSONSchema7Extended = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: "string",
+          regex: "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid = yupschema.isValidSync({
+      name: "555-1212"
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      name: "(888)555-1212"
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({ name: "(888)555-1212 ext. 532" });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({ name: null });
+    expect(valid).toBeFalsy();
+
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe("Incorrect format");
   });
 });

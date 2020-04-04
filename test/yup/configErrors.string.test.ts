@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
+import { JSONSchema7DefinitionExtended } from "../../src/schema";
 
 describe("convertToYup() string configuration errors", () => {
   it("should show configuration error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -33,7 +33,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -63,7 +63,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not meet minimum character length", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -94,7 +94,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not meet maximum character length", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -124,7 +124,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match pattern", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -153,8 +153,38 @@ describe("convertToYup() string configuration errors", () => {
     expect(errorMessage).toBe(config.errors.postcode.pattern);
   });
 
+  it("should show configuration error when value does not match regex", () => {
+    const schema: JSONSchema7DefinitionExtended = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        postcode: {
+          type: "string",
+          regex: "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+        }
+      }
+    };
+    const config = {
+      errors: {
+        postcode: {
+          regex: "Incorrect regex"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ postcode: "abcdefg" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.postcode.regex);
+  });
+
   it("should show configuration error when value does not match constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -184,7 +214,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -214,7 +244,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match date-time format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -246,7 +276,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match time format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -278,7 +308,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match date format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -310,7 +340,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match email format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -342,7 +372,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match idn email format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -374,7 +404,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match hostname format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -406,7 +436,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match international hostname format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -438,7 +468,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match ipv4 format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -470,7 +500,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match ipv6 format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -502,7 +532,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match URI format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -534,7 +564,7 @@ describe("convertToYup() string configuration errors", () => {
   });
 
   it("should show configuration error when value does not match URI relative path format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema7DefinitionExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

@@ -1,4 +1,3 @@
-import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import isUndefined from "lodash/isUndefined";
 import isArray from "lodash/isArray";
@@ -14,9 +13,8 @@ import {
   IPV4_REGEX,
   IPV6_REGEX
 } from "./string.constants";
-import { isPattern } from "../../../schema";
+import { isRegex, JSONSchema7Extended } from "../../../schema";
 import { createRequiredSchema } from "../required";
-import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
 
@@ -25,8 +23,8 @@ import { joinPath } from "../../utils";
  */
 
 const createStringSchema = (
-  [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  [key, value]: [string, JSONSchema7Extended],
+  jsonSchema: JSONSchema7Extended
 ): Yup.StringSchema<string> => {
   const {
     description,
@@ -36,7 +34,8 @@ const createStringSchema = (
     pattern,
     format,
     const: consts,
-    enum: enums
+    enum: enums,
+    regex
   } = value;
 
   const defaultMessage = getError(
@@ -84,10 +83,16 @@ const createStringSchema = (
     Schema = Schema.concat(Schema.max(maxLength, message));
   }
 
-  if (isPattern(pattern)) {
+  if (isRegex(pattern)) {
     const path = joinPath(description, "pattern");
     const message = getError(path, "Incorrect format");
     Schema = Schema.concat(Schema.matches(pattern, message));
+  }
+
+  if (isRegex(regex)) {
+    const path = joinPath(description, "regex");
+    const message = getError(path, "Incorrect format");
+    Schema = Schema.concat(Schema.matches(regex, message));
   }
 
   if (format) {
@@ -97,7 +102,7 @@ const createStringSchema = (
 };
 
 export const stringSchemaFormat = (
-  format: JSONSchema7["format"],
+  format: JSONSchema7Extended["format"],
   description: string | undefined,
   Schema: Yup.StringSchema
 ) => {

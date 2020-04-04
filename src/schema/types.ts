@@ -53,7 +53,17 @@ export enum SchemaKeywords {
   MINIMUM_ITEMS = "minItems",
   MAXIMUM_ITEMS = "maxItems",
   CONTAINS = "contains",
-  TUPLE = "tuple"
+  TUPLE = "tuple",
+  REGEX = "regex"
+}
+
+export type JSONSchema7DefinitionExtended = JSONSchema7Extended | boolean;
+
+export interface JSONSchema7Extended extends JSONSchema7 {
+  regex?: string;
+  properties?: {
+    [key: string]: JSONSchema7DefinitionExtended;
+  };
 }
 
 /**
@@ -71,10 +81,10 @@ export const isSchemaObject = (
 export const isItemsArray = (
   items: JSONSchema7Definition | JSONSchema7Definition[] | undefined
 ): items is JSONSchema7Definition[] =>
-  isArray(items) && items.every(item => has(item, "type"));
+  isArray(items) && items.every((item) => has(item, "type"));
 
 /**
  * String pattern key type guard
  */
 
-export const isPattern = (regexp: any): regexp is RegExp => regexp;
+export const isRegex = (regexp: any): regexp is RegExp => regexp;

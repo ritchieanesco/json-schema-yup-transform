@@ -26,7 +26,8 @@ const createArraySchema = (
     items,
     contains,
     const: consts,
-    enum: enums
+    enum: enums,
+    uniqueItems
   } = value;
 
   const defaultMessage = getError(
@@ -105,6 +106,16 @@ const createArraySchema = (
     const path = joinPath(description, "enum");
     const message = getError(path, "Value does not match enum");
     Schema = Schema.concat(Schema.enum(enums, message));
+  }
+
+  if (!isUndefined(uniqueItems)) {
+    const path = joinPath(description, "uniqueItems");
+    const message = getError(path, `Items in array are not unique`);
+
+    // `uniqueItems` is a custom yup method. See /yup/addons/index.ts
+    // for implementation
+
+    Schema = Schema.concat(Schema.uniqueItems(uniqueItems, message));
   }
 
   return Schema;

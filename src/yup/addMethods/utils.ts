@@ -2,7 +2,10 @@ import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import isArray from "lodash/isArray";
 import isUndefined from "lodash/isUndefined";
 import isString from "lodash/isString";
+import isPlainObject from "lodash/isPlainObject";
 import isEqual from "lodash/isEqual";
+import uniq from "lodash/uniq";
+import stringifyObject from "stringify-object";
 import { validateTypeOfValue } from "../schemas/";
 import { DataTypes, isSchemaObject, getItemsArrayItem } from "../../schema";
 import { isEnum } from "../../schema";
@@ -11,7 +14,7 @@ import { isEnum } from "../../schema";
  * Checks if input is one of enum
  */
 export const isValueEnum = (enums: JSONSchema7["enum"], value: any): boolean =>
-  isArray(enums) && enums.some(item => isEqual(item, value));
+  isArray(enums) && enums.some((item) => isEqual(item, value));
 
 /**
  * Validates the value from the schema items property. In addition,
@@ -53,4 +56,18 @@ export const validateItemsArray = (items: JSONSchema7Definition[]) => (
     return true;
   }
   return false;
+};
+
+/**
+ * Check if each array values is unique
+ */
+
+export const isUnique = (arr: unknown[]): boolean => {
+  /** Convert array values to string in order to do value comparisons*/
+  const normalizedArr = arr.map((item) => {
+    if (isArray(item) || isPlainObject(item))
+      return stringifyObject(item).replace(/\s/g, "");
+    return item;
+  });
+  return uniq(normalizedArr).length === normalizedArr.length;
 };

@@ -7,7 +7,7 @@ import isArray from "lodash/isArray";
 import isInteger from "lodash/isInteger";
 import { JSONSchema7Definition } from "json-schema";
 import { DataTypes } from "../../schema";
-import { validateItemsArray } from "./utils";
+import { validateItemsArray, isUnique } from "./utils";
 
 /**
  * Validates that array length is more or equal to that
@@ -19,7 +19,7 @@ export function minimumItems(
   count: number,
   message: string
 ): Yup.ArraySchema<unknown> {
-  return this.test("test-minimumItems", message, function(input: unknown[]) {
+  return this.test("test-minimumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = isArray(input) && input.length >= count;
     return isValid || createError({ path, message });
@@ -36,7 +36,7 @@ export function maximumItems(
   count: number,
   message: string
 ): Yup.ArraySchema<unknown> {
-  return this.test("test-maximumItems", message, function(input: unknown[]) {
+  return this.test("test-maximumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = isArray(input) && input.length <= count;
     return isValid || createError({ path, message });
@@ -53,7 +53,7 @@ export function contains(
   value: string,
   message: string
 ): Yup.ArraySchema<unknown> {
-  return this.test("test-contains", message, function(input: unknown[]) {
+  return this.test("test-contains", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = false;
     if (isArray(input)) {
@@ -91,10 +91,30 @@ export function tuple(
   items: JSONSchema7Definition[],
   message: string
 ): Yup.ArraySchema<unknown> {
-  return this.test("test-tuple", message, function(input: any[]) {
+  return this.test("test-tuple", message, function (input: any[]) {
     const { path, createError } = this;
     const validator = validateItemsArray(items);
     const isValid = input.every(validator);
     return isValid || createError({ path, message });
+  });
+}
+
+/**
+ * Validates the given array values are unique
+ */
+
+export function uniqueItems(
+  this: Yup.ArraySchema<unknown>,
+  enable: boolean,
+  message: string
+): Yup.ArraySchema<unknown> {
+  return this.test("test-unique-items", message, function (input: unknown[]) {
+    const { path, createError } = this;
+    // method will always be valid if uniqueItems property is set to false
+    if (!enable) return true;
+    if (!isArray(input)) return false;
+    // empty arrays are always considered valid
+    if (input.length === 0) return true;
+    return isUnique(input) || createError({ path, message });
   });
 }

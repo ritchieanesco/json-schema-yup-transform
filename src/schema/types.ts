@@ -54,7 +54,8 @@ export enum SchemaKeywords {
   MAXIMUM_ITEMS = "maxItems",
   CONTAINS = "contains",
   TUPLE = "tuple",
-  REGEX = "regex"
+  REGEX = "regex",
+  UNIQUE_ITEMS = "uniqueItems"
 }
 
 export type JSONSchema7DefinitionExtended = JSONSchema7Extended | boolean;

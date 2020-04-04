@@ -84,7 +84,7 @@ The tables below outline which keywords each schema type supports.
 | additionalItems | :heavy_multiplication_x: |
 | minItems        | :heavy_check_mark:       |
 | maxItems        | :heavy_check_mark:       |
-| uniqueItems     | :heavy_multiplication_x: |
+| uniqueItems     | :heavy_check_mark:       |
 
 ### Boolean types
 

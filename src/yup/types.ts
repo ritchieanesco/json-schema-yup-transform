@@ -17,12 +17,3 @@ export interface ConfigErrors {
 export interface Config {
   errors?: ConfigErrors;
 }
-
-export type JSONSchema7DefinitionExtended = JSONSchema7Extended | boolean;
-
-export interface JSONSchema7Extended extends JSONSchema7 {
-  regex?: string;
-  properties?: {
-    [key: string]: JSONSchema7DefinitionExtended;
-  };
-}

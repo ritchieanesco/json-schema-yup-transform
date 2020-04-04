@@ -326,4 +326,37 @@ describe("convertToYup() array configuration errors", () => {
     }
     expect(errorMessage).toBe(config.errors.list.enum);
   });
+
+  it("should show configuration error when values are not unique", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        items: {
+          type: "array",
+          uniqueItems: true
+        }
+      }
+    };
+
+    const config = {
+      errors: {
+        items: {
+          uniqueItems: "Incorrect uniqueItems"
+        }
+      }
+    };
+
+    let yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+
+    try {
+      errorMessage = yupschema.validateSync({ items: ["b", "b"] });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.items.uniqueItems);
+  });
 });

@@ -238,4 +238,105 @@ describe("convertToYup() array", () => {
     }
     expect(errorMessage).toBe("Value does not match enum");
   });
+
+  it("should validate unique items", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        items: {
+          type: "array",
+          uniqueItems: true
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid;
+
+    valid = yupschema.isValidSync({
+      items: ["a", "b", "c"]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: [{ a: 1 }, { b: 2 }, { c: 3 }]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: [["a"], ["b"], ["c"]]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: []
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: [{ a: 1 }, { b: 2 }, { b: 2 }]
+    });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({
+      items: ["a", "b", "b"]
+    });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({
+      items: [1, 2, 2]
+    });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({
+      items: [["a"], ["b"], ["b"]]
+    });
+    expect(valid).toBeFalsy();
+
+    try {
+      valid = yupschema.validateSync({ items: ["b", "b"] });
+    } catch (e) {
+      valid = e.errors[0];
+    }
+    expect(valid).toBe("Items in array are not unique");
+  });
+
+  it("should not validate unique items", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        items: {
+          type: "array",
+          uniqueItems: false
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid;
+
+    valid = yupschema.isValidSync({
+      items: ["a", "b", "c"]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: []
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: ["a", "b", "b"]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      items: [1, 2, 2]
+    });
+    expect(valid).toBeTruthy();
+  });
 });

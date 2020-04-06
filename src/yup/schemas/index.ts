@@ -78,7 +78,7 @@ const getValidationSchema = (
       case DataTypes.NULL:
         return createNullSchema();
       case DataTypes.OBJECT:
-        return createObjectSchema();
+        return createObjectSchema([key, value], jsonSchema);
       default:
         throw new Error(`${type} is not supported`);
     }
@@ -93,8 +93,7 @@ const getValidationSchema = (
 
 const getLazyValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7,
-  recursive: boolean = false
+  jsonSchema: JSONSchema7
 ): Yup.Lazy =>
   Yup.lazy((inputValue) => {
     const type = get(value, "type") as JSONSchema7TypeName[];

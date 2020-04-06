@@ -46,7 +46,10 @@ export const buildProperties = (
     // if item is object type call this function again
     if (type === "object" && properties) {
       const objSchema = build(value);
-      schema = { ...schema, [key]: objSchema };
+      if (objSchema) {
+        const ObjectSchema = createValidationSchema([key, value], jsonSchema);
+        schema = { ...schema, [key]: ObjectSchema.concat(objSchema) };
+      }
     } else if (
       type === "array" &&
       isSchemaObject(items) &&
@@ -135,7 +138,7 @@ export const buildCondition = (
     const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
     const thenConditionSchema = buildConditionItem(thenSchema, [
       ifSchemaKey,
-      val => {
+      (val) => {
         return isValid(val) === true;
       }
     ]);
@@ -147,7 +150,7 @@ export const buildCondition = (
     const isValid = isValidator([ifSchemaKey, ifSchemaValue], elseSchema);
     const elseConditionSchema = buildConditionItem(elseSchema, [
       ifSchemaKey,
-      val => isValid(val) === false
+      (val) => isValid(val) === false
     ]);
     if (!elseConditionSchema) return false;
     conditionSchema = { ...conditionSchema, ...elseConditionSchema };

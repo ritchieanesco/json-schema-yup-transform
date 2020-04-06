@@ -32,6 +32,24 @@ describe("convertToYup() object", () => {
     });
     expect(isValid).toBeFalsy();
   });
+  it("should validate required", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        items: {
+          type: "object"
+        }
+      },
+      required: ["items"]
+    };
+
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let isValid = yupschema.isValidSync({});
+    expect(isValid).toBeFalsy();
+  });
 
   it("should validate nested object type", () => {
     let schema: JSONSchema7 = {

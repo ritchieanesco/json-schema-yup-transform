@@ -274,4 +274,34 @@ describe("convertToYup() object", () => {
     });
     expect(isValid).toBeFalsy();
   });
+
+  it("should validate multiple types", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        address: {
+          type: ["object", "null"]
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      address: {}
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      address: null
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      address: ""
+    });
+    expect(isValid).toBeTruthy();
+  });
 });

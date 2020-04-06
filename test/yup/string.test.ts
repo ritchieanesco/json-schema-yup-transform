@@ -51,6 +51,11 @@ describe("convertToYup() string", () => {
       name: null
     });
     expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      name: ""
+    });
+    expect(isValid).toBeTruthy();
   });
 
   it("should throw error if value type is not one of multiple types", () => {

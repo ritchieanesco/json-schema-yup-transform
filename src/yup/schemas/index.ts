@@ -97,7 +97,11 @@ const getLazyValidationSchema = (
 ): Yup.Lazy =>
   Yup.lazy((inputValue) => {
     const type = get(value, "type") as JSONSchema7TypeName[];
-    const valueType = inputValue || null;
+    const valueType = type.includes("null")
+      ? inputValue === ""
+        ? null
+        : inputValue
+      : inputValue;
     const typeOfValue = getTypeOfValue(type, valueType);
     if (!typeOfValue) {
       throw new Error(`${typeof inputValue} data type is not supported`);

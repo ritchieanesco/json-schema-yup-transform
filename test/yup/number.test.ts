@@ -49,6 +49,11 @@ describe("convertToYup() number", () => {
       name: null
     });
     expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      name: ""
+    });
+    expect(isValid).toBeTruthy();
   });
 
   it("should validate required", () => {

@@ -29,7 +29,8 @@ $ yarn test
 ```
 
 ## Useful Tools
-* [JSON Schema Validator](https://www.jsonschemavalidator.net/)
+
+- [JSON Schema Validator](https://www.jsonschemavalidator.net/)
 
 ## Supported features
 
@@ -117,7 +118,7 @@ The tables below outline which keywords each schema type supports.
 | then                                  | :heavy_check_mark: |
 | else                                  | :heavy_check_mark: |
 | definitions                           | :heavy_check_mark: |
-| $id                                   | :heavy_check_mark: |
+| \$id                                  | :heavy_check_mark: |
 
 ### Extending Schemas
 
@@ -133,32 +134,33 @@ The tables below outline which keywords each schema type supports.
 **Provide a valid schema and `convertToYup` will transform it to a yup schema.**
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
-    const schema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example",
-      title: "Example",
-      properties: {
-        name: {
-          type: "string"
-        }
-      }
-    };
+import { convertToYup } from "json-schema-yup-transformer";
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example",
+  title: "Example",
+  properties: {
+    name: {
+      type: "string"
+    }
+  }
+};
 
-    // the yup equivalent of the above json schema
-    // const yupschema = Yup.object().shape({
-    //     name: Yup.string()
-    // })
+// the yup equivalent of the above json schema
+// const yupschema = Yup.object().shape({
+//     name: Yup.string()
+// })
 
-    // check validity
+// check validity
 
-    const yupschema = convertToYup(schema)
-    const isValid = yupschema.isValidsync({
-        name: "Bruce Tanek"
-    })
-    // => true
+const yupschema = convertToYup(schema);
+const isValid = yupschema.isValidsync({
+  name: "Bruce Tanek"
+});
+// => true
 ```
+
 **Applying conditional rules**
 
 ```js
@@ -211,43 +213,44 @@ The tables below outline which keywords each schema type supports.
     })
     // => true
 ```
+
 **Applying multiple types**
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
-    const schema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example-multiple-types",
-      title: "Example of multiple types",
-      properties: {
-        name: {
-          type: ["string", "null"]
-        }
-      }
-    };
+import { convertToYup } from "json-schema-yup-transformer";
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-multiple-types",
+  title: "Example of multiple types",
+  properties: {
+    name: {
+      type: ["string", "null"]
+    }
+  }
+};
 
-    // the yup equivalent of the above json schema
-    // const yupschema = Yup.object().shape({
-    //     name: Yup.lazy(value => {
-    //       switch (typeof value) {
-    //          case 'number':
-    //              return number();
-    //          case 'string':
-    //              return string();
-    //          default:
-    //              return mixed();
-    //       }
-    //    })
-    // })
+// the yup equivalent of the above json schema
+// const yupschema = Yup.object().shape({
+//     name: Yup.lazy(value => {
+//       switch (typeof value) {
+//          case 'string':
+//              return Yup.number();
+//          case 'null':
+//              return Yup.mixed().notRequired();
+//          default:
+//              return Yup.mixed();
+//       }
+//    })
+// })
 
-    // check validity
+// check validity
 
-    const yupschema = convertToYup(schema)
-    const isValid = yupschema.isValidsync({
-        name: null
-    })
-    // => true
+const yupschema = convertToYup(schema);
+const isValid = yupschema.isValidsync({
+  name: null
+});
+// => true
 ```
 
 **Providing custom error messages**
@@ -255,129 +258,129 @@ The tables below outline which keywords each schema type supports.
 The structure of the configuration error messages need to adhere to the path of that field in the schema as well as the associated schema validation keyword.
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
-    const schema = {
+import { convertToYup } from "json-schema-yup-transformer";
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-custom-error-messages",
+  title: "Exampel of custom error messages",
+  properties: {
+    team: {
       type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example-custom-error-messages",
-      title: "Exampel of custom error messages",
       properties: {
-        team: {
-            type: "object",
-            properties: {
-                name: {
-                    type: "string"
-                }
-            }
+        name: {
+          type: "string"
         }
-      },
-      required: ["name"]
-    };
-
-    // configuration for custom error messages
-
-    const config = {
-        errors: {
-            team: {
-                name: {
-                    required: "Custom error message"
-                }
-            }
-        }
+      }
     }
+  },
+  required: ["name"]
+};
 
-    // check validity
-    const yupschema = convertToYup(schema, config)
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync();
-    } catch (e) {
-      errorMessage = e.errors[0];
+// configuration for custom error messages
+
+const config = {
+  errors: {
+    team: {
+      name: {
+        required: "Custom error message"
+      }
     }
-    // => "Custom error message"
+  }
+};
+
+// check validity
+const yupschema = convertToYup(schema, config);
+let errorMessage;
+try {
+  errorMessage = yupschema.validateSync();
+} catch (e) {
+  errorMessage = e.errors[0];
+}
+// => "Custom error message"
 ```
 
 Setting default error messages for a type
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
-    const schema = {
+import { convertToYup } from "json-schema-yup-transformer";
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-default-error-messages",
+  title: "Example of default error messages",
+  properties: {
+    team: {
       type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example-default-error-messages",
-      title: "Example of default error messages",
       properties: {
-        team: {
-            type: "object",
-            properties: {
-                name: {
-                    type: "string"
-                }
-            }
+        name: {
+          type: "string"
         }
       }
-    };
-
-    // set default error message for type of string
-
-    const config = {
-        errors: {
-            defaults: {
-                string: "Custom error message"
-            }
-        }
     }
+  }
+};
 
-    // check validity
-    const yupschema = convertToYup(schema, config)
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({
-            team: {
-                name: null
-            }
-        });
-    } catch (e) {
-      errorMessage = e.errors[0];
+// set default error message for type of string
+
+const config = {
+  errors: {
+    defaults: {
+      string: "Custom error message"
     }
-    // => "Custom error message"
+  }
+};
+
+// check validity
+const yupschema = convertToYup(schema, config);
+let errorMessage;
+try {
+  errorMessage = yupschema.validateSync({
+    team: {
+      name: null
+    }
+  });
+} catch (e) {
+  errorMessage = e.errors[0];
+}
+// => "Custom error message"
 ```
 
-Applying definitions and $ref
+Applying definitions and \$ref
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
-    let schema: JSONSchema7 = {
+import { convertToYup } from "json-schema-yup-transformer";
+let schema: JSONSchema7 = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-definitions",
+  title: "Example of definitions",
+  definitions: {
+    address: {
       type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example-definitions",
-      title: "Example of definitions",
-      definitions: {
-        address: {
-          type: "object",
-          properties: {
-            street_address: { type: "string" },
-            city: { type: "string" },
-            state: { type: "string" }
-          },
-          required: ["street_address", "city", "state"]
-        }
-      },
       properties: {
-        mailingAddress: {
-          $ref: "#/definitions/address"
-        }
-      }
-    };
+        street_address: { type: "string" },
+        city: { type: "string" },
+        state: { type: "string" }
+      },
+      required: ["street_address", "city", "state"]
+    }
+  },
+  properties: {
+    mailingAddress: {
+      $ref: "#/definitions/address"
+    }
+  }
+};
 
-    // check validity
-    const yupschema = convertToYup(schema)
-    const isValid = yupschema.isValidsync({
-      mailingAddress: {
-          street_address: "18 Rover street",
-          city: "New York City",
-          state: "New York"
-      }
-    })
-    // => true
+// check validity
+const yupschema = convertToYup(schema);
+const isValid = yupschema.isValidsync({
+  mailingAddress: {
+    street_address: "18 Rover street",
+    city: "New York City",
+    state: "New York"
+  }
+});
+// => true
 ```

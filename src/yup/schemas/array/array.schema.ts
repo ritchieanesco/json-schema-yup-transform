@@ -8,6 +8,7 @@ import { isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
+import { createEnumerableSchema } from "../enumerables";
 import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
@@ -27,7 +28,6 @@ const createArraySchema = (
     maxItems,
     items,
     contains,
-    enum: enums,
     uniqueItems
   } = value;
 
@@ -102,13 +102,8 @@ const createArraySchema = (
   /** Determine if schema matches constant */
   Schema = createConstantSchema(Schema, [key, value]);
 
-  if (isArray(enums)) {
-    const path = joinPath(description, "enum");
-    const message =
-      getError(path) ||
-      capitalize(`${key} does not match any of the enumerables`);
-    Schema = Schema.concat(Schema.enum(enums, message));
-  }
+  /** Determine if schema matches any enums */
+  Schema = createEnumerableSchema(Schema, [key, value]);
 
   if (!isUndefined(uniqueItems)) {
     const path = joinPath(description, "uniqueItems");

@@ -1,10 +1,10 @@
 import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
-import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
+import { createEnumerableSchema } from "../enumerables";
 import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
@@ -42,8 +42,7 @@ export const createBaseNumberSchema = (
     maximum,
     exclusiveMaximum,
     exclusiveMinimum,
-    multipleOf,
-    enum: enums
+    multipleOf
   } = value;
 
   const isMinNumber = isNumber(minimum);
@@ -123,13 +122,8 @@ export const createBaseNumberSchema = (
   /** Determine if schema matches constant */
   Schema = createConstantSchema(Schema, [key, value]);
 
-  if (isArray(enums)) {
-    const path = joinPath(description, "enum");
-    const message =
-      getError(path) ||
-      capitalize(`${key} does not match any of the enumerables`);
-    Schema = Schema.concat(Schema.enum(enums, message));
-  }
+  /** Determine if schema matches any enums */
+  Schema = createEnumerableSchema(Schema, [key, value]);
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);

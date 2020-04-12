@@ -1,5 +1,4 @@
 import isNumber from "lodash/isNumber";
-import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
@@ -16,6 +15,7 @@ import {
 import { isRegex, JSONSchema7Extended } from "../../../schema";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
+import { createEnumerableSchema } from "../enumerables";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
 
@@ -34,7 +34,6 @@ const createStringSchema = (
     maxLength,
     pattern,
     format,
-    enum: enums,
     regex
   } = value;
 
@@ -53,13 +52,8 @@ const createStringSchema = (
   /** Determine if schema matches constant */
   Schema = createConstantSchema(Schema, [key, value]);
 
-  if (isArray(enums)) {
-    const path = joinPath(description, "enum");
-    const message =
-      getError(path) ||
-      capitalize(`${key} does not match any of the enumerables`);
-    Schema = Schema.concat(Schema.enum(enums, message));
-  }
+  /** Determine if schema matches any enums */
+  Schema = createEnumerableSchema(Schema, [key, value]);
 
   if (isNumber(minLength)) {
     const path = joinPath(description, "minLength");

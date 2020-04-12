@@ -14,7 +14,7 @@ describe("convertToYup() string format", () => {
       $id: "test",
       title: "Test",
       properties: {
-        name: {
+        event: {
           type: "string",
           format: "date-time"
         }
@@ -22,44 +22,44 @@ describe("convertToYup() string format", () => {
     };
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
-      name: "2018-11-13T20:20:39+00:00"
+      event: "2018-11-13T20:20:39+00:00"
     });
     expect(valid).toBeTruthy();
 
     // validate month
-    valid = yupschema.isValidSync({ name: "2018-14-13T20:20:39+00:00" });
+    valid = yupschema.isValidSync({ event: "2018-14-13T20:20:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate day
-    valid = yupschema.isValidSync({ name: "2018-11-32T20:20:39+00:00" });
+    valid = yupschema.isValidSync({ event: "2018-11-32T20:20:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate hour
-    valid = yupschema.isValidSync({ name: "2018-11-32T20:26:39+00:00" });
+    valid = yupschema.isValidSync({ event: "2018-11-32T20:26:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate minutes
-    valid = yupschema.isValidSync({ name: "2018-11-32T20:80:39+00:00" });
+    valid = yupschema.isValidSync({ event: "2018-11-32T20:80:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate seconds
-    valid = yupschema.isValidSync({ name: "2018-11-32T20:80:70+00:00" });
+    valid = yupschema.isValidSync({ event: "2018-11-32T20:80:70+00:00" });
     expect(valid).toBeFalsy();
 
     // validate milliseconds
-    valid = yupschema.isValidSync({ name: "2018-11-32T20:80:39+70:00" });
+    valid = yupschema.isValidSync({ event: "2018-11-32T20:80:39+70:00" });
     expect(valid).toBeFalsy();
 
-    valid = yupschema.isValidSync({ name: null });
+    valid = yupschema.isValidSync({ event: null });
     expect(valid).toBeFalsy();
 
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Date and time format is invalid");
+    expect(errorMessage).toBe("Event is a invalid date and time format");
   });
 
   it("should validate time format", () => {
@@ -69,42 +69,42 @@ describe("convertToYup() string format", () => {
       $id: "test",
       title: "Test",
       properties: {
-        name: {
+        event: {
           type: "string",
           format: "time"
         }
       }
     };
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
-    let valid = yupschema.isValidSync({ name: "20:20:39+00:00" });
+    let valid = yupschema.isValidSync({ event: "20:20:39+00:00" });
     expect(valid).toBeTruthy();
 
     // validate hour
-    valid = yupschema.isValidSync({ name: "26:20:39+00:00" });
+    valid = yupschema.isValidSync({ event: "26:20:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate minutes
-    valid = yupschema.isValidSync({ name: "20:80:39+00:00" });
+    valid = yupschema.isValidSync({ event: "20:80:39+00:00" });
     expect(valid).toBeFalsy();
 
     // validate seconds
-    valid = yupschema.isValidSync({ name: "20:80:70+00:00" });
+    valid = yupschema.isValidSync({ event: "20:80:70+00:00" });
     expect(valid).toBeFalsy();
 
     // validate milliseconds
-    valid = yupschema.isValidSync({ name: "20:80:39+70:00" });
+    valid = yupschema.isValidSync({ event: "20:80:39+70:00" });
     expect(valid).toBeFalsy();
 
-    valid = yupschema.isValidSync({ name: null });
+    valid = yupschema.isValidSync({ event: null });
     expect(valid).toBeFalsy();
 
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Time format is invalid");
+    expect(errorMessage).toBe("Event is a invalid time format");
   });
 
   it("should validate date format", () => {
@@ -114,7 +114,7 @@ describe("convertToYup() string format", () => {
       $id: "test",
       title: "Test",
       properties: {
-        name: {
+        event: {
           type: "string",
           format: "date"
         }
@@ -122,28 +122,28 @@ describe("convertToYup() string format", () => {
     };
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid = yupschema.isValidSync({
-      name: "2018-11-13"
+      event: "2018-11-13"
     });
     expect(valid).toBeTruthy();
 
     // validate month
-    valid = yupschema.isValidSync({ name: "2018-14-13" });
+    valid = yupschema.isValidSync({ event: "2018-14-13" });
     expect(valid).toBeFalsy();
 
     // validate day
-    valid = yupschema.isValidSync({ name: "2018-11-32" });
+    valid = yupschema.isValidSync({ event: "2018-11-32" });
     expect(valid).toBeFalsy();
 
-    valid = yupschema.isValidSync({ name: null });
+    valid = yupschema.isValidSync({ event: null });
     expect(valid).toBeFalsy();
 
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
+      errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Date format is invalid");
+    expect(errorMessage).toBe("Event is a invalid date format");
   });
 
   it("should validate email format", () => {
@@ -198,7 +198,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Email is invalid");
+    expect(errorMessage).toBe("Email is a invalid email format");
   });
 
   it("should validate IDN email format", () => {
@@ -263,7 +263,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("International email is invalid");
+    expect(errorMessage).toBe("Email is a invalid international email format");
   });
 
   it("should validate hostname format", () => {
@@ -301,7 +301,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Hostname format is invalid");
+    expect(errorMessage).toBe("Website is a invalid hostname format");
   });
 
   it("should validate international hostname format", () => {
@@ -344,7 +344,9 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("International hostname format is invalid");
+    expect(errorMessage).toBe(
+      "Website is a invalid international hostname format"
+    );
   });
 
   it("should validate ipv4 format", () => {
@@ -392,7 +394,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("ipv4 format is invalid");
+    expect(errorMessage).toBe("Website is a invalid ipv4 format");
   });
 
   it("should validate ipv6 format", () => {
@@ -440,7 +442,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("ipv6 format is invalid");
+    expect(errorMessage).toBe("Website is a invalid ipv6 format");
   });
 
   it("should validate uri format", () => {
@@ -493,7 +495,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("URI format is invalid");
+    expect(errorMessage).toBe("Website is a invalid uri format");
   });
 
   it("should validate uri relative path format", () => {
@@ -532,7 +534,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("URI reference format is invalid");
+    expect(errorMessage).toBe("Website is a invalid uri reference format");
   });
 
   it("should render warning for iri use", () => {

@@ -199,7 +199,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Value does not match constant");
+    expect(errorMessage).toBe("List does not match constant");
   });
 
   it("should validate enum", () => {

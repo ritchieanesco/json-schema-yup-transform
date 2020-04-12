@@ -51,7 +51,7 @@ const createStringSchema = (
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);
 
   /** Determine if schema matches constant */
-  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
+  Schema = createConstantSchema(Schema, [key, value]);
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");

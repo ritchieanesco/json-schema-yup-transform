@@ -27,7 +27,7 @@ const createBooleanSchema = (
   }
 
   /** Determine if schema matches constant */
-  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
+  Schema = createConstantSchema(Schema, [key, value]);
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);

@@ -121,7 +121,7 @@ export const createBaseNumberSchema = (
   }
 
   /** Determine if schema matches constant */
-  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
+  Schema = createConstantSchema(Schema, [key, value]);
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");

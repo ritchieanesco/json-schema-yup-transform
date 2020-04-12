@@ -382,7 +382,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Value does not match constant");
+    expect(valid).toBe("Years does not match constant");
   });
 
   it("should validate enum", () => {

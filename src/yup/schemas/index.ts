@@ -1,11 +1,6 @@
 import { JSONSchema7, JSONSchema7TypeName } from "json-schema";
 import isArray from "lodash/isArray";
-import isPlainObject from "lodash/isPlainObject";
-import isNull from "lodash/isNull";
 import isString from "lodash/isString";
-import isNumber from "lodash/isNumber";
-import isBoolean from "lodash/isBoolean";
-import isInteger from "lodash/isInteger";
 import get from "lodash/get";
 import has from "lodash/has";
 import createArraySchema from "./array";
@@ -16,24 +11,8 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { DataTypes, getPropertyType } from "../../schema/";
+import { DataTypes, getPropertyType, isTypeOfValue } from "../../schema/";
 import { SchemaItem } from "../types";
-
-/**
- * Hash table to determine field values are
- * the expected data type. Primarily used in Yup Lazy
- * to ensure the field value type are supported
- */
-
-export const validateTypeOfValue = {
-  [DataTypes.STRING]: isString,
-  [DataTypes.NUMBER]: isNumber,
-  [DataTypes.BOOLEAN]: isBoolean,
-  [DataTypes.OBJECT]: isPlainObject,
-  [DataTypes.NULL]: isNull,
-  [DataTypes.ARRAY]: isArray,
-  [DataTypes.INTEGER]: isInteger
-};
 
 /**
  * Validates the input data type against the schema type and returns
@@ -45,7 +24,7 @@ const getTypeOfValue = (
   value: unknown
 ): JSONSchema7TypeName => {
   const filteredType: JSONSchema7TypeName[] = types.filter(
-    (item) => has(validateTypeOfValue, item) && validateTypeOfValue[item](value)
+    (item) => has(isTypeOfValue, item) && isTypeOfValue[item](value)
   );
   const index = types.indexOf(filteredType[0]);
   return types[index];

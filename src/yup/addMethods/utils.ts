@@ -6,8 +6,12 @@ import isPlainObject from "lodash/isPlainObject";
 import isEqual from "lodash/isEqual";
 import uniq from "lodash/uniq";
 import stringifyObject from "stringify-object";
-import { validateTypeOfValue } from "../schemas/";
-import { DataTypes, isSchemaObject, getItemsArrayItem } from "../../schema";
+import {
+  DataTypes,
+  isSchemaObject,
+  getItemsArrayItem,
+  isTypeOfValue
+} from "../../schema";
 import { isEnum } from "../../schema";
 
 /**
@@ -34,7 +38,7 @@ export const validateItemsArray = (items: JSONSchema7Definition[]) => (
       return false;
     }
 
-    if (!validateTypeOfValue[type](item)) {
+    if (!isTypeOfValue[type](item)) {
       return false;
     }
     // enums and consts are only applicable to

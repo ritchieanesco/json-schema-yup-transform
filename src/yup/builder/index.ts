@@ -12,7 +12,7 @@ import { getObjectHead } from "../utils";
  * Iterate through each item in properties and generate a key value pair of yup schema
  */
 
-export const buildProperties = (
+const buildProperties = (
   properties: {
     [key: string]: JSONSchema7Definition;
   },
@@ -96,7 +96,7 @@ const isValidator = (
 
 /** Build `is` and `then` validation schema */
 
-export const buildCondition = (
+const buildCondition = (
   jsonSchema: JSONSchema7
 ): false | { [key: string]: Yup.MixedSchema } => {
   const ifSchema = get(jsonSchema, "if");

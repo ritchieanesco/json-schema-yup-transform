@@ -2,6 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import isUndefined from "lodash/isUndefined";
 import isArray from "lodash/isArray";
+import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { SchemaItem } from "../../types";
@@ -13,15 +14,15 @@ import { joinPath } from "../../utils";
  */
 
 const createNumberSchema = (
-  item: SchemaItem,
+  [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
   const defaultMessage =
-    getError("defaults.number") || "The value is not of type number";
+    getError("defaults.number") || capitalize(`${key} is not of type number`);
 
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage),
-    item,
+    [key, value],
     jsonSchema
   );
 };
@@ -70,7 +71,9 @@ export const createBaseNumberSchema = (
   // Minimum value is inclusive
   if (isMinNumber) {
     const path = joinPath(description, "minimum");
-    const message = getError(path) || "Minimum value is required";
+    const message =
+      getError(path) ||
+      capitalize(`${key} requires a minimum value of ${minimum}`);
     Schema = Schema.concat(Schema.min(minimum as number, message));
   }
 

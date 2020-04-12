@@ -117,7 +117,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Minimum value is required");
+    expect(valid).toBe("Years requires a minimum value of 5");
   });
 
   it("should validate exclusive minimum", () => {

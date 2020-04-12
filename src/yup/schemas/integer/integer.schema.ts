@@ -1,4 +1,5 @@
 import { JSONSchema7 } from "json-schema";
+import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createBaseNumberSchema } from "../number";
 import { SchemaItem } from "../../types";
@@ -9,14 +10,14 @@ import { getError } from "../../config/";
  */
 
 const createIntegerSchema = (
-  item: SchemaItem,
+  [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
   const defaultMessage =
-    getError("defaults.integer") || "The value is not of type integer";
+    getError("defaults.integer") || capitalize(`${key} is not of type integer`);
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage).integer().strict(true),
-    item,
+    [key, value],
     jsonSchema
   );
 };

@@ -16,7 +16,7 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { DataTypes, getPropertyType } from "../../schema/";
+import { DataTypes, SchemaType, getPropertyType } from "../../schema/";
 import { SchemaItem } from "../types";
 
 /**
@@ -60,27 +60,16 @@ const getValidationSchema = (
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<any> => {
   const { type } = value;
-  if (isString(type)) {
-    switch (type) {
-      case DataTypes.STRING:
-        return createStringSchema([key, value], jsonSchema);
-      case DataTypes.NUMBER:
-        return createNumberSchema([key, value], jsonSchema);
-      case DataTypes.INTEGER:
-        return createIntegerSchema([key, value], jsonSchema);
-      case DataTypes.ARRAY:
-        return createArraySchema([key, value], jsonSchema);
-      case DataTypes.BOOLEAN:
-        return createBooleanSchema([key, value], jsonSchema);
-      case DataTypes.NULL:
-        return createNullSchema();
-      case DataTypes.OBJECT:
-        return createObjectSchema([key, value], jsonSchema);
-      default:
-        throw new Error(`${type} is not supported`);
-    }
-  }
-  throw new Error("Only string is supported");
+  const schemaMap = {
+    [DataTypes.STRING]: createStringSchema([key, value], jsonSchema),
+    [DataTypes.NUMBER]: createNumberSchema([key, value], jsonSchema),
+    [DataTypes.INTEGER]: createIntegerSchema([key, value], jsonSchema),
+    [DataTypes.ARRAY]: createArraySchema([key, value], jsonSchema),
+    [DataTypes.BOOLEAN]: createBooleanSchema([key, value], jsonSchema),
+    [DataTypes.NULL]: createNullSchema(),
+    [DataTypes.OBJECT]: createObjectSchema([key, value], jsonSchema)
+  };
+  return schemaMap[type as SchemaType];
 };
 
 /**

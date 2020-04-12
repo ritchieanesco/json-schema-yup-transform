@@ -16,10 +16,8 @@ const createNumberSchema = (
   item: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
-  const defaultMessage = getError(
-    "defaults.number",
-    "The value is not of type number"
-  );
+  const defaultMessage =
+    getError("defaults.number") || "The value is not of type number";
 
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage),
@@ -72,13 +70,13 @@ export const createBaseNumberSchema = (
   // Minimum value is inclusive
   if (isMinNumber) {
     const path = joinPath(description, "minimum");
-    const message = getError(path, "Minimum value is required");
+    const message = getError(path) || "Minimum value is required";
     Schema = Schema.concat(Schema.min(minimum as number, message));
   }
 
   if (isExclusiveMinNumber) {
     const path = joinPath(description, "exclusiveMinimum");
-    const message = getError(path, "Exclusive minimum value is required");
+    const message = getError(path) || "Exclusive minimum value is required";
     Schema = Schema.concat(
       Schema.min((exclusiveMinimum as number) + 1, message)
     );
@@ -87,13 +85,13 @@ export const createBaseNumberSchema = (
   // Maximum value is inclusive
   if (isMaxNumber) {
     const path = joinPath(description, "maximum");
-    const message = getError(path, "Maximum value is required");
+    const message = getError(path) || "Maximum value is required";
     Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 
   if (isExclusiveMaxNumber) {
     const path = joinPath(description, "exclusiveMaximum");
-    const message = getError(path, "Exclusive maximum value is required");
+    const message = getError(path) || "Exclusive maximum value is required";
     Schema = Schema.concat(
       Schema.max((exclusiveMaximum as number) - 1, message)
     );
@@ -101,10 +99,8 @@ export const createBaseNumberSchema = (
 
   if (multipleOf) {
     const path = joinPath(description, "multipleOf");
-    const message = getError(
-      path,
-      `This value is not a multiple of ${multipleOf}`
-    );
+    const message =
+      getError(path) || `This value is not a multiple of ${multipleOf}`;
     // `multipleOf` is a custom yup method. See /yup/addons/index.ts
     // for implementation
 
@@ -113,13 +109,13 @@ export const createBaseNumberSchema = (
 
   if (!isUndefined(consts)) {
     const path = joinPath(description, "const");
-    const message = getError(path, "Value does not match constant");
+    const message = getError(path) || "Value does not match constant";
     Schema = Schema.concat(Schema.constant(consts, message));
   }
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");
-    const message = getError(path, "Value does not match enum");
+    const message = getError(path) || "Value does not match enum";
     Schema = Schema.concat(Schema.enum(enums, message));
   }
 

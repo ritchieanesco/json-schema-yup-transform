@@ -30,10 +30,8 @@ const createArraySchema = (
     uniqueItems
   } = value;
 
-  const defaultMessage = getError(
-    "defaults.array",
-    "The value is not of type array"
-  );
+  const defaultMessage =
+    getError("defaults.array") || `The value is not of type array`;
 
   let Schema = Yup.array().typeError(defaultMessage);
 
@@ -53,10 +51,9 @@ const createArraySchema = (
     const { type } = contains as JSONSchema7;
 
     const path = joinPath(description, "contains");
-    const message = getError(
-      path,
-      `At least one item of this array must be of ${type} type`
-    );
+    const message =
+      getError(path) ||
+      `At least one item of this array must be of ${type} type`;
 
     // `contains` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -67,7 +64,7 @@ const createArraySchema = (
   } else {
     if (isItemsArray(items)) {
       const path = joinPath(description, "tuple");
-      const message = getError(path, "Must adhere to the expected data type");
+      const message = getError(path) || "Must adhere to the expected data type";
 
       // `tuple` is a custom yup method. See /yup/addons/index.ts
       // for implementation
@@ -78,7 +75,7 @@ const createArraySchema = (
 
   if (isNumber(minItems)) {
     const path = joinPath(description, "minItems");
-    const message = getError(path, `Minimum of ${minItems} items required`);
+    const message = getError(path) || `Minimum of ${minItems} items required`;
 
     // `minimumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -88,7 +85,7 @@ const createArraySchema = (
 
   if (isNumber(maxItems)) {
     const path = joinPath(description, "maxItems");
-    const message = getError(path, `Maximum of ${maxItems} items required`);
+    const message = getError(path) || `Maximum of ${maxItems} items required`;
 
     // `maximumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -98,19 +95,19 @@ const createArraySchema = (
 
   if (!isUndefined(consts)) {
     const path = joinPath(description, "const");
-    const message = getError(path, "Value does not match constant");
+    const message = getError(path) || "Value does not match constant";
     Schema = Schema.concat(Schema.constant(consts, message));
   }
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");
-    const message = getError(path, "Value does not match enum");
+    const message = getError(path) || "Value does not match enum";
     Schema = Schema.concat(Schema.enum(enums, message));
   }
 
   if (!isUndefined(uniqueItems)) {
     const path = joinPath(description, "uniqueItems");
-    const message = getError(path, `Items in array are not unique`);
+    const message = getError(path) || "Items in array are not unique";
 
     // `uniqueItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation

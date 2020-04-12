@@ -12,10 +12,8 @@ const createObjectSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.ObjectSchema<object> => {
-  const defaultMessage = getError(
-    "defaults.object",
-    "The value is not of type object"
-  );
+  const defaultMessage =
+    getError("defaults.object") || "The value is not of type object";
 
   let Schema = Yup.object().typeError(defaultMessage);
 

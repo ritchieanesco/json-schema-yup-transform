@@ -18,6 +18,6 @@ export const createRequiredSchema = <T extends Yup.Schema<any>>(
 
   const { description } = value;
   const path = joinPath(description, "required");
-  const message = getError(path, "This is required");
+  const message = getError(path) || "This is required";
   return Schema.concat(Schema.required(message));
 };

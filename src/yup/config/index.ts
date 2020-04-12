@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { ConfigErrors, Config } from "../types";
+import { ConfigErrors, Config, isConfigError } from "../types";
 
 let config: Config = {};
 
@@ -22,12 +22,9 @@ export const getErrors = (): ConfigErrors | false => {
 
 /** Retrieve specific error from configuration */
 
-export const getError = (
-  path: string | false,
-  defaults: string = `${path} is invalid`
-): string => {
+export const getError = (path: string | false): string | false => {
   const pathArray = path && path.split(".");
-  if (!pathArray) return defaults;
+  if (!pathArray) return false;
   const errors = getErrors();
-  return get(errors, pathArray) || defaults;
+  return isConfigError(errors) && get(errors, pathArray);
 };

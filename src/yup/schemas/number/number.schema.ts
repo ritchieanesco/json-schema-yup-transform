@@ -79,7 +79,11 @@ export const createBaseNumberSchema = (
 
   if (isExclusiveMinNumber) {
     const path = joinPath(description, "exclusiveMinimum");
-    const message = getError(path) || "Exclusive minimum value is required";
+    const message =
+      getError(path) ||
+      capitalize(
+        `${key} requires a exclusive minimum value of ${exclusiveMinimum}`
+      );
     Schema = Schema.concat(
       Schema.min((exclusiveMinimum as number) + 1, message)
     );

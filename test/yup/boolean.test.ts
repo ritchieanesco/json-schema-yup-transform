@@ -91,7 +91,7 @@ describe("convertToYup() boolean", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("This is required");
+    expect(valid).toBe("Enable is required");
   });
 
   it("should set default value", () => {

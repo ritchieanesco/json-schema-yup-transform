@@ -1,4 +1,5 @@
 import { JSONSchema7 } from "json-schema";
+import capitalize from "lodash/capitalize";
 import { isRequiredField } from "../../schema";
 import Yup from "../addMethods";
 import { SchemaItem } from "../types";
@@ -18,6 +19,6 @@ export const createRequiredSchema = <T extends Yup.Schema<any>>(
 
   const { description } = value;
   const path = joinPath(description, "required");
-  const message = getError(path) || "This is required";
+  const message = getError(path) || capitalize(`${key} is required`);
   return Schema.concat(Schema.required(message));
 };

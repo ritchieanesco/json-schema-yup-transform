@@ -95,7 +95,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("This is required");
+    expect(valid).toBe("Items is required");
   });
 
   it("should validate minItems", () => {

@@ -100,7 +100,11 @@ export const createBaseNumberSchema = (
 
   if (isExclusiveMaxNumber) {
     const path = joinPath(description, "exclusiveMaximum");
-    const message = getError(path) || "Exclusive maximum value is required";
+    const message =
+      getError(path) ||
+      capitalize(
+        `${key} requires a exclusive maximum value of ${exclusiveMaximum}`
+      );
     Schema = Schema.concat(
       Schema.max((exclusiveMaximum as number) - 1, message)
     );

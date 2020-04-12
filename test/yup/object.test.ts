@@ -321,4 +321,15 @@ describe("convertToYup() object", () => {
       convertToYup(schema) as Yup.ObjectSchema;
     }).toThrowError("Type key is missing");
   });
+
+  it("should return undefined when properties does not exist", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test"
+    };
+    const yupschema = convertToYup(schema);
+    expect(yupschema).toBeUndefined();
+  });
 });

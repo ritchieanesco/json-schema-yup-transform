@@ -17,7 +17,7 @@ const buildProperties = (
     [key: string]: JSONSchema7Definition;
   },
   jsonSchema: JSONSchema7
-) => {
+): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
@@ -58,10 +58,14 @@ const buildProperties = (
           [key]: Yup.array(createValidationSchema([key, items], jsonSchema))
         };
       } else {
+        let condition = {};
+        const newCondition =
+          hasIfSchema(jsonSchema, key) && buildCondition(jsonSchema);
+        if (newCondition) condition = { ...newCondition };
         schema = {
           ...schema,
           [key]: createValidationSchema([key, value], jsonSchema),
-          ...(hasIfSchema(jsonSchema, key) ? buildCondition(jsonSchema) : {})
+          ...condition
         };
       }
     }

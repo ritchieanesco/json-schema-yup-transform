@@ -236,7 +236,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Value does not match enum");
+    expect(errorMessage).toBe("List does not match any of the enumerables");
   });
 
   it("should validate unique items", () => {

@@ -418,7 +418,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Value does not match enum");
+    expect(valid).toBe("Years does not match any of the enumerables");
   });
 
   it("should set default value", () => {

@@ -130,7 +130,9 @@ export const createBaseNumberSchema = (
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");
-    const message = getError(path) || "Value does not match enum";
+    const message =
+      getError(path) ||
+      capitalize(`${key} does not match any of the enumerables`);
     Schema = Schema.concat(Schema.enum(enums, message));
   }
 

@@ -6,24 +6,7 @@ import isPlainObject from "lodash/isPlainObject";
 import Yup from "../addMethods/";
 import { getProperties, isSchemaObject } from "../../schema/";
 import createValidationSchema from "../schemas/";
-import { SchemaItem } from "../types";
 import { getObjectHead } from "../utils";
-
-/**
- * Merges yup validation schema into the object
- */
-
-export const buildValidation = (
-  schema: {},
-  [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
-): { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
-  const validationSchema = createValidationSchema([key, value], jsonSchema);
-  return {
-    ...schema,
-    [key]: validationSchema
-  };
-};
 
 /**
  * Iterate through each item in properties and generate a key value pair of yup schema

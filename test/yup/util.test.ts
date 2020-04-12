@@ -697,8 +697,9 @@ describe("normalize()", () => {
 });
 
 describe("getObjectHead()", () => {
-  it("should return first item in object as an array", () => {
-    expect(getObjectHead({ a: { test: "a" } })).toBeTruthy();
+  it.only("should return first item in object as an array", () => {
+    expect(getObjectHead({ a: "1", b: "2", c: "2" })).toEqual(["a", "1"]);
+    expect(getObjectHead("test")).toBeFalsy();
     expect(getObjectHead({})).toBeFalsy();
   });
 });

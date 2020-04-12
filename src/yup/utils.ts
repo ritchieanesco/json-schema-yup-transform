@@ -1,6 +1,5 @@
 import get from "lodash/get";
 import head from "lodash/head";
-import isString from "lodash/isString";
 import isPlainObject from "lodash/isPlainObject";
 import isEmpty from "lodash/isEmpty";
 import isArray from "lodash/isArray";
@@ -23,13 +22,11 @@ export const joinPath = (
 /** Retrieves the first item in an object */
 
 export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
+  if (!isPlainObject(obj) || isEmpty(obj)) return false;
   /** Get all keys from obj */
   const arr = Object.keys(obj);
   /** Grab the first key */
-  const key = head(arr);
-  if (!isString(key)) {
-    return false;
-  }
+  const key = head(arr) as string;
   /** Grab the first item */
   const value = get(obj, key);
   return [key, value];
@@ -41,9 +38,7 @@ export const removeEmptyObjects = (schema: JSONSchema7) => {
   const cleaner = (result: JSONSchema7, value: any, key: string) => {
     const isCollection = isPlainObject(value);
     const cleaned = isCollection ? cleanObject(value) : value;
-    if (isCollection && isEmpty(cleaned)) {
-      return;
-    }
+    if (isCollection && isEmpty(cleaned)) return;
     isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
   };
   const cleanObject = (schema: JSONSchema7) => transform(schema, cleaner);

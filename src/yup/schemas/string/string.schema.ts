@@ -1,5 +1,4 @@
 import isNumber from "lodash/isNumber";
-import isUndefined from "lodash/isUndefined";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 import capitalize from "lodash/capitalize";
@@ -16,6 +15,7 @@ import {
 } from "./string.constants";
 import { isRegex, JSONSchema7Extended } from "../../../schema";
 import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
 
@@ -34,7 +34,6 @@ const createStringSchema = (
     maxLength,
     pattern,
     format,
-    const: consts,
     enum: enums,
     regex
   } = value;
@@ -51,13 +50,8 @@ const createStringSchema = (
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);
 
-  if (!isUndefined(consts)) {
-    const path = joinPath(description, "const");
-    const message =
-      getError(path) || capitalize(`${key} does not match constant`);
-
-    Schema = Schema.concat(Schema.constant(consts, message));
-  }
+  /** Determine if schema matches constant */
+  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");

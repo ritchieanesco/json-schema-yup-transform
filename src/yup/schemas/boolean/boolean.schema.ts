@@ -1,12 +1,11 @@
 import { JSONSchema7 } from "json-schema";
 import isBoolean from "lodash/isBoolean";
-import isUndefined from "lodash/isUndefined";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
 import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
-import { joinPath } from "../../utils";
 
 /**
  * Initializes a yup boolean schema derived from a json boolean schema
@@ -16,7 +15,7 @@ const createBooleanSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.BooleanSchema<boolean> => {
-  const { description, default: defaults, const: consts } = value;
+  const { default: defaults } = value;
 
   const defaultMessage =
     getError("defaults.boolean") || capitalize(`${key} is not of type boolean`);
@@ -27,12 +26,8 @@ const createBooleanSchema = (
     Schema = Schema.concat(Schema.default(defaults));
   }
 
-  if (!isUndefined(consts)) {
-    const path = joinPath(description, "const");
-    const message =
-      getError(path) || capitalize(`${key} does not match constant`);
-    Schema = Schema.concat(Schema.constant(consts, message));
-  }
+  /** Determine if schema matches constant */
+  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);

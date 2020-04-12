@@ -7,6 +7,7 @@ import capitalize from "lodash/capitalize";
 import { isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
 import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
@@ -26,7 +27,6 @@ const createArraySchema = (
     maxItems,
     items,
     contains,
-    const: consts,
     enum: enums,
     uniqueItems
   } = value;
@@ -99,12 +99,8 @@ const createArraySchema = (
     Schema = Schema.concat(Schema.maximumItems(maxItems, message));
   }
 
-  if (!isUndefined(consts)) {
-    const path = joinPath(description, "const");
-    const message =
-      getError(path) || capitalize(`${key} does not match constant`);
-    Schema = Schema.concat(Schema.constant(consts, message));
-  }
+  /** Determine if schema matches constant */
+  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");

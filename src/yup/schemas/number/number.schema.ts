@@ -1,10 +1,10 @@
 import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
-import isUndefined from "lodash/isUndefined";
 import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
 import { SchemaItem } from "../../types";
 import { getError } from "../../config/";
 import { joinPath } from "../../utils";
@@ -43,7 +43,6 @@ export const createBaseNumberSchema = (
     exclusiveMaximum,
     exclusiveMinimum,
     multipleOf,
-    const: consts,
     enum: enums
   } = value;
 
@@ -121,12 +120,8 @@ export const createBaseNumberSchema = (
     Schema = Schema.concat(Schema.multipleOf(multipleOf, message));
   }
 
-  if (!isUndefined(consts)) {
-    const path = joinPath(description, "const");
-    const message =
-      getError(path) || capitalize(`${key} does not match constant`);
-    Schema = Schema.concat(Schema.constant(consts, message));
-  }
+  /** Determine if schema matches constant */
+  Schema = createConstantSchema(Schema, jsonSchema, [key, value]);
 
   if (isArray(enums)) {
     const path = joinPath(description, "enum");

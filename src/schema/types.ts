@@ -17,15 +17,6 @@ export enum DataTypes {
   INTEGER = "integer"
 }
 
-export type SchemaType =
-  | "string"
-  | "number"
-  | "boolean"
-  | "object"
-  | "integer"
-  | "array"
-  | "null";
-
 export enum SchemaKeywords {
   REQUIRED = "required",
   ENUM = "enum",

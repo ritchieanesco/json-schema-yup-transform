@@ -16,7 +16,7 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { DataTypes, SchemaType, getPropertyType } from "../../schema/";
+import { DataTypes, getPropertyType } from "../../schema/";
 import { SchemaItem } from "../types";
 
 /**
@@ -69,7 +69,7 @@ const getValidationSchema = (
     [DataTypes.NULL]: createNullSchema(),
     [DataTypes.OBJECT]: createObjectSchema([key, value], jsonSchema)
   };
-  return schemaMap[type as SchemaType];
+  return schemaMap[type as JSONSchema7TypeName];
 };
 
 /**

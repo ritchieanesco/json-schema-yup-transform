@@ -16,7 +16,7 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { DataTypes, SchemaType, getPropertyType } from "../../schema/";
+import { DataTypes, getPropertyType } from "../../schema/";
 import { SchemaItem } from "../types";
 
 /**
@@ -43,15 +43,12 @@ export const validateTypeOfValue = {
 const getTypeOfValue = (
   types: JSONSchema7TypeName[],
   value: unknown
-): false | SchemaType => {
+): JSONSchema7TypeName => {
   const filteredType: JSONSchema7TypeName[] = types.filter(
     (item) => has(validateTypeOfValue, item) && validateTypeOfValue[item](value)
   );
-  if (filteredType.length) {
-    const index = types.indexOf(filteredType[0]);
-    return types[index];
-  }
-  return false;
+  const index = types.indexOf(filteredType[0]);
+  return types[index];
 };
 
 /**

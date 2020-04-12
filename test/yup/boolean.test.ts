@@ -149,6 +149,6 @@ describe("convertToYup() boolean", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Value does not match constant");
+    expect(errorMessage).toBe("Isactive does not match constant");
   });
 });

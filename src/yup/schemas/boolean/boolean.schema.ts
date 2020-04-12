@@ -1,6 +1,7 @@
 import { JSONSchema7 } from "json-schema";
 import isBoolean from "lodash/isBoolean";
 import isUndefined from "lodash/isUndefined";
+import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { SchemaItem } from "../../types";
@@ -18,7 +19,7 @@ const createBooleanSchema = (
   const { description, default: defaults, const: consts } = value;
 
   const defaultMessage =
-    getError("defaults.boolean") || "The value is not of type boolean";
+    getError("defaults.boolean") || capitalize(`${key} is not of type boolean`);
 
   let Schema = Yup.boolean().typeError(defaultMessage);
 
@@ -28,7 +29,8 @@ const createBooleanSchema = (
 
   if (!isUndefined(consts)) {
     const path = joinPath(description, "const");
-    const message = getError(path) || "Value does not match constant";
+    const message =
+      getError(path) || capitalize(`${key} does not match constant`);
     Schema = Schema.concat(Schema.constant(consts, message));
   }
 

@@ -129,7 +129,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Minimum of 3 items required");
+    expect(valid).toBe("Items requires a minimum of 3 items");
   });
 
   it("should validate maxItems", () => {

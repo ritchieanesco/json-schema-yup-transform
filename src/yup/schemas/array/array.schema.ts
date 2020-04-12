@@ -65,7 +65,8 @@ const createArraySchema = (
   } else {
     if (isItemsArray(items)) {
       const path = joinPath(description, "tuple");
-      const message = getError(path) || "Must adhere to the expected data type";
+      const message =
+        getError(path) || capitalize(`${key} must be of same type`);
 
       // `tuple` is a custom yup method. See /yup/addons/index.ts
       // for implementation
@@ -76,7 +77,9 @@ const createArraySchema = (
 
   if (isNumber(minItems)) {
     const path = joinPath(description, "minItems");
-    const message = getError(path) || `Minimum of ${minItems} items required`;
+    const message =
+      getError(path) ||
+      capitalize(`${key} requires a minimum of ${minItems} items`);
 
     // `minimumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation

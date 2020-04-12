@@ -53,7 +53,8 @@ const createStringSchema = (
 
   if (!isUndefined(consts)) {
     const path = joinPath(description, "const");
-    const message = getError(path) || "Value does not match constant";
+    const message =
+      getError(path) || capitalize(`${key} does not match constant`);
 
     Schema = Schema.concat(Schema.constant(consts, message));
   }

@@ -89,9 +89,6 @@ const getLazyValidationSchema = (
         : inputValue
       : inputValue;
     const typeOfValue = getTypeOfValue(type, valueType);
-    if (!typeOfValue) {
-      throw new Error(`${typeof inputValue} data type is not supported`);
-    }
     const newItem: SchemaItem = [key, { ...value, type: typeOfValue }];
     return getValidationSchema(newItem, jsonSchema);
   });

@@ -3,6 +3,7 @@ import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
 import isUndefined from "lodash/isUndefined";
+import capitalize from "lodash/capitalize";
 import { isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
@@ -31,7 +32,7 @@ const createArraySchema = (
   } = value;
 
   const defaultMessage =
-    getError("defaults.array") || `The value is not of type array`;
+    getError("defaults.array") || capitalize(`${key} is not of type array`);
 
   let Schema = Yup.array().typeError(defaultMessage);
 
@@ -53,7 +54,7 @@ const createArraySchema = (
     const path = joinPath(description, "contains");
     const message =
       getError(path) ||
-      `At least one item of this array must be of ${type} type`;
+      capitalize(`${key} must at least contain one item of type ${type}`);
 
     // `contains` is a custom yup method. See /yup/addons/index.ts
     // for implementation

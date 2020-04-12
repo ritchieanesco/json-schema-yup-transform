@@ -113,7 +113,8 @@ export const createBaseNumberSchema = (
   if (multipleOf) {
     const path = joinPath(description, "multipleOf");
     const message =
-      getError(path) || `This value is not a multiple of ${multipleOf}`;
+      getError(path) ||
+      capitalize(`${key} requires a multiple of ${multipleOf}`);
     // `multipleOf` is a custom yup method. See /yup/addons/index.ts
     // for implementation
 

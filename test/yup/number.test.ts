@@ -351,7 +351,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("This value is not a multiple of 5");
+    expect(valid).toBe("Years requires a multiple of 5");
   });
 
   it("should validate constant", () => {

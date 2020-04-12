@@ -7,7 +7,7 @@ import { getError } from "../config";
 import { joinPath } from "../utils";
 
 /**
- * Add required schema should subschema is required
+ * Add constant yup method when schema constant is declared
  */
 
 export const createConstantSchema = <T extends Yup.Schema<any>>(

@@ -116,7 +116,8 @@ const createArraySchema = (
 
   if (!isUndefined(uniqueItems)) {
     const path = joinPath(description, "uniqueItems");
-    const message = getError(path) || "Items in array are not unique";
+    const message =
+      getError(path) || capitalize(`${key} values are not unique`);
 
     // `uniqueItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation

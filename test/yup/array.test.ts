@@ -300,7 +300,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Items in array are not unique");
+    expect(valid).toBe("Items values are not unique");
   });
 
   it("should not validate unique items", () => {

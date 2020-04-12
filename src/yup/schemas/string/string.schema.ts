@@ -2,6 +2,7 @@ import isNumber from "lodash/isNumber";
 import isUndefined from "lodash/isUndefined";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
+import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import {
   INTERNATIONAL_EMAIL_REGEX,
@@ -39,7 +40,7 @@ const createStringSchema = (
   } = value;
 
   const defaultMessage =
-    getError("defaults.string") || "The value is not of type string";
+    getError("defaults.string") || capitalize(`${key} is not of type string`);
 
   let Schema = Yup.string().typeError(defaultMessage);
 

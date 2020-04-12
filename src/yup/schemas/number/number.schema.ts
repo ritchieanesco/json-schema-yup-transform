@@ -92,7 +92,9 @@ export const createBaseNumberSchema = (
   // Maximum value is inclusive
   if (isMaxNumber) {
     const path = joinPath(description, "maximum");
-    const message = getError(path) || "Maximum value is required";
+    const message =
+      getError(path) ||
+      capitalize(`${key} requires a maximum value of ${maximum}`);
     Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 

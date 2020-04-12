@@ -183,7 +183,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Maximum value is required");
+    expect(valid).toBe("Years requires a maximum value of 5");
   });
 
   it("should validate exclusive maximum", () => {

@@ -89,7 +89,9 @@ const createArraySchema = (
 
   if (isNumber(maxItems)) {
     const path = joinPath(description, "maxItems");
-    const message = getError(path) || `Maximum of ${maxItems} items required`;
+    const message =
+      getError(path) ||
+      capitalize(`${key} requires a maximum of ${maxItems} items`);
 
     // `maximumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation

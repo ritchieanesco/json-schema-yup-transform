@@ -1,4 +1,5 @@
 import { JSONSchema7 } from "json-schema";
+import capitalize from "lodash/capitalize";
 import { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
@@ -13,7 +14,7 @@ const createObjectSchema = (
   jsonSchema: JSONSchema7
 ): Yup.ObjectSchema<object> => {
   const defaultMessage =
-    getError("defaults.object") || "The value is not of type object";
+    getError("defaults.object") || capitalize(`${key} is not of type object`);
 
   let Schema = Yup.object().typeError(defaultMessage);
 

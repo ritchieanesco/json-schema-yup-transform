@@ -15,10 +15,7 @@ export const getConfiguration = (): Config => config;
 
 /** Retrieve all errors from configuration */
 
-export const getErrors = (): ConfigErrors | false => {
-  if (!config.errors) return false;
-  return config.errors;
-};
+export const getErrors = (): ConfigErrors | undefined => config.errors;
 
 /** Retrieve specific error from configuration */
 

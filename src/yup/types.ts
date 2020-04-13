@@ -3,7 +3,7 @@ import isPlainObject from "lodash/isPlainObject";
 import { SchemaKeywords, DataTypes } from "../schema";
 
 export const isConfigError = (
-  errors: false | ConfigErrors
+  errors: undefined | ConfigErrors
 ): errors is ConfigErrors => isPlainObject(errors);
 
 export type SchemaItem = [string, JSONSchema7];

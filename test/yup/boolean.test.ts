@@ -95,6 +95,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should set default value", () => {
+    const defaultValue = true;
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -103,19 +104,22 @@ describe("convertToYup() boolean", () => {
       properties: {
         consent: {
           type: "boolean",
-          default: true
+          default: defaultValue
         }
       },
       required: ["consent"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
-    let isValid = yupschema.isValidSync({});
-    expect(isValid).toBeTruthy();
+    let isValid = yupschema
+      .test(
+        "is-default",
+        "${path} is default value",
+        (value) => value.consent === defaultValue
+      )
+      .isValidSync({});
 
-    let field = Yup.reach(yupschema, "consent");
-    // @ts-ignore
-    expect(field._default).toBe(true);
+    expect(isValid).toBeTruthy();
   });
 
   it("should validate constant", () => {

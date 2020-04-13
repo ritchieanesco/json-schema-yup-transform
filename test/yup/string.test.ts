@@ -290,7 +290,8 @@ describe("convertToYup() string", () => {
     expect(errorMessage).toBe("Value does not match enum");
   });
 
-  it("should set default value", () => {
+  it.only("should set default value", () => {
+    const defaultValue = "Roger";
     const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -299,19 +300,22 @@ describe("convertToYup() string", () => {
       properties: {
         name: {
           type: "string",
-          default: "test"
+          default: defaultValue
         }
       },
       required: ["name"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
-    let isValid = yupschema.isValidSync({});
-    expect(isValid).toBeTruthy();
+    let isValid = yupschema
+      .test(
+        "is-default",
+        "${path} is default value",
+        (value) => value.name === defaultValue
+      )
+      .isValidSync({});
 
-    let field = Yup.reach(yupschema, "name");
-    // @ts-ignore
-    expect(field._default).toBe("test");
+    expect(isValid).toBeTruthy();
   });
 
   it.only("should not validate empty value if field has multiple types", () => {

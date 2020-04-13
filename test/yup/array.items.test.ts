@@ -284,7 +284,7 @@ describe("convertToYup() array items", () => {
     expect(valid).toBeFalsy();
   });
   it("should set default value", () => {
-    const defaults = ["a"];
+    const defaultValue = ["a"];
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -293,18 +293,19 @@ describe("convertToYup() array items", () => {
       properties: {
         list: {
           type: "array",
-          default: defaults
+          default: defaultValue
         }
       },
       required: ["list"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
-    let isValid = yupschema.isValidSync({});
-    expect(isValid).toBeTruthy();
+    let isValid = yupschema
+      .test("is-default", "${path} is default value", (value) =>
+        isEqual(value.list, defaultValue)
+      )
+      .isValidSync({});
 
-    let field = Yup.reach(yupschema, "list");
-    // @ts-ignore
-    expect(isEqual(field._default, defaults)).toBeTruthy();
+    expect(isValid).toBeTruthy();
   });
 });

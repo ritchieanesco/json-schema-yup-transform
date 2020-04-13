@@ -422,6 +422,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should set default value", () => {
+    const defaultValue = 7;
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -430,18 +431,20 @@ describe("convertToYup() number", () => {
       properties: {
         age: {
           type: "number",
-          default: 7
+          default: defaultValue
         }
       },
       required: ["age"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
-    let isValid = yupschema.isValidSync({});
+    let isValid = yupschema
+      .test(
+        "is-default",
+        "${path} is default value",
+        (value) => value.age === defaultValue
+      )
+      .isValidSync({});
     expect(isValid).toBeTruthy();
-
-    let field = Yup.reach(yupschema, "age");
-    // @ts-ignore
-    expect(field._default).toBe(7);
   });
 });

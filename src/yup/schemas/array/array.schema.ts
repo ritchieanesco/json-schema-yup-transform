@@ -2,7 +2,6 @@ import { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
-import isUndefined from "lodash/isUndefined";
 import capitalize from "lodash/capitalize";
 import { isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
@@ -105,7 +104,7 @@ const createArraySchema = (
   /** Determine if schema matches any enums */
   Schema = createEnumerableSchema(Schema, [key, value]);
 
-  if (!isUndefined(uniqueItems)) {
+  if (uniqueItems) {
     const path = joinPath(description, "uniqueItems");
     const message =
       getError(path) || capitalize(`${key} values are not unique`);

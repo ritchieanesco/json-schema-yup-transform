@@ -385,6 +385,26 @@ describe("convertToYup() number", () => {
     expect(valid).toBe("Years does not match constant");
   });
 
+  it("should validate falsy constant", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        years: {
+          type: "number",
+          const: 0
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid = yupschema.isValidSync({
+      years: 0
+    });
+    expect(valid).toBeTruthy();
+  });
+
   it("should validate enum", () => {
     const schema: JSONSchema7 = {
       type: "object",

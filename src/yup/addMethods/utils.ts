@@ -1,6 +1,5 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import isArray from "lodash/isArray";
-import isUndefined from "lodash/isUndefined";
 import isString from "lodash/isString";
 import isPlainObject from "lodash/isPlainObject";
 import isEqual from "lodash/isEqual";
@@ -46,7 +45,8 @@ export const validateItemsArray = (items: JSONSchema7Definition[]) => (
     type === DataTypes.ARRAY
   ) {
     if (enums && !isValueEnum(enums, item)) return false;
-    if (!isUndefined(consts) && !isEqual(item, consts)) return false;
+    if ((consts || consts === null || consts === 0) && !isEqual(item, consts))
+      return false;
   }
 
   return true;

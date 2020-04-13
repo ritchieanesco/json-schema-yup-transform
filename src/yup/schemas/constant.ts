@@ -1,4 +1,3 @@
-import isUndefined from "lodash/isUndefined";
 import capitalize from "lodash/capitalize";
 import Yup from "../addMethods";
 import { SchemaItem } from "../types";
@@ -15,7 +14,7 @@ export const createConstantSchema = <T extends Yup.Schema<any>>(
 ): T => {
   const { const: consts, description } = value;
 
-  if (!isUndefined(consts)) {
+  if (consts || consts === null || consts === 0) {
     const path = joinPath(description, "const");
     const message =
       getError(path) || capitalize(`${key} does not match constant`);

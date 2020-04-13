@@ -12,7 +12,6 @@ import {
   getItemsArrayItem,
   isTypeOfValue
 } from "../../schema";
-import { isEnum } from "../../schema";
 
 /**
  * Checks if input is one of enum
@@ -30,36 +29,27 @@ export const validateItemsArray = (items: JSONSchema7Definition[]) => (
   index: number
 ): boolean => {
   const schemaItem = getItemsArrayItem(items, index);
-  if (isSchemaObject(schemaItem)) {
-    const { type, enum: enums, const: consts } = schemaItem;
 
-    // Items do not support multiple types
-    if (!isString(type)) {
-      return false;
-    }
+  if (!isSchemaObject(schemaItem)) return false;
 
-    if (!isTypeOfValue[type](item)) {
-      return false;
-    }
-    // enums and consts are only applicable to
-    // types, numbers and integers
-    if (
-      type === DataTypes.STRING ||
-      type === DataTypes.NUMBER ||
-      type === DataTypes.INTEGER
-    ) {
-      if (enums && !isEnum(schemaItem, item)) {
-        return false;
-      }
+  const { type, enum: enums, const: consts } = schemaItem;
 
-      if (!isUndefined(consts) && item !== consts) {
-        return false;
-      }
-    }
+  // Items do not support multiple types
+  if (!isString(type) || !isTypeOfValue[type](item)) return false;
 
-    return true;
+  // enums and consts are only applicable to
+  // types, numbers and integers
+  if (
+    type === DataTypes.STRING ||
+    type === DataTypes.NUMBER ||
+    type === DataTypes.INTEGER ||
+    type === DataTypes.ARRAY
+  ) {
+    if (enums && !isValueEnum(enums, item)) return false;
+    if (!isUndefined(consts) && !isEqual(item, consts)) return false;
   }
-  return false;
+
+  return true;
 };
 
 /**

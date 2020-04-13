@@ -204,7 +204,7 @@ describe("convertToYup() array items tuple", () => {
     expect(valid).toBeFalsy();
   });
 
-  it("should NOT validate array const", () => {
+  it("should validate array const", () => {
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -216,7 +216,7 @@ describe("convertToYup() array items tuple", () => {
           items: [
             {
               type: "array",
-              const: "test"
+              const: ["test"]
             },
             { type: "number" },
             { type: "boolean" }
@@ -228,7 +228,7 @@ describe("convertToYup() array items tuple", () => {
     let valid;
 
     valid = yupschema.isValidSync({
-      things: [["asdadad"], 1, true]
+      things: [["test"], 1, true]
     });
     expect(valid).toBeTruthy();
 
@@ -351,6 +351,48 @@ describe("convertToYup() array items tuple", () => {
 
     valid = yupschema.isValidSync({
       things: [3, 1, true]
+    });
+    expect(valid).toBeFalsy();
+  });
+
+  it("should validate array enum", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        things: {
+          type: "array",
+          items: [
+            {
+              type: "array",
+              enum: [
+                ["a", "b"],
+                ["c", "d"]
+              ]
+            },
+            { type: "number" },
+            { type: "boolean" }
+          ]
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid;
+
+    valid = yupschema.isValidSync({
+      things: [["a", "b"], 1, true]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      things: [["c", "d"], 1, true]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      things: [["e", "f"], 1, true]
     });
     expect(valid).toBeFalsy();
   });

@@ -1,8 +1,4 @@
-import {
-  JSONSchema7,
-  JSONSchema7Definition,
-  JSONSchema7Type
-} from "json-schema";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";
@@ -37,7 +33,7 @@ export const getDefinitionItem = (
   if (path.startsWith("#")) {
     const key = findKey(
       definitions,
-      item => isSchemaObject(item) && item.$id === path
+      (item) => isSchemaObject(item) && item.$id === path
     );
     return key ? get(definitions, key) : undefined;
   }
@@ -68,13 +64,6 @@ export const getRequired = (schema: JSONSchema7): JSONSchema7["required"] =>
   schema.required;
 
 /**
- * Retrieve enums property value
- */
-
-export const getEnum = (schema: JSONSchema7): JSONSchema7Type[] | undefined =>
-  schema.enum;
-
-/**
  * Retrieve reference id from `$ref` attribute
  */
 
@@ -93,4 +82,4 @@ const get$RefValue = (ref: string): string => {
 export const getItemsArrayItem = (
   items: JSONSchema7Definition[],
   index: number
-): JSONSchema7Definition | undefined => nth(items, index);
+): boolean | JSONSchema7 | undefined => nth(items, index);

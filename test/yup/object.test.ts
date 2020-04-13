@@ -204,6 +204,31 @@ describe("convertToYup() object", () => {
     expect(isValid).toBeFalsy();
   });
 
+  it("should validate fields from definitions", () => {
+    let schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      definitions: undefined,
+      properties: {
+        mailingAddress: {
+          $ref: "#/definitions/address"
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      mailingAddress: {
+        street_address: "test",
+        city: "Melbourne",
+        state: "VIC"
+      }
+    });
+    expect(isValid).toBeTruthy();
+  });
+
   it("should validate fields using definition id", () => {
     let schema: JSONSchema7 = {
       type: "object",

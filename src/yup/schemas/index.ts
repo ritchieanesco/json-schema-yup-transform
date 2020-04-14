@@ -62,8 +62,10 @@ const getLazyValidationSchema = (
 ): Yup.Lazy =>
   Yup.lazy((inputValue) => {
     const type = get(value, "type") as JSONSchema7TypeName[];
+    // include a check for undefined as Formik 2.1.4
+    // coeerces empty strings to undefined
     const valueType = type.includes("null")
-      ? inputValue === ""
+      ? inputValue === "" || inputValue === undefined
         ? null
         : inputValue
       : inputValue;

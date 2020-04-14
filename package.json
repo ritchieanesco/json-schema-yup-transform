@@ -22,7 +22,7 @@
   "dependencies": {
     "is-relative-url": "3.0.0",
     "lodash": "4.17.15",
-    "yup": "0.28.3"
+    "yup": "^0.28.3"
   },
   "devDependencies": {
     "@types/is-relative-url": "^3.0.0",

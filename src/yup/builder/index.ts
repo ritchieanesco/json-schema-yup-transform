@@ -122,13 +122,29 @@ const buildCondition = (
   let conditionSchema = {};
 
   if (isSchemaObject(thenSchema)) {
-    const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
-    const thenConditionSchema = buildConditionItem(thenSchema, [
-      ifSchemaKey,
-      (val) => isValid(val) === true
-    ]);
-    if (!thenConditionSchema) return false;
-    conditionSchema = { ...thenConditionSchema };
+    const { properties, required } = thenSchema;
+    if (!properties) return false;
+
+    for (const [key, val] of Object.entries(properties)) {
+      if (!val || typeof val === "boolean") continue;
+      const item: { properties: {}; required?: string[] } = {
+        properties: { [key]: { ...val } }
+      };
+      if (required && required.includes(key)) {
+        item.required = [key];
+      }
+      const isValid = isValidator([ifSchemaKey, ifSchemaValue], item);
+      const thenConditionSchema = buildConditionItem(item, [
+        ifSchemaKey,
+        (val) => isValid(val) === true
+      ]);
+      if (thenConditionSchema)
+        conditionSchema = Object.assign(
+          {},
+          conditionSchema,
+          thenConditionSchema
+        );
+    }
   }
 
   if (isSchemaObject(elseSchema)) {

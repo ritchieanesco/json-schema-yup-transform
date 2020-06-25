@@ -67,7 +67,7 @@ const createStringSchema = (
     const path = joinPath(description, "maxLength");
     const message =
       getError(path) ||
-      capitalize(`${key} requires a maximum of ${maxLength} characters`);
+      capitalize(`${key} cannot exceed a maximum of ${maxLength} characters`);
     Schema = Schema.concat(Schema.max(maxLength, message));
   }
 

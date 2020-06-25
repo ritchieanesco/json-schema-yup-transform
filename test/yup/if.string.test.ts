@@ -430,8 +430,7 @@ describe("convertToYup() string conditions", () => {
       title: "Test",
       properties: {
         country: {
-          type: "string",
-          enum: ["Australia", "Canada"]
+          type: "string"
         }
       },
       required: ["country"],
@@ -682,5 +681,41 @@ describe("convertToYup() string conditions", () => {
       country: "Australia"
     });
     expect(isValid).toBeTruthy();
+  });
+
+  fit("should validate required field", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        country: {
+          type: "string"
+        },
+        postal_code: { type: "string" }
+      },
+      if: {
+        properties: { country: { type: "string", const: "Australia" } }
+      },
+      then: {
+        properties: {
+          postal_code: { type: "string" }
+        },
+        required: ["postal_code"]
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    let isValid = yupschema.isValidSync({
+      country: "Australia",
+      postal_code: "0000"
+    });
+    expect(isValid).toBeTruthy();
+
+    isValid = yupschema.isValidSync({
+      country: "Australia"
+    });
+    expect(isValid).toBeFalsy();
   });
 });

@@ -58,13 +58,13 @@ const buildProperties = (
           [key]: Yup.array(createValidationSchema([key, items], jsonSchema))
         };
       } else {
-        let condition = {};
-        const newCondition =
-          hasIfSchema(jsonSchema, key) && buildCondition(jsonSchema);
-        if (newCondition) condition = { ...newCondition };
+        const condition = hasIfSchema(jsonSchema, key)
+          ? buildCondition(jsonSchema)
+          : {};
+        const newSchema = createValidationSchema([key, value], jsonSchema);
         schema = {
           ...schema,
-          [key]: createValidationSchema([key, value], jsonSchema),
+          [key]: key in schema ? schema[key].concat(newSchema) : newSchema,
           ...condition
         };
       }
@@ -125,9 +125,7 @@ const buildCondition = (
     const isValid = isValidator([ifSchemaKey, ifSchemaValue], thenSchema);
     const thenConditionSchema = buildConditionItem(thenSchema, [
       ifSchemaKey,
-      (val) => {
-        return isValid(val) === true;
-      }
+      (val) => isValid(val) === true
     ]);
     if (!thenConditionSchema) return false;
     conditionSchema = { ...thenConditionSchema };
@@ -142,7 +140,6 @@ const buildCondition = (
     if (!elseConditionSchema) return false;
     conditionSchema = { ...conditionSchema, ...elseConditionSchema };
   }
-
   return conditionSchema;
 };
 
@@ -177,7 +174,6 @@ const buildConditionItem = (
 
   /** Get the correct schema type to concat the when schema to */
   let Schema = schemaData[key];
-
   return {
     [key]: Yup.mixed().when(ifSchemaKey, {
       is: callback,

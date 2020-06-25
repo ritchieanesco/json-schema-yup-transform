@@ -183,7 +183,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Years requires a maximum value of 5");
+    expect(valid).toBe("Years cannot exceed a maximum value of 5");
   });
 
   it("should validate exclusive maximum", () => {
@@ -216,7 +216,7 @@ describe("convertToYup() number", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Years requires a exclusive maximum value of 5");
+    expect(valid).toBe("Years cannot exceed a exclusive maximum value of 5");
   });
 
   it("should validate minimum and maximum", () => {

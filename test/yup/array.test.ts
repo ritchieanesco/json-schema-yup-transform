@@ -165,7 +165,7 @@ describe("convertToYup() array", () => {
     } catch (e) {
       valid = e.errors[0];
     }
-    expect(valid).toBe("Items requires a maximum of 6 items");
+    expect(valid).toBe("Items cannot exceed a maximum of 6 items");
   });
 
   it("should validate constant", () => {

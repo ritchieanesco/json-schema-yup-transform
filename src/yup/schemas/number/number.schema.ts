@@ -92,7 +92,7 @@ export const createBaseNumberSchema = (
     const path = joinPath(description, "maximum");
     const message =
       getError(path) ||
-      capitalize(`${key} requires a maximum value of ${maximum}`);
+      capitalize(`${key} cannot exceed a maximum value of ${maximum}`);
     Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 
@@ -101,7 +101,7 @@ export const createBaseNumberSchema = (
     const message =
       getError(path) ||
       capitalize(
-        `${key} requires a exclusive maximum value of ${exclusiveMaximum}`
+        `${key} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
       );
     Schema = Schema.concat(
       Schema.max((exclusiveMaximum as number) - 1, message)

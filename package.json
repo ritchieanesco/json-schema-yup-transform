@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "is-relative-url": "3.0.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "yup": "^0.29.1"
   },
   "devDependencies": {

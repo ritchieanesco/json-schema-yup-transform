@@ -134,7 +134,8 @@ The tables below outline which keywords each schema type supports.
 **Provide a valid schema and `convertToYup` will transform it to a yup schema.**
 
 ```js
-import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
+
 const schema = {
   type: "object",
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -164,60 +165,61 @@ const isValid = yupschema.isValidsync({
 **Applying conditional rules**
 
 ```js
-    import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
 
-    const schema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "example-conditional-rules",
-      title: "Example of conditional rules",
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-conditional-rules",
+  title: "Example of conditional rules",
+  properties: {
+    country: {
+      type: "string"
+    }
+  },
+  required: ["country"]
+  if: {
       properties: {
-        country: {
-          type: "string"
-        }
-      },
-      required: ["country"]
-      if: {
-          properties: {
-              country: {
-                const: "Australia"
-              }
+          country: {
+            const: "Australia"
           }
       }
-      then: {
-          properties: {
-              residencyYears: {
-                  type: "number",
-                  minimum: 12
-              }
-          },
-          required: ["residencyYears"]
-      }
-    };
+  }
+  then: {
+      properties: {
+          residencyYears: {
+              type: "number",
+              minimum: 12
+          }
+      },
+      required: ["residencyYears"]
+  }
+};
 
-    // the yup equivalent of the above json schema
-    // const yupschema = Yup.object().shape({
-    //     country: Yup.string().required(),
-    //     residencyYears: Yup.number().when('country', {
-    //      is: 'true'
-    //      then: Yup.number().required()
-    //    })
-    // })
+// the yup equivalent of the above json schema
+// const yupschema = Yup.object().shape({
+//     country: Yup.string().required(),
+//     residencyYears: Yup.number().when('country', {
+//      is: 'true'
+//      then: Yup.number().required()
+//    })
+// })
 
-    // check validity
+// check validity
 
-    const yupschema = convertToYup(schema)
-    const isValid = yupschema.isValidsync({
-        country: "Australia",
-        residencyYears: 15
-    })
-    // => true
+const yupschema = convertToYup(schema)
+const isValid = yupschema.isValidsync({
+    country: "Australia",
+    residencyYears: 15
+})
+// => true
 ```
 
 **Applying multiple types**
 
 ```js
-import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
+
 const schema = {
   type: "object",
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -258,7 +260,8 @@ const isValid = yupschema.isValidsync({
 The structure of the configuration error messages need to adhere to the path of that field in the schema as well as the associated schema validation keyword.
 
 ```js
-import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
+
 const schema = {
   type: "object",
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -303,7 +306,8 @@ try {
 Setting default error messages for a type
 
 ```js
-import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
+
 const schema = {
   type: "object",
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -349,7 +353,8 @@ try {
 Applying definitions and \$ref
 
 ```js
-import { convertToYup } from "json-schema-yup-transformer";
+import convertToYup from "json-schema-yup-transformer";
+
 let schema: JSONSchema7 = {
   type: "object",
   $schema: "http://json-schema.org/draft-07/schema#",

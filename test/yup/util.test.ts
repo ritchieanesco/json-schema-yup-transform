@@ -402,7 +402,7 @@ describe("applyIfTypes()", () => {
     };
     expect(applyIfTypes(schema)).toEqual(schema);
   });
-  it.only("should add types to all if schemas", () => {
+  it("should add types to all if schemas", () => {
     const schema: JSONSchema7 = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "vehicles",
@@ -697,7 +697,7 @@ describe("normalize()", () => {
 });
 
 describe("getObjectHead()", () => {
-  it.only("should return first item in object as an array", () => {
+  it("should return first item in object as an array", () => {
     expect(getObjectHead({ a: "1", b: "2", c: "2" })).toEqual(["a", "1"]);
     expect(getObjectHead("test")).toBeFalsy();
     expect(getObjectHead({})).toBeFalsy();

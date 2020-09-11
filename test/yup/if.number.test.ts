@@ -494,7 +494,7 @@ describe("convertToYup() number conditions", () => {
     expect(isValid).toBeTruthy();
   });
 
-  it.only("should validate other conditional", () => {
+  it("should validate other conditional", () => {
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -522,25 +522,6 @@ describe("convertToYup() number conditions", () => {
       }
     };
     const yupschema = convertToYup(schema) as Yup.ObjectSchema;
-
-    // let isValid = yupschema.isValidSync({
-    //   postcode: 3000,
-    //   productId: 55
-    // });
-    // expect(isValid).toBeTruthy();
-
-    // isValid = yupschema.isValidSync({
-    //   postcode: 3000,
-    //   productId: 101
-    // });
-    // expect(isValid).toBeFalsy();
-
-    // isValid = yupschema.isValidSync({
-    //   postcode: 4000,
-    //   productId: 6
-    // });
-    // expect(isValid).toBeTruthy();
-
     let isValid = yupschema.isValidSync({
       postcode: 4000,
       productId: 5

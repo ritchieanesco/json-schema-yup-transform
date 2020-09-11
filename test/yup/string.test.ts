@@ -75,7 +75,7 @@ describe("convertToYup() string", () => {
       yupschema.isValidSync({
         name: []
       });
-    }).toThrowError("object data type is not supported");
+    }).toBeTruthy();
   });
 
   it("should validate required", () => {
@@ -107,7 +107,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("This is required");
+    expect(errorMessage).toBe("Name is required");
   });
 
   it("should validate minimum character length", () => {
@@ -141,7 +141,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("A minimum of 6 characters required");
+    expect(errorMessage).toBe("Name requires a minimum of 6 characters");
   });
 
   it("should validate maximum character length", () => {
@@ -175,7 +175,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("A maximum of 6 characters required");
+    expect(errorMessage).toBe("Name cannot exceed a maximum of 6 characters");
   });
 
   it("should validate pattern", () => {
@@ -214,7 +214,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Incorrect format");
+    expect(errorMessage).toBe("Name is a incorrect format");
   });
 
   it("should validate constant", () => {
@@ -248,7 +248,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Value does not match constant");
+    expect(errorMessage).toBe("Name does not match constant");
   });
 
   it("should validate enum", () => {
@@ -287,10 +287,10 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Value does not match enum");
+    expect(errorMessage).toBe("Name does not match any of the enumerables");
   });
 
-  it.only("should set default value", () => {
+  it("should set default value", () => {
     const defaultValue = "Roger";
     const schema: JSONSchema7Extended = {
       type: "object",
@@ -318,7 +318,7 @@ describe("convertToYup() string", () => {
     expect(isValid).toBeTruthy();
   });
 
-  it.only("should not validate empty value if field has multiple types", () => {
+  it("should not validate empty value if field has multiple types", () => {
     const schema: JSONSchema7Extended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -380,6 +380,6 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Incorrect format");
+    expect(errorMessage).toBe("Name is a incorrect format");
   });
 });

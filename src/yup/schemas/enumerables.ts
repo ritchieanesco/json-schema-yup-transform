@@ -14,7 +14,6 @@ export const createEnumerableSchema = <T extends Yup.Schema<any>>(
   [key, value]: SchemaItem
 ): T => {
   const { enum: enums, description } = value;
-
   if (isArray(enums)) {
     const path = joinPath(description, "enum");
     const message =

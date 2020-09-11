@@ -69,7 +69,7 @@ const getLazyValidationSchema = (
         ? null
         : inputValue
       : inputValue;
-    const typeOfValue = getTypeOfValue(type, valueType);
+    const typeOfValue = getTypeOfValue(type, valueType) || null;
     const newItem: SchemaItem = [key, { ...value, type: typeOfValue }];
     return getValidationSchema(newItem, jsonSchema);
   });

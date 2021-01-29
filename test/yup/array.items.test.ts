@@ -89,6 +89,42 @@ describe("convertToYup() array items", () => {
     expect(valid).toBeFalsy();
   });
 
+
+  it("should validate unique strings", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        things: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string"
+          }
+        }
+      }
+    };
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let valid;
+
+    valid = yupschema.isValidSync({
+      things: ["a", "b"]
+    });
+    expect(valid).toBeTruthy();
+
+    valid = yupschema.isValidSync({
+      things: ["a", "a"]
+    });
+    expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({
+      things: []
+    });
+    expect(valid).toBeTruthy();
+  });
+
   it("should validate numbers", () => {
     const schema: JSONSchema7 = {
       type: "object",

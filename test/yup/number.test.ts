@@ -467,4 +467,29 @@ describe("convertToYup() number", () => {
       .isValidSync({});
     expect(isValid).toBeTruthy();
   });
+
+  it("should use title as label in error message", () => {
+    const fieldTitle = "My Age";
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        age: {
+          type: "number",
+          title: fieldTitle
+        }
+      }
+    };
+
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ age: "Forty" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(`${fieldTitle} is not of type number`);
+  });
 });

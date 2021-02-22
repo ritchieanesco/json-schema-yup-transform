@@ -155,4 +155,29 @@ describe("convertToYup() boolean", () => {
     }
     expect(errorMessage).toBe("Isactive does not match constant");
   });
+
+  it("should use title as label in error message", () => {
+    const fieldTitle = "Is Active";
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        isActive: {
+          type: "boolean",
+          title: fieldTitle
+        }
+      }
+    };
+
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ isActive: "test" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(`${fieldTitle} is not of type boolean`);
+  });
 });

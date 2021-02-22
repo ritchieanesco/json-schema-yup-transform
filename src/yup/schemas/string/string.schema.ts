@@ -76,13 +76,13 @@ const createStringSchema = (
 
   if (isRegex(pattern)) {
     const path = joinPath(description, "pattern");
-    const message = getError(path) || `${label} is a incorrect format`;
+    const message = getError(path) || `${label} is an incorrect format`;
     Schema = Schema.concat(Schema.matches(pattern, message));
   }
 
   if (isRegex(regex)) {
     const path = joinPath(description, "regex");
-    const message = getError(path) || `${label} is a incorrect format`;
+    const message = getError(path) || `${label} is an incorrect format`;
     Schema = Schema.concat(Schema.matches(regex, message));
   }
 

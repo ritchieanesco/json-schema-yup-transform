@@ -214,7 +214,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is a incorrect format");
+    expect(errorMessage).toBe("Name is an incorrect format");
   });
 
   it("should validate constant", () => {
@@ -380,6 +380,6 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is a incorrect format");
+    expect(errorMessage).toBe("Name is an incorrect format");
   });
 });

@@ -13,8 +13,12 @@ const createIntegerSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
+  const { title } = value;
+
+  const label = title || capitalize(key);
+
   const defaultMessage =
-    getError("defaults.integer") || capitalize(`${key} is not of type integer`);
+    getError("defaults.integer") || `${label} is not of type integer`;
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage).integer().strict(true),
     [key, value],

@@ -17,8 +17,12 @@ const createNumberSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
+  const { title } = value;
+
+  const label = title || capitalize(key);
+
   const defaultMessage =
-    getError("defaults.number") || capitalize(`${key} is not of type number`);
+    getError("defaults.number") || `${label} is not of type number`;
 
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage),

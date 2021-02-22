@@ -15,10 +15,12 @@ const createBooleanSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.BooleanSchema<boolean> => {
-  const { default: defaults } = value;
+  const { default: defaults, title } = value;
+
+  const label = title || capitalize(key);
 
   const defaultMessage =
-    getError("defaults.boolean") || capitalize(`${key} is not of type boolean`);
+    getError("defaults.boolean") || `${label} is not of type boolean`;
 
   let Schema = Yup.boolean().typeError(defaultMessage);
 

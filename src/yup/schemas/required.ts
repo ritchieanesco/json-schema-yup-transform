@@ -17,8 +17,9 @@ export const createRequiredSchema = <T extends Yup.Schema<any>>(
 ): T => {
   if (!isRequiredField(jsonSchema, key)) return Schema;
 
-  const { description } = value;
+  const { description, title } = value;
+  const label = title || capitalize(key);
   const path = joinPath(description, "required");
-  const message = getError(path) || capitalize(`${key} is required`);
+  const message = getError(path) || `${label} is a required field`;
   return Schema.concat(Schema.required(message));
 };

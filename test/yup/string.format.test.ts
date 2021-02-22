@@ -59,7 +59,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Event is a invalid date and time format");
+    expect(errorMessage).toBe("Event is an invalid date and time format");
   });
 
   it("should validate time format", () => {
@@ -104,7 +104,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Event is a invalid time format");
+    expect(errorMessage).toBe("Event is an invalid time format");
   });
 
   it("should validate date format", () => {
@@ -143,7 +143,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Event is a invalid date format");
+    expect(errorMessage).toBe("Event is an invalid date format");
   });
 
   it("should validate email format", () => {
@@ -198,7 +198,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Email is a invalid email format");
+    expect(errorMessage).toBe("Email is an invalid email format");
   });
 
   it("should validate IDN email format", () => {
@@ -263,7 +263,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Email is a invalid international email format");
+    expect(errorMessage).toBe("Email is an invalid international email format");
   });
 
   it("should validate hostname format", () => {
@@ -301,7 +301,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Website is a invalid hostname format");
+    expect(errorMessage).toBe("Website is an invalid hostname format");
   });
 
   it("should validate international hostname format", () => {
@@ -345,7 +345,7 @@ describe("convertToYup() string format", () => {
       errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
-      "Website is a invalid international hostname format"
+      "Website is an invalid international hostname format"
     );
   });
 
@@ -394,7 +394,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Website is a invalid ipv4 format");
+    expect(errorMessage).toBe("Website is an invalid ipv4 format");
   });
 
   it("should validate ipv6 format", () => {
@@ -442,7 +442,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Website is a invalid ipv6 format");
+    expect(errorMessage).toBe("Website is an invalid ipv6 format");
   });
 
   it("should validate uri format", () => {
@@ -495,7 +495,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Website is a invalid uri format");
+    expect(errorMessage).toBe("Website is an invalid URI format");
   });
 
   it("should validate uri relative path format", () => {
@@ -534,7 +534,7 @@ describe("convertToYup() string format", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Website is a invalid uri reference format");
+    expect(errorMessage).toBe("Website is an invalid URI reference format");
   });
 
   it("should render warning for iri use", () => {

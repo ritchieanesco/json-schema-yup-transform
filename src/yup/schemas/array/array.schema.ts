@@ -27,11 +27,14 @@ const createArraySchema = (
     maxItems,
     items,
     contains,
-    uniqueItems
+    uniqueItems,
+    title
   } = value;
 
+  const label = title || capitalize(key);
+
   const defaultMessage =
-    getError("defaults.array") || capitalize(`${key} is not of type array`);
+    getError("defaults.array") || `${label} is not of type array`;
 
   let Schema = Yup.array().typeError(defaultMessage);
 

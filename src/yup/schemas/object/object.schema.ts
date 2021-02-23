@@ -13,8 +13,12 @@ const createObjectSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.ObjectSchema<object> => {
+  const { title } = value;
+
+  const label = title || capitalize(key);
+
   const defaultMessage =
-    getError("defaults.object") || capitalize(`${key} is not of type object`);
+    getError("defaults.object") || `${label} is not of type object`;
 
   let Schema = Yup.object().typeError(defaultMessage);
 

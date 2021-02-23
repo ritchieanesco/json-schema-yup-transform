@@ -214,7 +214,7 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is a incorrect format");
+    expect(errorMessage).toBe("Name is an incorrect format");
   });
 
   it("should validate constant", () => {
@@ -380,6 +380,32 @@ describe("convertToYup() string", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is a incorrect format");
+    expect(errorMessage).toBe("Name is an incorrect format");
+  });
+
+  it("should use title as label in error message", () => {
+    const fieldTitle = "First Name";
+    const schema: JSONSchema7Extended = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        name: {
+          type: "string",
+          title: fieldTitle
+        }
+      },
+      required: ["name"]
+    };
+
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ name: "" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(`${fieldTitle} is required`);
   });
 });

@@ -50,24 +50,28 @@ const buildProperties = (
         ...schema,
         [key]: ArraySchema.concat(Yup.array(build(items)))
       };
+    } else if (type === "array" && isSchemaObject(items)) {
+      const ArraySchema = createValidationSchema(
+        [key, omit(value, "items")],
+        jsonSchema
+      );
+      schema = {
+        ...schema,
+        [key]: ArraySchema.concat(
+          Yup.array(createValidationSchema([key, items], jsonSchema))
+        )
+      };
     } else {
       // check if item has a then or else schema
-      if (type === "array" && isSchemaObject(items)) {
-        schema = {
-          ...schema,
-          [key]: Yup.array(createValidationSchema([key, items], jsonSchema))
-        };
-      } else {
-        const condition = hasIfSchema(jsonSchema, key)
-          ? buildCondition(jsonSchema)
-          : {};
-        const newSchema = createValidationSchema([key, value], jsonSchema);
-        schema = {
-          ...schema,
-          [key]: key in schema ? schema[key].concat(newSchema) : newSchema,
-          ...condition
-        };
-      }
+      const condition = hasIfSchema(jsonSchema, key)
+        ? buildCondition(jsonSchema)
+        : {};
+      const newSchema = createValidationSchema([key, value], jsonSchema);
+      schema = {
+        ...schema,
+        [key]: key in schema ? schema[key].concat(newSchema) : newSchema,
+        ...condition
+      };
     }
   }
   return schema;

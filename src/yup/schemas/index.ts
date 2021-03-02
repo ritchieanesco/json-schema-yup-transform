@@ -13,6 +13,8 @@ import createStringSchema from "./string";
 import Yup from "../addMethods/";
 import { DataTypes, getPropertyType, isTypeOfValue } from "../../schema/";
 import { SchemaItem } from "../types";
+import { MixedSchema } from "yup/lib/mixed";
+import Lazy from "yup/lib/Lazy";
 
 /**
  * Validates the input data type against the schema type and returns
@@ -37,7 +39,7 @@ const getTypeOfValue = (
 const getValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
-): Yup.MixedSchema<any> => {
+): MixedSchema => {
   const { type } = value;
   const schemaMap = {
     [DataTypes.STRING]: createStringSchema([key, value], jsonSchema),
@@ -59,7 +61,7 @@ const getValidationSchema = (
 const getLazyValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
-): Yup.Lazy =>
+): Lazy<any> =>
   Yup.lazy((inputValue) => {
     const type = get(value, "type") as JSONSchema7TypeName[];
     // include a check for undefined as Formik 2.1.4
@@ -82,7 +84,7 @@ const getLazyValidationSchema = (
 const createValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
-): Yup.Lazy | Yup.MixedSchema<any> => {
+): Lazy<any> | MixedSchema => {
   const type = getPropertyType(value);
   if (isArray(type)) {
     return getLazyValidationSchema([key, value], jsonSchema);

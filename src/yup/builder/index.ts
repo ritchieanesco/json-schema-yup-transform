@@ -7,6 +7,9 @@ import Yup from "../addMethods/";
 import { getProperties, isSchemaObject } from "../../schema/";
 import createValidationSchema from "../schemas/";
 import { getObjectHead } from "../utils";
+import { ObjectShape } from "yup/lib/object";
+import { MixedSchema } from "yup/lib/mixed";
+import Lazy from "yup/lib/Lazy";
 
 /**
  * Iterate through each item in properties and generate a key value pair of yup schema
@@ -17,7 +20,7 @@ const buildProperties = (
     [key: string]: JSONSchema7Definition;
   },
   jsonSchema: JSONSchema7
-): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
+): {} | { [key: string]: Lazy<any> | MixedSchema } => {
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
@@ -106,7 +109,7 @@ const isValidator = (
 
 const buildCondition = (
   jsonSchema: JSONSchema7
-): false | { [key: string]: Yup.MixedSchema } => {
+): false | { [key: string]: MixedSchema } => {
   const ifSchema = get(jsonSchema, "if");
   if (!isSchemaObject(ifSchema)) return false;
 
@@ -170,7 +173,7 @@ const buildCondition = (
 const buildConditionItem = (
   schema: JSONSchema7,
   [ifSchemaKey, callback]: [string, (val: unknown) => boolean]
-): false | { [key: string]: Yup.MixedSchema } => {
+): false | { [key: string]: MixedSchema } => {
   const { properties } = schema;
   if (!properties) return false;
 
@@ -210,7 +213,7 @@ const buildConditionItem = (
 
 export const build = (
   jsonSchema: JSONSchema7
-): Yup.ObjectSchema<object> | undefined => {
+): Yup.ObjectSchema<ObjectShape> | undefined => {
   const properties = getProperties(jsonSchema);
 
   if (!properties) return properties;

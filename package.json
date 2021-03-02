@@ -23,7 +23,7 @@
     "is-relative-url": "3.0.0",
     "lodash": "4.17.19",
     "stringify-object": "^3.3.0",
-    "yup": "^0.29.1"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/is-relative-url": "^3.0.0",
@@ -31,7 +31,6 @@
     "@types/json-schema": "^7.0.4",
     "@types/lodash": "^4.14.149",
     "@types/stringify-object": "^3.2.0",
-    "@types/yup": "^0.26.33",
     "bufferutil": "^4.0.1",
     "canvas": "^2.5.0",
     "coveralls": "^3.0.11",

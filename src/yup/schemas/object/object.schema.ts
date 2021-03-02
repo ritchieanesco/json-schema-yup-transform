@@ -4,6 +4,7 @@ import { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { getError } from "../../config/";
+import { ObjectShape } from "yup/lib/object";
 
 /**
  * Initializes a yup object schema derived from a json object schema
@@ -12,7 +13,7 @@ import { getError } from "../../config/";
 const createObjectSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
-): Yup.ObjectSchema<object> => {
+): Yup.ObjectSchema<ObjectShape> => {
   const { title } = value;
 
   const label = title || capitalize(key);

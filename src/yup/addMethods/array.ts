@@ -15,10 +15,10 @@ import { validateItemsArray, isUnique } from "./utils";
  */
 
 export function minimumItems(
-  this: Yup.ArraySchema<unknown>,
+  this: Yup.ArraySchema<Yup.AnySchema>,
   count: number,
   message: string
-): Yup.ArraySchema<unknown> {
+): Yup.ArraySchema<Yup.AnySchema> {
   return this.test("test-minimumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = isArray(input) && input.length >= count;
@@ -32,10 +32,10 @@ export function minimumItems(
  */
 
 export function maximumItems(
-  this: Yup.ArraySchema<unknown>,
+  this: Yup.ArraySchema<Yup.AnySchema>,
   count: number,
   message: string
-): Yup.ArraySchema<unknown> {
+): Yup.ArraySchema<Yup.AnySchema> {
   return this.test("test-maximumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = isArray(input) && input.length <= count;
@@ -49,10 +49,10 @@ export function maximumItems(
  */
 
 export function contains(
-  this: Yup.ArraySchema<unknown>,
+  this: Yup.ArraySchema<Yup.AnySchema>,
   value: string,
   message: string
-): Yup.ArraySchema<unknown> {
+): Yup.ArraySchema<Yup.AnySchema> {
   return this.test("test-contains", message, function (input: unknown[]) {
     const { path, createError } = this;
     let isValid = false;
@@ -87,10 +87,10 @@ export function contains(
  */
 
 export function tuple(
-  this: Yup.ArraySchema<unknown>,
+  this: Yup.ArraySchema<Yup.AnySchema>,
   items: JSONSchema7Definition[],
   message: string
-): Yup.ArraySchema<unknown> {
+): Yup.ArraySchema<Yup.AnySchema> {
   return this.test("test-tuple", message, function (input: any[]) {
     const { path, createError } = this;
     const validator = validateItemsArray(items);
@@ -104,10 +104,10 @@ export function tuple(
  */
 
 export function uniqueItems(
-  this: Yup.ArraySchema<unknown>,
+  this: Yup.ArraySchema<Yup.AnySchema>,
   enable: boolean,
   message: string
-): Yup.ArraySchema<unknown> {
+): Yup.ArraySchema<Yup.AnySchema> {
   return this.test("test-unique-items", message, function (input: unknown[]) {
     const { path, createError } = this;
     // method will always be valid if uniqueItems property is set to false

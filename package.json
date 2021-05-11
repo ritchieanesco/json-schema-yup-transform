@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "is-relative-url": "3.0.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "stringify-object": "^3.3.0",
     "yup": "^0.29.1"
   },

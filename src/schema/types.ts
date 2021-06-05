@@ -17,6 +17,16 @@ export enum DataTypes {
   INTEGER = "integer"
 }
 
+/**
+ * Composite schema types
+ */
+export enum CompositSchemaTypes {
+  ALLOF = 'allOf',
+  ANYOF = 'anyOf',
+  ONEOF = 'oneOf',
+  NOT = 'not',
+}
+
 export enum SchemaKeywords {
   REQUIRED = "required",
   ENUM = "enum",

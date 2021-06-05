@@ -11,8 +11,9 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { DataTypes, getPropertyType, isTypeOfValue } from "../../schema/";
+import { CompositSchemaTypes, DataTypes, getCompositionType, getPropertyType, isTypeOfValue } from "../../schema/";
 import { SchemaItem } from "../types";
+import { createAllOfSchema, createAnyOfSchema, createNotSchema, createOneOfSchema } from "./composition";
 
 /**
  * Validates the input data type against the schema type and returns
@@ -38,17 +39,23 @@ const getValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<any> => {
-  const { type } = value;
+  const type = value.type || getCompositionType(value);
+
   const schemaMap = {
-    [DataTypes.STRING]: createStringSchema([key, value], jsonSchema),
-    [DataTypes.NUMBER]: createNumberSchema([key, value], jsonSchema),
-    [DataTypes.INTEGER]: createIntegerSchema([key, value], jsonSchema),
-    [DataTypes.ARRAY]: createArraySchema([key, value], jsonSchema),
-    [DataTypes.BOOLEAN]: createBooleanSchema([key, value], jsonSchema),
-    [DataTypes.NULL]: createNullSchema(),
-    [DataTypes.OBJECT]: createObjectSchema([key, value], jsonSchema)
+    [DataTypes.STRING]: createStringSchema,
+    [DataTypes.NUMBER]: createNumberSchema,
+    [DataTypes.INTEGER]: createIntegerSchema,
+    [DataTypes.ARRAY]: createArraySchema,
+    [DataTypes.BOOLEAN]: createBooleanSchema,
+    [DataTypes.NULL]: createNullSchema,
+    [DataTypes.OBJECT]: createObjectSchema,
+    [CompositSchemaTypes.ALLOF]: createAllOfSchema,
+    [CompositSchemaTypes.ANYOF]: createAnyOfSchema,
+    [CompositSchemaTypes.ONEOF]: createOneOfSchema,
+    [CompositSchemaTypes.NOT]: createNotSchema,
   };
-  return schemaMap[type as JSONSchema7TypeName];
+
+  return schemaMap[type as JSONSchema7TypeName]([key, value], jsonSchema);
 };
 
 /**
@@ -83,7 +90,7 @@ const createValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.Lazy | Yup.MixedSchema<any> => {
-  const type = getPropertyType(value);
+  const type = getPropertyType(value) || getCompositionType(value);
   if (isArray(type)) {
     return getLazyValidationSchema([key, value], jsonSchema);
   }

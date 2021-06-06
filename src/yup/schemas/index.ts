@@ -11,7 +11,7 @@ import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
-import { CompositSchemaTypes, DataTypes, getCompositionType, getPropertyType, isTypeOfValue } from "../../schema/";
+import { DataTypes, getCompositionType, getPropertyType, hasAllOf, hasAnyOf, hasNot, hasOneOf, isTypeOfValue } from "../../schema/";
 import { SchemaItem } from "../types";
 import { createAllOfSchema, createAnyOfSchema, createNotSchema, createOneOfSchema } from "./composition";
 
@@ -39,7 +39,23 @@ const getValidationSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<any> => {
-  const type = value.type || getCompositionType(value);
+  if (hasAnyOf(value)) {
+    return createAnyOfSchema([key, value], jsonSchema);
+  }
+
+  if (hasAllOf(value)) {
+    return createAllOfSchema([key, value], jsonSchema);
+  }
+
+  if (hasOneOf(value)) {
+    return createOneOfSchema([key, value], jsonSchema);
+  }
+
+  if (hasNot(value)) {
+    return createNotSchema([key, value], jsonSchema);
+  }
+
+  const type = value.type;
 
   const schemaMap = {
     [DataTypes.STRING]: createStringSchema,
@@ -49,10 +65,6 @@ const getValidationSchema = (
     [DataTypes.BOOLEAN]: createBooleanSchema,
     [DataTypes.NULL]: createNullSchema,
     [DataTypes.OBJECT]: createObjectSchema,
-    [CompositSchemaTypes.ALLOF]: createAllOfSchema,
-    [CompositSchemaTypes.ANYOF]: createAnyOfSchema,
-    [CompositSchemaTypes.ONEOF]: createOneOfSchema,
-    [CompositSchemaTypes.NOT]: createNotSchema,
   };
 
   return schemaMap[type as JSONSchema7TypeName]([key, value], jsonSchema);

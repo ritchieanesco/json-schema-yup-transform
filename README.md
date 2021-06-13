@@ -122,8 +122,8 @@ The tables below outline which keywords each schema type supports.
 
 ### Extending Schemas
 
-| Keyword | Supported                |
-| ------- | ------------------------ |
+| Keyword | Supported          |
+| ------- | ------------------ |
 | allOf   | :heavy_check_mark: |
 | anyOf   | :heavy_check_mark: |
 | oneOf   | :heavy_check_mark: |
@@ -386,6 +386,115 @@ const isValid = yupschema.isValidsync({
     city: "New York City",
     state: "New York"
   }
+});
+// => true
+```
+
+**Validate against `allof` subschemas**
+
+```js
+import convertToYup from "json-schema-yup-transformer";
+
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "test",
+  title: "Test",
+  properties: {
+    things: {
+      allOf: [
+        { type: "string", minLength: 4 },
+        { type: "string", maxLength: 6 }
+      ]
+    }
+  }
+};
+
+// check validity
+let yupschema = convertToYup(schema);
+let isValid = yupschema.isValidSync({
+  things: "12345"
+});
+// => true
+```
+
+**Validate against `anyof` subschemas**
+
+```js
+import convertToYup from "json-schema-yup-transformer";
+
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "test",
+  title: "Test",
+  properties: {
+    things: {
+      anyOf: [
+        { type: "string", minLength: 6 },
+        { type: "string", const: "test" }
+      ]
+    }
+  }
+};
+
+// check validity
+let yupschema = convertToYup(schema);
+let isValid = yupschema.isValidSync({
+  things: "test"
+});
+// => true
+```
+
+**Validate against `not` subschemas**
+
+```js
+import convertToYup from "json-schema-yup-transformer";
+
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "test",
+  title: "Test",
+  properties: {
+    things: {
+      not: { type: "string", minLength: 6 }
+    }
+  }
+};
+
+// check validity
+let yupschema = convertToYup(schema);
+let isValid = yupschema.isValidSync({
+  things: "1234"
+});
+// => true
+```
+
+**Validate against `oneof` subschemas**
+
+```js
+import convertToYup from "json-schema-yup-transformer";
+
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "test",
+  title: "Test",
+  properties: {
+    things: {
+      oneOf: [
+        { type: "string", minLength: 6 },
+        { type: "string", minLength: 3 }
+      ]
+    }
+  }
+};
+
+// check validity
+let yupschema = convertToYup(schema);
+let isValid = yupschema.isValidSync({
+  things: "1234"
 });
 // => true
 ```

@@ -55,7 +55,7 @@ const getValidationSchema = (
     return createNotSchema([key, value], jsonSchema);
   }
 
-  const type = value.type;
+  const { type } = value;
 
   const schemaMap = {
     [DataTypes.STRING]: createStringSchema,

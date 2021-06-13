@@ -85,20 +85,37 @@ export const isItemsArray = (
 ): items is JSONSchema7Definition[] =>
   isArray(items) && items.every((item) => has(item, "type"));
 
+
+export interface AnyOfSchema7 extends JSONSchema7 {
+  anyOf: JSONSchema7Definition[]
+}
+
+export interface AllOfSchema7 extends JSONSchema7 {
+  allOf: JSONSchema7Definition[]
+}
+
+export interface OneOfSchema7 extends JSONSchema7 {
+  oneOf: JSONSchema7Definition[]
+}
+
+export interface NotSchema7 extends JSONSchema7 {
+  not: JSONSchema7Definition
+}
+
 /**
  * String pattern key type guard
  */
 
 export const isRegex = (regexp: any): regexp is RegExp => regexp;
 
-export const hasAnyOf = (value: JSONSchema7): value is JSONSchema7 & { anyOf: JSONSchema7Definition[]} =>
+export const hasAnyOf = (value: JSONSchema7): value is AnyOfSchema7 =>
   !!value.anyOf;
 
-export const hasAllOf = (value: JSONSchema7): value is JSONSchema7 & { allOf: JSONSchema7Definition[]} =>
+export const hasAllOf = (value: JSONSchema7): value is AllOfSchema7 =>
   !!value.allOf;
 
-export const hasOneOf = (value: JSONSchema7): value is JSONSchema7 & { oneOf: JSONSchema7Definition[]} =>
+export const hasOneOf = (value: JSONSchema7): value is OneOfSchema7 =>
   !!value.oneOf;
 
-export const hasNot = (value: JSONSchema7): value is JSONSchema7 & { not: JSONSchema7Definition} =>
+export const hasNot = (value: JSONSchema7): value is NotSchema7 =>
   !!value.not;

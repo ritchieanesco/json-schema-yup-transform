@@ -46,8 +46,11 @@ export const createBaseNumberSchema = (
     maximum,
     exclusiveMaximum,
     exclusiveMinimum,
-    multipleOf
+    multipleOf,
+    title
   } = value;
+
+  const label = title || capitalize(key);
 
   const isMinNumber = isNumber(minimum);
   const isMaxNumber = isNumber(maximum);
@@ -75,7 +78,7 @@ export const createBaseNumberSchema = (
     const path = joinPath(description, "minimum");
     const message =
       getError(path) ||
-      capitalize(`${key} requires a minimum value of ${minimum}`);
+      capitalize(`${label} requires a minimum value of ${minimum}`);
     Schema = Schema.concat(Schema.min(minimum as number, message));
   }
 
@@ -84,7 +87,7 @@ export const createBaseNumberSchema = (
     const message =
       getError(path) ||
       capitalize(
-        `${key} requires a exclusive minimum value of ${exclusiveMinimum}`
+        `${label} requires a exclusive minimum value of ${exclusiveMinimum}`
       );
     Schema = Schema.concat(
       Schema.min((exclusiveMinimum as number) + 1, message)
@@ -96,7 +99,7 @@ export const createBaseNumberSchema = (
     const path = joinPath(description, "maximum");
     const message =
       getError(path) ||
-      capitalize(`${key} cannot exceed a maximum value of ${maximum}`);
+      capitalize(`${label} cannot exceed a maximum value of ${maximum}`);
     Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 
@@ -105,7 +108,7 @@ export const createBaseNumberSchema = (
     const message =
       getError(path) ||
       capitalize(
-        `${key} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
+        `${label} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
       );
     Schema = Schema.concat(
       Schema.max((exclusiveMaximum as number) - 1, message)
@@ -116,7 +119,7 @@ export const createBaseNumberSchema = (
     const path = joinPath(description, "multipleOf");
     const message =
       getError(path) ||
-      capitalize(`${key} requires a multiple of ${multipleOf}`);
+      capitalize(`${label} requires a multiple of ${multipleOf}`);
     // `multipleOf` is a custom yup method. See /yup/addons/index.ts
     // for implementation
 

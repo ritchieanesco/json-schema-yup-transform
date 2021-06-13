@@ -3,7 +3,7 @@ import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";
 import { DEFINITION_ROOT } from "./constants";
-import { isSchemaObject } from "./types";
+import { CompositSchemaTypes, isSchemaObject } from "./types";
 
 /**
  * Retrieve definitions property value
@@ -55,6 +55,15 @@ export const getProperties = (
 export const getPropertyType = (
   propertyItem: JSONSchema7
 ): JSONSchema7["type"] => propertyItem.type;
+
+export const getCompositionType = (
+  propertyItem: JSONSchema7
+): CompositSchemaTypes | false | undefined => (
+  propertyItem.anyOf && CompositSchemaTypes.ANYOF
+  || propertyItem.allOf && CompositSchemaTypes.ALLOF
+  || propertyItem.oneOf && CompositSchemaTypes.ONEOF
+  || propertyItem.not && CompositSchemaTypes.NOT
+);
 
 /**
  * Retrieve required property value

@@ -124,10 +124,10 @@ The tables below outline which keywords each schema type supports.
 
 | Keyword | Supported                |
 | ------- | ------------------------ |
-| allOf   | :heavy_multiplication_x: |
-| anyOf   | :heavy_multiplication_x: |
-| oneOf   | :heavy_multiplication_x: |
-| not     | :heavy_multiplication_x: |
+| allOf   | :heavy_check_mark: |
+| anyOf   | :heavy_check_mark: |
+| oneOf   | :heavy_check_mark: |
+| not     | :heavy_check_mark: |
 
 ## Usage
 

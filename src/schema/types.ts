@@ -17,6 +17,16 @@ export enum DataTypes {
   INTEGER = "integer"
 }
 
+/**
+ * Composite schema types
+ */
+export enum CompositSchemaTypes {
+  ALLOF = 'allOf',
+  ANYOF = 'anyOf',
+  ONEOF = 'oneOf',
+  NOT = 'not',
+}
+
 export enum SchemaKeywords {
   REQUIRED = "required",
   ENUM = "enum",
@@ -80,3 +90,15 @@ export const isItemsArray = (
  */
 
 export const isRegex = (regexp: any): regexp is RegExp => regexp;
+
+export const hasAnyOf = (value: JSONSchema7): value is JSONSchema7 & { anyOf: JSONSchema7Definition[]} =>
+  !!value.anyOf;
+
+export const hasAllOf = (value: JSONSchema7): value is JSONSchema7 & { allOf: JSONSchema7Definition[]} =>
+  !!value.allOf;
+
+export const hasOneOf = (value: JSONSchema7): value is JSONSchema7 & { oneOf: JSONSchema7Definition[]} =>
+  !!value.oneOf;
+
+export const hasNot = (value: JSONSchema7): value is JSONSchema7 & { not: JSONSchema7Definition} =>
+  !!value.not;

@@ -1,5 +1,6 @@
 import get from "lodash/get";
-import { ConfigErrors, Config, isConfigError } from "../types";
+import { ConfigErrors, Config, isConfigError, NodeTypes } from "../types";
+import { joinPath } from "../utils";
 
 let config: Config = {};
 
@@ -25,3 +26,12 @@ export const getError = (path: string | false): string | false => {
   const errors = getErrors();
   return isConfigError(errors) && get(errors, pathArray);
 };
+
+/** Returns 'custom' or 'default' error message */
+export const getErrorMessage = (description: string | false | undefined, type: NodeTypes) => {
+  const customErrorMessage = description
+    ? getError(joinPath(description, type))
+    : undefined;
+
+  return customErrorMessage || getError(joinPath("defaults", type));
+}

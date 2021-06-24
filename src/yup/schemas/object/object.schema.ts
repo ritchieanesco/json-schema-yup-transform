@@ -3,7 +3,8 @@ import capitalize from "lodash/capitalize";
 import { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
-import { getError } from "../../config/";
+import { getErrorMessage } from "../../config/";
+import { DataTypes } from "../../../schema";
 
 /**
  * Initializes a yup object schema derived from a json object schema
@@ -13,12 +14,15 @@ const createObjectSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.ObjectSchema<object> => {
-  const { title } = value;
+  const {
+    description,
+    title
+  } = value;
 
   const label = title || capitalize(key);
 
-  const defaultMessage =
-    getError("defaults.object") || `${label} is not of type object`;
+  const defaultMessage = getErrorMessage(description, DataTypes.OBJECT)
+    || capitalize(`${label}  is not of type object`);
 
   let Schema = Yup.object().typeError(defaultMessage);
 

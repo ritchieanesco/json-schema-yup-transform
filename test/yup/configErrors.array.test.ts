@@ -3,7 +3,7 @@ import { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
 
 describe("convertToYup() array configuration errors", () => {
-  it("should show configuration error for incorrect data type", () => {
+  it("should show default configuration error for incorrect data type", () => {
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -32,7 +32,68 @@ describe("convertToYup() array configuration errors", () => {
     expect(errorMessage).toBe(config.errors.defaults.array);
   });
 
-  it("should show configuration error for required", () => {
+  it("should show custom configuration error for incorrect data type", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        groceries: {
+          type: "array"
+        }
+      }
+    };
+    const config = {
+      errors: {
+        groceries: {
+          array: "Default array message"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ groceries: "ABC" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.groceries.array);
+  });
+
+  it("should override defaults configuration error for incorrect data type", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        groceries: {
+          type: "array"
+        }
+      }
+    };
+    const config = {
+      errors: {
+        defaults: {
+          array: "Default array message"
+        },
+        groceries: {
+          array: "Custom array message"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({ groceries: "ABC" });
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.groceries.array);
+  });
+
+  it("should show defaults configuration error for required", () => {
     const schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -47,6 +108,69 @@ describe("convertToYup() array configuration errors", () => {
     };
     const config = {
       errors: {
+        defaults: {
+          required: "Field is required"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({});
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.defaults.required);
+  });
+
+  it("should show custom configuration error for required", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        groceries: {
+          type: "array"
+        }
+      },
+      required: ["groceries"]
+    };
+    const config = {
+      errors: {
+        groceries: {
+          required: "Groceries (array) is required"
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({});
+    } catch (e) {
+      errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(config.errors.groceries.required);
+  });
+
+  it("should override defaults configuration error for required", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        groceries: {
+          type: "array"
+        }
+      },
+      required: ["groceries"]
+    };
+    const config = {
+      errors: {
+        defaults: {
+          required: "Field is required"
+        },
         groceries: {
           required: "Groceries (array) is required"
         }

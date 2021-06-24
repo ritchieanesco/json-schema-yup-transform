@@ -3,13 +3,13 @@ import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
-import { isItemsArray } from "../../../schema";
+import { DataTypes, isItemsArray } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
 import { SchemaItem } from "../../types";
-import { getError } from "../../config/";
+import { getError, getErrorMessage } from "../../config/";
 import { joinPath } from "../../utils";
 
 /**
@@ -33,8 +33,8 @@ const createArraySchema = (
 
   const label = title || capitalize(key);
 
-  const defaultMessage =
-    getError("defaults.array") || `${label} is not of type array`;
+  const defaultMessage = getErrorMessage(description, DataTypes.ARRAY)
+    || `${label} is not of type array`;
 
   let Schema = Yup.array().typeError(defaultMessage);
 

@@ -1,6 +1,6 @@
 import { JSONSchema7 } from "json-schema";
 import isPlainObject from "lodash/isPlainObject";
-import { SchemaKeywords, DataTypes } from "../schema";
+import { SchemaKeywords, DataTypes, CompositSchemaTypes } from "../schema";
 
 export const isConfigError = (
   errors: undefined | ConfigErrors
@@ -10,7 +10,7 @@ export type SchemaItem = [string, JSONSchema7];
 
 /* Configuration type to handle error messaging */
 
-type NodeTypes = SchemaKeywords | DataTypes;
+export type NodeTypes = SchemaKeywords | CompositSchemaTypes | DataTypes;
 
 export type ConfigErrorTypes = {
   [key in NodeTypes]?: string;

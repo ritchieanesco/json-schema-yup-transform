@@ -13,7 +13,7 @@ describe("convertToYup() allOf", () => {
         things: {
           allOf: [
             { type: "string", minLength: 4 },
-            { type: "string", maxLength: 6 },
+            { type: "string", maxLength: 6 }
           ]
         }
       }

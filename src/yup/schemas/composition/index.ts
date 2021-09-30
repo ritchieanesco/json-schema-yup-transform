@@ -15,7 +15,7 @@ export const createAnyOfSchema = (
 ): Yup.MixedSchema<string> => {
   const path = joinPath(value.description, "anyOf");
   const message = getError(path) || capitalize(`${key} does not match alternatives`);
-  const schemas = value.anyOf.map((val, i) => createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema));
+  const schemas = value.anyOf.map((val) => createValidationSchema([key, val as JSONSchema7], jsonSchema));
 
   return Yup.mixed().test(
     "one-of-schema",
@@ -57,7 +57,7 @@ export const createOneOfSchema = (
   const path = joinPath(value.description, "oneOf");
   const message =
     getError(path) || capitalize(`${key} does not match one alternative`);
-  const schemas = value.oneOf.map((val, i) => createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema));
+  const schemas = value.oneOf.map((val) => createValidationSchema([key, val as JSONSchema7], jsonSchema));
 
   return Yup.mixed().test(
     "one-of-schema",

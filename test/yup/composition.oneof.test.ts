@@ -32,7 +32,7 @@ describe("convertToYup() oneOf", () => {
     expect(valid).toBeFalsy();
   });
 
-  it("should validate fields using definition id", () => {
+  it("should validate fields using definition", () => {
     let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -58,9 +58,10 @@ describe("convertToYup() oneOf", () => {
       },
       properties: {
         entity: {
-          anyOf: [{ $ref: "#person" }, { $ref: "#company" }]
+          oneOf: [{ $ref: "#person" }, { $ref: "#company" }]
         }
-      }
+      },
+      required: ["entity"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
@@ -81,9 +82,7 @@ describe("convertToYup() oneOf", () => {
     expect(valid).toBeTruthy();
 
     valid = yupschema.isValidSync({
-      entity: {
-        things: "fail"
-      }
+      entity: 123
     });
 
     expect(valid).toBeFalsy();

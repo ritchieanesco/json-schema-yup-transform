@@ -160,7 +160,7 @@ describe("convertToYup() object", () => {
     expect(isValid).toBeTruthy();
   });
 
-  it("should validate fields from definitions", () => {
+  it("should validate object fields from definitions", () => {
     let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",

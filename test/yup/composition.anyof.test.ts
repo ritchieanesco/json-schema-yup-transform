@@ -16,7 +16,8 @@ describe("convertToYup() anyOf", () => {
             { type: "string", const: "test" }
           ]
         }
-      }
+      },
+      required: ["things"]
     };
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
@@ -35,9 +36,12 @@ describe("convertToYup() anyOf", () => {
       things: "fail"
     });
     expect(valid).toBeFalsy();
+
+    valid = yupschema.isValidSync({});
+    expect(valid).toBeFalsy();
   });
 
-  it("should validate fields using definition id", () => {
+  it("should validate fields using definition", () => {
     let schema: JSONSchema7 = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
@@ -45,7 +49,6 @@ describe("convertToYup() anyOf", () => {
       title: "Test",
       definitions: {
         person: {
-          $id: "#person",
           type: "object",
           properties: {
             personName: { type: "string" }
@@ -53,7 +56,6 @@ describe("convertToYup() anyOf", () => {
           required: ["personName"]
         },
         company: {
-          $id: "#company",
           type: "object",
           properties: {
             companyName: { type: "string" }
@@ -62,67 +64,43 @@ describe("convertToYup() anyOf", () => {
         }
       },
       properties: {
-        entities: {
-          anyOf: [{ $ref: "#person" }, { $ref: "#company" }]
+        entity: {
+          anyOf: [
+            { $ref: "#/definitions/person" },
+            { $ref: "#/definitions/company" }
+          ]
         }
-      }
+      },
+      required: ["entity"]
     };
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
     valid = yupschema.isValidSync({
-      entities: [
-        {
-          personName: "jane doe"
-        }
-      ]
+      entity: {
+        personName: "jane doe"
+      }
     });
     expect(valid).toBeTruthy();
 
     valid = yupschema.isValidSync({
-      entities: [
-        {
-          companyName: "things incorporated"
-        }
-      ]
+      entity: {
+        companyName: "things incorporated"
+      }
     });
     expect(valid).toBeTruthy();
 
     valid = yupschema.isValidSync({
-      entities: [
-        {
-          personName: "jane doe"
-        },
-        {
-          companyName: "things incorporated"
-        }
-      ]
+      entity: {
+        things: "lol"
+      }
     });
-
-    expect(valid).toBeTruthy();
-
-    valid = yupschema.isValidSync({
-      entities: [
-        {
-          things: "fail"
-        }
-      ]
-    });
-
     expect(valid).toBeFalsy();
 
     valid = yupschema.isValidSync({
-      entities: [
-        {
-          companyName: "things incorporated"
-        },
-        {
-          things: "fail"
-        }
-      ]
+      entity: undefined
     });
-
     expect(valid).toBeFalsy();
   });
 });

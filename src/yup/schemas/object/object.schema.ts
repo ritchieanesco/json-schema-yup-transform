@@ -4,6 +4,7 @@ import { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { getError } from "../../config/";
+import {buildProperties} from "../../builder";
 
 /**
  * Initializes a yup object schema derived from a json object schema
@@ -20,7 +21,16 @@ const createObjectSchema = (
   const defaultMessage =
     getError("defaults.object") || `${label} is not of type object`;
 
-  let Schema = Yup.object().typeError(defaultMessage);
+  let shape = value.properties
+    && buildProperties(value.properties, jsonSchema);
+
+  (value.required ?? []).forEach(requiredField => {
+    if (shape !== undefined) {
+      shape[requiredField] = createRequiredSchema(shape[requiredField], value, [requiredField, value]) 
+    }
+  });
+
+  let Schema = Yup.object(shape).typeError(defaultMessage);
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);

@@ -52,7 +52,7 @@ export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
     const hasRef = get(value, "$ref");
     const replaced = hasRef
       ? getDefinitionItem(schema, get(value, "$ref"))
-      : isPlainObject(value)
+      : (isPlainObject(value) || isArray(value))
       ? replaceAllRefs(value)
       : value;
     result[key] = replaced;

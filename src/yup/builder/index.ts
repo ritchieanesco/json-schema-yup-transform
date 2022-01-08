@@ -66,11 +66,25 @@ const buildProperties = (
       const condition = hasIfSchema(jsonSchema, key)
         ? buildCondition(jsonSchema)
         : {};
+      // check if item has if schema in allOf array
+      const conditions = hasAllOfIfSchema(jsonSchema, key)
+        ? jsonSchema.allOf?.reduce((all, schema) => {
+            if (typeof schema === "boolean") {
+              return all;
+            }
+            all = {
+              ...all,
+              ...buildCondition(schema)
+            };
+            return all;
+          }, [])
+        : [];       
       const newSchema = createValidationSchema([key, value], jsonSchema);
       schema = {
         ...schema,
         [key]: key in schema ? schema[key].concat(newSchema) : newSchema,
-        ...condition
+        ...condition,
+        ...conditions
       };
     }
   }
@@ -86,6 +100,22 @@ const hasIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
   if (!isSchemaObject(ifSchema)) return false;
   const { properties } = ifSchema;
   return isPlainObject(properties) && has(properties, key);
+};
+
+/**
+ * Determine schema has at least one if schemas inside an allOf array
+ */
+
+const hasAllOfIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
+  const { allOf } = jsonSchema;
+
+  if (!allOf) {
+    return false;
+  }
+
+  return allOf.some(
+    (schema) => typeof schema !== "boolean" && hasIfSchema(schema, key)
+  );
 };
 
 /**

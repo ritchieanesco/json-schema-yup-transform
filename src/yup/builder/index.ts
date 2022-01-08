@@ -72,11 +72,7 @@ const buildProperties = (
             if (typeof schema === "boolean") {
               return all;
             }
-            all = {
-              ...all,
-              ...buildCondition(schema)
-            };
-            return all;
+            return { ...all, ...buildCondition(schema) };
           }, [])
         : [];       
       const newSchema = createValidationSchema([key, value], jsonSchema);

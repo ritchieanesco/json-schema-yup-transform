@@ -12,7 +12,7 @@ import { getObjectHead } from "../utils";
  * Iterate through each item in properties and generate a key value pair of yup schema
  */
 
-const buildProperties = (
+export const buildProperties = (
   properties: {
     [key: string]: JSONSchema7Definition;
   },

@@ -89,7 +89,6 @@ describe("convertToYup() array items", () => {
     expect(valid).toBeFalsy();
   });
 
-
   it("should validate unique strings", () => {
     const schema: JSONSchema7 = {
       type: "object",

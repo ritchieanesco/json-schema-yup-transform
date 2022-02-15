@@ -6,8 +6,8 @@ import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
 import { SchemaItem } from "../../types";
-import { getError } from "../../config/";
-import { joinPath } from "../../utils";
+import { getErrorMessage } from "../../config/";
+import { DataTypes, SchemaKeywords } from "../../../schema";
 
 /**
  * Initializes a yup number schema derived from a json number schema
@@ -17,12 +17,15 @@ const createNumberSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.NumberSchema<number> => {
-  const { title } = value;
+  const {
+    description,
+    title
+  } = value;
 
   const label = title || capitalize(key);
 
-  const defaultMessage =
-    getError("defaults.number") || `${label} is not of type number`;
+  const defaultMessage = getErrorMessage(description, DataTypes.NUMBER)
+  || `${label} is not of type number`;
 
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage),
@@ -75,20 +78,16 @@ export const createBaseNumberSchema = (
 
   // Minimum value is inclusive
   if (isMinNumber) {
-    const path = joinPath(description, "minimum");
-    const message =
-      getError(path) ||
-      capitalize(`${label} requires a minimum value of ${minimum}`);
+    const message = getErrorMessage(description, SchemaKeywords.MINIMUM)
+      || capitalize(`${label} requires a minimum value of ${minimum}`);
+
     Schema = Schema.concat(Schema.min(minimum as number, message));
   }
 
   if (isExclusiveMinNumber) {
-    const path = joinPath(description, "exclusiveMinimum");
-    const message =
-      getError(path) ||
-      capitalize(
-        `${label} requires a exclusive minimum value of ${exclusiveMinimum}`
-      );
+    const message = getErrorMessage(description, SchemaKeywords.EXCLUSIVE_MINIMUM)
+      || capitalize(`${label} requires a exclusive minimum value of ${exclusiveMinimum}`);
+
     Schema = Schema.concat(
       Schema.min((exclusiveMinimum as number) + 1, message)
     );
@@ -96,33 +95,27 @@ export const createBaseNumberSchema = (
 
   // Maximum value is inclusive
   if (isMaxNumber) {
-    const path = joinPath(description, "maximum");
-    const message =
-      getError(path) ||
-      capitalize(`${label} cannot exceed a maximum value of ${maximum}`);
+    const message = getErrorMessage(description, SchemaKeywords.MAXIMUM)
+      || capitalize(`${label} cannot exceed a maximum value of ${maximum}`);
+
     Schema = Schema.concat(Schema.max(maximum as number, message));
   }
 
   if (isExclusiveMaxNumber) {
-    const path = joinPath(description, "exclusiveMaximum");
-    const message =
-      getError(path) ||
-      capitalize(
-        `${label} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
-      );
+    const message = getErrorMessage(description, SchemaKeywords.EXCLUSIVE_MAXIMUM)
+      || capitalize(`${label} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`);
+
     Schema = Schema.concat(
       Schema.max((exclusiveMaximum as number) - 1, message)
     );
   }
 
   if (multipleOf) {
-    const path = joinPath(description, "multipleOf");
-    const message =
-      getError(path) ||
-      capitalize(`${label} requires a multiple of ${multipleOf}`);
+    const message = getErrorMessage(description, SchemaKeywords.MULTIPLE_OF)
+      || capitalize(`${label} requires a multiple of ${multipleOf}`);
+
     // `multipleOf` is a custom yup method. See /yup/addons/index.ts
     // for implementation
-
     Schema = Schema.concat(Schema.multipleOf(multipleOf, message));
   }
 

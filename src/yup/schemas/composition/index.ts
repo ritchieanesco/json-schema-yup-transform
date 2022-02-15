@@ -5,6 +5,7 @@ import Yup from "../../addMethods";
 import { getError } from "../../config";
 import { joinPath } from "../../utils";
 import type {
+  CompositSchemaTypes,
   AnyOfSchema7,
   AllOfSchema7,
   OneOfSchema7,
@@ -18,7 +19,7 @@ export const createAnyOfSchema = (
   [key, value]: [string, AnyOfSchema7],
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
-  const path = joinPath(value.description, "anyOf");
+  const path = joinPath(value.description, CompositSchemaTypes.ANYOF);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} does not match alternatives`;
   const schemas = value.anyOf.map((val, i) =>
@@ -37,7 +38,7 @@ export const createAllOfSchema = (
   [key, value]: [string, AllOfSchema7],
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
-  const path = joinPath(value.description, "allOf");
+  const path = joinPath(value.description, CompositSchemaTypes.ALLOF);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} does not match all alternatives`;
   const schemas = value.allOf.map((val, i) =>
@@ -56,7 +57,7 @@ export const createOneOfSchema = (
   [key, value]: [string, OneOfSchema7],
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
-  const path = joinPath(value.description, "oneOf");
+  const path = joinPath(value.description, CompositSchemaTypes.ONEOF);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} does not match one alternative`;
   const schemas = value.oneOf.map((val, i) =>
@@ -77,7 +78,7 @@ export const createNotSchema = (
   [key, value]: [string, NotSchema7],
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
-  const path = joinPath(value.description, "not");
+  const path = joinPath(value.description, CompositSchemaTypes.NOT);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} matches alternatives`;
   const schema = createValidationSchema(

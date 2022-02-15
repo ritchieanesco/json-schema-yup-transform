@@ -5,7 +5,8 @@ import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { SchemaItem } from "../../types";
-import { getError } from "../../config/";
+import { getErrorMessage } from "../../config/";
+import { DataTypes } from "../../../schema";
 
 /**
  * Initializes a yup boolean schema derived from a json boolean schema
@@ -15,12 +16,16 @@ const createBooleanSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema7
 ): Yup.BooleanSchema<boolean> => {
-  const { default: defaults, title } = value;
+  const {
+    description,
+    default: defaults,
+    title
+  } = value;
 
   const label = title || capitalize(key);
 
-  const defaultMessage =
-    getError("defaults.boolean") || `${label} is not of type boolean`;
+  const defaultMessage = getErrorMessage(description, DataTypes.BOOLEAN)
+    || `${label} is not of type boolean`;
 
   let Schema = Yup.boolean().typeError(defaultMessage);
 

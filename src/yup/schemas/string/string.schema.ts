@@ -12,11 +12,11 @@ import {
   IPV4_REGEX,
   IPV6_REGEX
 } from "./string.constants";
-import { isRegex, JSONSchema7Extended } from "../../../schema";
+import { DataTypes, isRegex, JSONSchema7Extended, SchemaKeywords } from "../../../schema";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
-import { getError } from "../../config/";
+import { getErrorMessage } from "../../config/";
 import { joinPath } from "../../utils";
 
 /**
@@ -40,8 +40,8 @@ const createStringSchema = (
 
   const label = title || capitalize(key);
 
-  const defaultMessage =
-    getError("defaults.string") || `${label} is not of type string`;
+  const defaultMessage = getErrorMessage(description, DataTypes.STRING)
+    || capitalize(`${label} is not of type string`);
 
   let Schema = Yup.string().typeError(defaultMessage);
 
@@ -59,30 +59,30 @@ const createStringSchema = (
   Schema = createEnumerableSchema(Schema, [key, value]);
 
   if (isNumber(minLength)) {
-    const path = joinPath(description, "minLength");
-    const message =
-      getError(path) ||
-      `${label} requires a minimum of ${minLength} characters`;
+    const message = getErrorMessage(description, SchemaKeywords.MINIMUM_LENGTH)
+      || `${label} requires a minimum of ${minLength} characters`;
+
     Schema = Schema.concat(Schema.min(minLength, message));
   }
 
   if (isNumber(maxLength)) {
-    const path = joinPath(description, "maxLength");
-    const message =
-      getError(path) ||
-      `${label} cannot exceed a maximum of ${maxLength} characters`;
+    const message = getErrorMessage(description, SchemaKeywords.MAXIMUM_LENGTH)
+      || `${label} cannot exceed a maximum of ${maxLength} characters`;
+
     Schema = Schema.concat(Schema.max(maxLength, message));
   }
 
   if (isRegex(pattern)) {
-    const path = joinPath(description, "pattern");
-    const message = getError(path) || `${label} is an incorrect format`;
+    const message = getErrorMessage(description, SchemaKeywords.PATTERN)
+      || `${label} is an incorrect format`;
+
     Schema = Schema.concat(Schema.matches(pattern, message));
   }
 
   if (isRegex(regex)) {
-    const path = joinPath(description, "regex");
-    const message = getError(path) || `${label} is an incorrect format`;
+    const message = getErrorMessage(description, SchemaKeywords.REGEX)
+      || `${label} is an incorrect format`;
+
     Schema = Schema.concat(Schema.matches(regex, message));
   }
 
@@ -101,53 +101,57 @@ export const stringSchemaFormat = (
   const label = title || capitalize(key);
 
   if (format === "date-time") {
-    const path = joinPath(description, "format.dateTime");
-    const message =
-      getError(path) || `${label} is an invalid date and time format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.DATE_TIME_FORMAT)
+      || `${label} is an invalid date and time format`;
     Schema = Schema.concat(Schema.matches(ISO_8601_DATE_TIME_REGEX, message));
   }
 
   if (format === "time") {
-    const path = joinPath(description, "format.time");
-    const message = getError(path) || `${label} is an invalid time format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.TIME_FORMAT)
+      || `${label} is an invalid time format`;
     Schema = Schema.concat(Schema.matches(ISO_8601_TIME_REGEX, message));
   }
 
   if (format === "date") {
-    const path = joinPath(description, "format.date");
-    const message = getError(path) || `${label} is an invalid date format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.DATE_FORMAT)
+      || `${label} is an invalid date format`;
     Schema = Schema.concat(Schema.matches(DATE_REGEX, message));
   }
 
   // email
 
   if (format === "email") {
-    const path = joinPath(description, "format.email");
-    const message = getError(path) || `${label} is an invalid email format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.EMAIL_FORMAT)
+      || `${label} is an invalid email format`;
     Schema = Schema.concat(Schema.email(message));
   }
 
   // international email format
 
   if (format === "idn-email") {
-    const path = joinPath(description, "format.idnEmail");
-    const message =
-      getError(path) || `${label} is an invalid international email format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.IDN_EMAIL_FORMAT)
+      || `${label} is an invalid international email format`;
     Schema = Schema.concat(Schema.matches(INTERNATIONAL_EMAIL_REGEX, message));
   }
 
   // hostnames
 
   if (format === "hostname") {
-    const path = joinPath(description, "format.hostname");
-    const message = getError(path) || `${label} is an invalid hostname format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.HOSTNAME_FORMAT)
+      || `${label} is an invalid hostname format`;
     Schema = Schema.concat(Schema.matches(HOSTNAME_REGEX, message));
   }
 
   if (format === "idn-hostname") {
-    const path = joinPath(description, "format.idnHostname");
-    const message =
-      getError(path) || `${label} is an invalid international hostname format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.IDN_HOSTNAME_FORMAT)
+      || `${label} is an invalid international hostname format`;
     Schema = Schema.concat(
       Schema.matches(INTERNATIONAL_HOSTNAME_REGEX, message)
     );
@@ -156,29 +160,32 @@ export const stringSchemaFormat = (
   // ip addresses
 
   if (format === "ipv4") {
-    const path = joinPath(description, "format.ipv4");
-    const message = getError(path) || `${label} is an invalid ipv4 format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.IPV4_FORMAT)
+      || `${label} is an invalid ipv4 format`;
     Schema = Schema.concat(Schema.matches(IPV4_REGEX, message));
   }
 
   if (format === "ipv6") {
-    const path = joinPath(description, "format.ipv6");
-    const message = getError(path) || `${label} is an invalid ipv6 format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.IPV6_FORMAT)
+      || `${label} is an invalid ipv6 format`;
     Schema = Schema.concat(Schema.matches(IPV6_REGEX, message));
   }
 
   // resource identifiers
 
   if (format === "uri") {
-    const path = joinPath(description, "format.uri");
-    const message = getError(path) || `${label} is an invalid URI format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.URI_FORMAT)
+      || `${label} is an invalid URI format`;
     Schema = Schema.concat(Schema.url(message));
   }
 
   if (format === "uri-reference") {
-    const path = joinPath(description, "format.uriReference");
-    const message =
-      getError(path) || `${label} is an invalid URI reference format`;
+    const path = joinPath(description, "format");
+    const message = getErrorMessage(path, SchemaKeywords.URI_REFERENCE_FORMAT)
+      || `${label} is an invalid URI reference format`;
 
     // `urlReference` is a custom yup method. See /yup/addons/index.ts
     // for implementation

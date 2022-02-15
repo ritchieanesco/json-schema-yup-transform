@@ -4,8 +4,8 @@ import createValidationSchema from "..";
 import Yup from "../../addMethods";
 import { getError } from "../../config";
 import { joinPath } from "../../utils";
-import type {
-  CompositSchemaTypes,
+import { CompositSchemaTypes } from "../../../schema/types"
+import {
   AnyOfSchema7,
   AllOfSchema7,
   OneOfSchema7,
@@ -22,8 +22,8 @@ export const createAnyOfSchema = (
   const path = joinPath(value.description, CompositSchemaTypes.ANYOF);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} does not match alternatives`;
-  const schemas = value.anyOf.map((val, i) =>
-    createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema)
+  const schemas = value.anyOf.map((val) =>
+    createValidationSchema([key, val as JSONSchema7], jsonSchema)
   );
 
   return Yup.mixed().test("one-of-schema", message, function (current) {
@@ -46,7 +46,6 @@ export const createAllOfSchema = (
     .map((val, i) =>
       createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema)
     );
-  );
   return Yup.mixed().test("all-of-schema", message, function (current) {
     return schemas.every((s) => s.isValidSync(current, this.options));
   });

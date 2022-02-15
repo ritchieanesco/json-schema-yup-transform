@@ -41,10 +41,12 @@ export const createAllOfSchema = (
   const path = joinPath(value.description, CompositSchemaTypes.ALLOF);
   const label = value.title || capitalize(key);
   const message = getError(path) || `${label} does not match all alternatives`;
-  const schemas = value.allOf.map((val, i) =>
-    createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema)
+  const schemas = value.allOf
+    .filter((el) => typeof el !== "boolean" && el.type)
+    .map((val, i) =>
+      createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema)
+    );
   );
-
   return Yup.mixed().test("all-of-schema", message, function (current) {
     return schemas.every((s) => s.isValidSync(current, this.options));
   });

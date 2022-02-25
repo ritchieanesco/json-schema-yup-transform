@@ -25,16 +25,24 @@ const createObjectSchema = (
   const defaultMessage = getErrorMessage(description, DataTypes.OBJECT)
     || capitalize(`${label}  is not of type object`);
 
-  let shape = value.properties
-    && buildProperties(value.properties, jsonSchema);
+  // Seperate compositional schemas from standard schemas.
+  // Standard schemas return Object schemas, compositional schemas return mixed or lazy schemas.
+  // Lazy schemas can not be concatenated which will throw an error when traversing a nested object.
+  const schm = JSON.stringify(jsonSchema.properties)
+  const isComposition = schm.indexOf("anyOf") > -1 || schm.indexOf("oneOf") > -1
 
-  (value.required ?? []).forEach(requiredField => {
-    if (shape !== undefined) {
-      shape[requiredField] = createRequiredSchema(shape[requiredField], value, [requiredField, value]) 
-    }
-  });
-
-  let Schema = Yup.object(shape).typeError(defaultMessage);
+  let Schema: Yup.ObjectSchema
+  if (isComposition) {
+    let shape = value.properties && buildProperties(value.properties, jsonSchema);
+    (value.required ?? []).forEach(requiredField => {
+      if (shape !== undefined) {
+        shape[requiredField] = createRequiredSchema(shape[requiredField], value, [requiredField, value])
+      }
+    });
+    Schema = Yup.object(shape).typeError(defaultMessage);
+  } else {
+    Schema = Yup.object().typeError(defaultMessage);
+  }
 
   /** Set required if ID is in required schema */
   Schema = createRequiredSchema(Schema, jsonSchema, [key, value]);

@@ -408,4 +408,43 @@ describe("convertToYup() string", () => {
     }
     expect(errorMessage).toBe(`${fieldTitle} is required`);
   });
+
+
+  it("should validate multiple types in a nested object", () => {
+    const schema: JSONSchema7Extended = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        address: {
+          type: "object",
+          properties: {
+            name: {
+              type: ["string", "null"]
+            }
+          }
+        }
+      }
+    };
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    expect(() => {
+      yupschema.isValidSync({
+        address: {
+        name: ""
+        }
+      });
+    }).toBeTruthy();
+
+    expect(() => {
+      yupschema.isValidSync({
+        address: {
+        name: null
+        }
+      });
+    }).toBeTruthy();
+
+  });
+
 });

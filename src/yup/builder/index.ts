@@ -74,7 +74,7 @@ export const buildProperties = (
             }
             return { ...all, ...buildCondition(schema) };
           }, [])
-        : [];       
+        : [];
       const newSchema = createValidationSchema([key, value], jsonSchema);
       schema = {
         ...schema,

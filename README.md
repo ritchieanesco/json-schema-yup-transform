@@ -6,6 +6,8 @@
 
 A utility to generate a Yup Schema from a valid JSON Schema.
 
+**Note:** This package only supports yup v0.29.3 and below.
+
 json-schema-yup-transform is heavily inspired by [schema-to-yup](https://github.com/kristianmandrup/schema-to-yup) but strictly supports the draft 7 [specification](https://json-schema.org/draft/2019-09/release-notes.html)
 
 The main objective is to support as many of the features of the draft 7 specification as possible.

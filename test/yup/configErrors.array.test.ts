@@ -209,7 +209,7 @@ describe("convertToYup() array configuration errors", () => {
     const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync({});
+      errorMessage = yupschema.validateSync({groceries: []});
     } catch (e) {
       errorMessage = e.errors[0];
     }
@@ -239,7 +239,7 @@ describe("convertToYup() array configuration errors", () => {
     const yupschema = convertToYup(schema, config) as Yup.ObjectSchema;
     let errorMessage;
     try {
-      errorMessage = yupschema.validateSync({});
+      errorMessage = yupschema.validateSync({groceries: [1,2,3,4,5 ]});
     } catch (e) {
       errorMessage = e.errors[0];
     }

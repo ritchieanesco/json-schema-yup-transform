@@ -114,6 +114,9 @@ describe("convertToYup() array", () => {
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
 
+    valid = yupschema.isValidSync({});
+    expect(valid).toBeTruthy();
+
     valid = yupschema.isValidSync({
       items: ["a", "b", "c"]
     });
@@ -147,6 +150,9 @@ describe("convertToYup() array", () => {
     };
     let yupschema = convertToYup(schema) as Yup.ObjectSchema;
     let valid;
+
+    valid = yupschema.isValidSync({});
+    expect(valid).toBeTruthy();
 
     valid = yupschema.isValidSync({
       items: ["a", "b", "c"]

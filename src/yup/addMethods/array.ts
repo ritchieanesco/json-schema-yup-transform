@@ -21,6 +21,7 @@ export function minimumItems(
 ): Yup.ArraySchema<unknown> {
   return this.test("test-minimumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
+    if (input === undefined) return true;
     let isValid = isArray(input) && input.length >= count;
     return isValid || createError({ path, message });
   });
@@ -38,6 +39,7 @@ export function maximumItems(
 ): Yup.ArraySchema<unknown> {
   return this.test("test-maximumItems", message, function (input: unknown[]) {
     const { path, createError } = this;
+    if (input === undefined) return true;
     let isValid = isArray(input) && input.length <= count;
     return isValid || createError({ path, message });
   });

@@ -683,6 +683,49 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
 
+  it("should validate if then else conditional", () => {
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        postcode: {
+          type: "number",
+          enum: [3000, 4000]
+        }
+      },
+      required: ["postcode"],
+      if: {
+        properties: { postcode: { type: "number", const: 3000 } }
+      },
+      then: {
+        properties: {
+          product: { type: "string", maxLength: 1 }
+        }
+      },
+      else: {
+        properties: {
+          product: { type: "string", maxLength: 2 }
+        }
+      }
+    };
+
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let isValid = yupschema.isValidSync({
+      postcode: 3000,
+      product: "ABC"
+    });
+    expect(isValid).toBeFalsy();
+
+    isValid = yupschema.isValidSync({
+      postcode: 3000,
+      product: "AB"
+    });
+    expect(isValid).toBeFalsy();
+
+  });
+
   it("should validate required field", () => {
     const schema: JSONSchema7 = {
       type: "object",

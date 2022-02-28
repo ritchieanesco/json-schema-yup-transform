@@ -26,7 +26,7 @@ export const buildProperties = (
     }
     const { properties, type, items } = value;
 
-    // if item is object type call this function again
+    // If item is object type call this function again
     if (type === "object" && properties) {
       const objSchema = build(value);
       if (objSchema) {
@@ -38,10 +38,7 @@ export const buildProperties = (
       isSchemaObject(items) &&
       has(items, "properties")
     ) {
-      /** Structured to handle nested objects in schema. First
-       * an array with all the relevant validation rules need to
-       * be applied and then the subschemas will be concatenated.
-       */
+      // Structured to handle nested objects in schema. First an array with all the relevant validation rules need to be applied and then the subschemas will be concatenated.
       const ArraySchema = createValidationSchema(
         [key, omit(value, "items")],
         jsonSchema
@@ -62,17 +59,17 @@ export const buildProperties = (
         )
       };
     } else {
-      // check if item has a then or else schema
+      // Check if item has a then or else schema
       const condition = hasIfSchema(jsonSchema, key)
-        ? buildCondition(jsonSchema)
+        ? createConditionalSchema(jsonSchema)
         : {};
-      // check if item has if schema in allOf array
+      // Check if item has if schema in allOf array
       const conditions = hasAllOfIfSchema(jsonSchema, key)
         ? jsonSchema.allOf?.reduce((all, schema) => {
             if (typeof schema === "boolean") {
               return all;
             }
-            return { ...all, ...buildCondition(schema) };
+            return { ...all, ...createConditionalSchema(schema) };
           }, [])
         : [];
       const newSchema = createValidationSchema([key, value], jsonSchema);
@@ -119,18 +116,17 @@ const hasAllOfIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
  * and generates a validation schema to validate the given value
  */
 
-const isValidator = (
-  [key, value]: [string, JSONSchema7],
-  jsonSchema: JSONSchema7
-) => (val: unknown): boolean => {
-  const conditionalSchema = createValidationSchema([key, value], jsonSchema);
-  const result: boolean = conditionalSchema.isValidSync(val);
-  return result;
-};
+const isValidator =
+  ([key, value]: [string, JSONSchema7], jsonSchema: JSONSchema7) =>
+  (val: unknown): boolean => {
+    const conditionalSchema = createValidationSchema([key, value], jsonSchema);
+    const result: boolean = conditionalSchema.isValidSync(val);
+    return result;
+  };
 
-/** Build `is` and `then` validation schema */
+/** Build `is`, `then`, `otherwise` validation schema */
 
-const buildCondition = (
+const createConditionalSchema = (
   jsonSchema: JSONSchema7
 ): false | { [key: string]: Yup.MixedSchema } => {
   const ifSchema = get(jsonSchema, "if");
@@ -140,93 +136,138 @@ const buildCondition = (
   if (!properties) return false;
 
   const ifSchemaHead = getObjectHead(properties);
-
   if (!ifSchemaHead) return false;
-  const [ifSchemaKey, ifSchemaValue] = ifSchemaHead;
 
+  const [ifSchemaKey, ifSchemaValue] = ifSchemaHead;
   if (!isSchemaObject(ifSchemaValue)) return false;
 
   const thenSchema = get(jsonSchema, "then");
-  const elseSchema = get(jsonSchema, "else");
-
-  let conditionSchema = {};
 
   if (isSchemaObject(thenSchema)) {
-    const { properties, required } = thenSchema;
-    if (!properties) return false;
-
-    for (const [key, val] of Object.entries(properties)) {
-      if (!val || typeof val === "boolean") continue;
-      const item: { properties: {}; required?: string[] } = {
-        properties: { [key]: { ...val } }
-      };
-      if (required && required.includes(key)) {
-        item.required = [key];
-      }
-      const isValid = isValidator([ifSchemaKey, ifSchemaValue], item);
-      const thenConditionSchema = buildConditionItem(item, [
-        ifSchemaKey,
-        (val) => isValid(val) === true
-      ]);
-      if (thenConditionSchema)
-        conditionSchema = Object.assign(
-          {},
-          conditionSchema,
-          thenConditionSchema
-        );
-    }
+    const elseSchema = get(jsonSchema, "else");
+    const isValid = isValidator([ifSchemaKey, ifSchemaValue], ifSchema);
+    return createIsThenOtherwiseSchema(
+      [ifSchemaKey, isValid],
+      thenSchema,
+      elseSchema
+    );
   }
 
-  if (isSchemaObject(elseSchema)) {
-    const isValid = isValidator([ifSchemaKey, ifSchemaValue], elseSchema);
-    const elseConditionSchema = buildConditionItem(elseSchema, [
-      ifSchemaKey,
-      (val) => isValid(val) === false
-    ]);
-    if (!elseConditionSchema) return false;
-    conditionSchema = { ...conditionSchema, ...elseConditionSchema };
-  }
-  return conditionSchema;
+  return false;
 };
 
-/**
- * Build the then/else schema as a yup when schema
- */
+/** `createIsThenOtherwiseSchemaItem` accepts an item from the "else" and "then" schemas and returns a yup schema for each item which will be used for the then or otherwise methods in when. */
 
-const buildConditionItem = (
-  schema: JSONSchema7,
-  [ifSchemaKey, callback]: [string, (val: unknown) => boolean]
-): false | { [key: string]: Yup.MixedSchema } => {
-  const { properties } = schema;
-  if (!properties) return false;
-
-  const schemaHead = getObjectHead(properties);
-  if (!schemaHead) return false;
-  const key = schemaHead[0];
-
-  /**
-   * Returns a key ( field name ) and value (generated schema) pair.
-   * Note: This will contain any nested conditions!!
-   * The recursion in `buildProperties` means the nested conditions
-   * will already have been transformed to a when schema
-   */
-  const schemaData = buildProperties(properties, schema);
-  if (!schemaData) return false;
-
-  /**
-   * Make a copy of schemaData and omit the current schema
-   */
-  const omitData = omit(schemaData, key);
-
-  /** Get the correct schema type to concat the when schema to */
-  let Schema = schemaData[key];
-  return {
-    [key]: Yup.mixed().when(ifSchemaKey, {
-      is: callback,
-      then: Schema
-    }),
-    ...omitData
+const createIsThenOtherwiseSchemaItem = (
+  [key, value]: [string, NonNullable<JSONSchema7>],
+  required: JSONSchema7["required"]
+):
+  | {
+      [key: string]: Yup.Lazy | Yup.MixedSchema<any>;
+    }
+  | false => {
+  const item: JSONSchema7 = {
+    properties: { [key]: { ...value } }
   };
+  if (required && required.includes(key)) {
+    item.required = [key];
+  }
+  if (!item.properties) return false;
+  const thenSchemaData = buildProperties(item.properties, item);
+  return thenSchemaData[key];
+};
+
+/** `createIsThenOtherwiseSchema` generates a yup when schema. */
+
+const createIsThenOtherwiseSchema = (
+  [ifSchemaKey, callback]: [string, (val: unknown) => boolean],
+  thenSchema: JSONSchema7,
+  elseSchema?: JSONSchema7Definition
+): false | { [key: string]: Yup.MixedSchema } => {
+  if (!thenSchema.properties) return false;
+
+  let thenKeys = Object.keys(thenSchema.properties);
+  // Collect all else schema keys and deduct from list when there is a matching then schema key. The remaining else keys will then be handled seperately.
+  let elseKeys =
+    typeof elseSchema === "object" && elseSchema.properties
+      ? Object.keys(elseSchema.properties)
+      : [];
+
+  const schema = {};
+
+  // Iterate through then schema and check for matching else schema keys and toggle between each rule pending if condition.
+
+  for (const thenKey of thenKeys) {
+    const thenIItem = thenSchema.properties[thenKey];
+    if (!isSchemaObject(thenIItem)) continue;
+
+    let thenSchemaItem = createIsThenOtherwiseSchemaItem(
+      [thenKey, thenIItem],
+      thenSchema.required
+    );
+    let matchingElseSchemaItem:
+      | { [key: string]: Yup.MixedSchema<any> | Yup.Lazy }
+      | false = false;
+
+    if (
+      isSchemaObject(elseSchema) &&
+      elseSchema.properties &&
+      thenKey in elseSchema.properties
+    ) {
+      matchingElseSchemaItem = createIsThenOtherwiseSchemaItem(
+        [thenKey, elseSchema.properties[thenKey] as JSONSchema7],
+        elseSchema.required
+      );
+      // Remove matching else schema keys from list so remaining else schema keys can be handled separately.
+      if (elseKeys.length) elseKeys.splice(elseKeys.indexOf(thenKey), 1);
+    }
+
+    schema[thenKey] = {
+      is: callback,
+      then: thenSchemaItem,
+      ...(matchingElseSchemaItem ? { otherwise: matchingElseSchemaItem } : {})
+    };
+  }
+
+  // Generate schemas for else keys that do not match the "then" schema.
+  if (elseKeys.length) {
+    elseKeys.forEach((k) => {
+      if (
+        isSchemaObject(elseSchema) &&
+        elseSchema.properties &&
+        k in elseSchema.properties
+      ) {
+        const elseSchemaItem = createIsThenOtherwiseSchemaItem(
+          [k, elseSchema.properties[k] as JSONSchema7],
+          elseSchema.required
+        );
+        if (elseSchemaItem) {
+          schema[k] = {
+            // Hardcode false as else schema's should handle "unhappy" path.
+            is: (schema: unknown) => callback(schema) === false,
+            then: elseSchemaItem
+          };
+        }
+      }
+    });
+  }
+
+  // Generate Yup.when schemas from the schema object.
+  const conditionalSchemas = Object.keys(schema).reduce((accum, next) => {
+    accum[next] = Yup.mixed().when(ifSchemaKey, { ...schema[next] });
+    return accum;
+  }, {});
+
+  // Create conditional schema for if schema's within else schema.
+  let nestedConditionalSchemas = {};
+  if (isSchemaObject(elseSchema) && get(elseSchema, "if")) {
+    nestedConditionalSchemas = {
+      ...nestedConditionalSchemas,
+      ...createConditionalSchema(elseSchema)
+    };
+  }
+
+  return { ...conditionalSchemas, ...nestedConditionalSchemas };
 };
 
 /**

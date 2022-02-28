@@ -16,7 +16,7 @@ import { DataTypes, isRegex, JSONSchema7Extended, SchemaKeywords } from "../../.
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
-import { getErrorMessage } from "../../config/";
+import { getErrorMessage, getError } from "../../config/";
 import { joinPath } from "../../utils";
 
 /**
@@ -102,21 +102,21 @@ export const stringSchemaFormat = (
 
   if (format === "date-time") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.DATE_TIME_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid date and time format`;
     Schema = Schema.concat(Schema.matches(ISO_8601_DATE_TIME_REGEX, message));
   }
 
   if (format === "time") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.TIME_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid time format`;
     Schema = Schema.concat(Schema.matches(ISO_8601_TIME_REGEX, message));
   }
 
   if (format === "date") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.DATE_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid date format`;
     Schema = Schema.concat(Schema.matches(DATE_REGEX, message));
   }
@@ -125,7 +125,7 @@ export const stringSchemaFormat = (
 
   if (format === "email") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.EMAIL_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid email format`;
     Schema = Schema.concat(Schema.email(message));
   }
@@ -134,7 +134,7 @@ export const stringSchemaFormat = (
 
   if (format === "idn-email") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.IDN_EMAIL_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid international email format`;
     Schema = Schema.concat(Schema.matches(INTERNATIONAL_EMAIL_REGEX, message));
   }
@@ -143,14 +143,14 @@ export const stringSchemaFormat = (
 
   if (format === "hostname") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.HOSTNAME_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid hostname format`;
     Schema = Schema.concat(Schema.matches(HOSTNAME_REGEX, message));
   }
 
   if (format === "idn-hostname") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.IDN_HOSTNAME_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid international hostname format`;
     Schema = Schema.concat(
       Schema.matches(INTERNATIONAL_HOSTNAME_REGEX, message)
@@ -161,14 +161,14 @@ export const stringSchemaFormat = (
 
   if (format === "ipv4") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.IPV4_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid ipv4 format`;
     Schema = Schema.concat(Schema.matches(IPV4_REGEX, message));
   }
 
   if (format === "ipv6") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.IPV6_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid ipv6 format`;
     Schema = Schema.concat(Schema.matches(IPV6_REGEX, message));
   }
@@ -177,14 +177,14 @@ export const stringSchemaFormat = (
 
   if (format === "uri") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.URI_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid URI format`;
     Schema = Schema.concat(Schema.url(message));
   }
 
   if (format === "uri-reference") {
     const path = joinPath(description, "format");
-    const message = getErrorMessage(path, SchemaKeywords.URI_REFERENCE_FORMAT)
+    const message = getError(path)
       || `${label} is an invalid URI reference format`;
 
     // `urlReference` is a custom yup method. See /yup/addons/index.ts

@@ -767,3 +767,72 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeFalsy();
   });
 });
+
+
+it("should validate other conditional", () => {
+ 
+
+    const schema: JSONSchema7 = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        mode: {
+          type: "string",
+          enum: ["C", "E"]
+        }
+      },
+      required: ["type"],
+      if: {
+        properties: { counmodetry: { type: "string", const: "E" } }
+      },
+      then: {
+        properties: {
+          namecorp: { type: "string" },
+          weburl: { type: "string" }
+        },
+        required: ["namecorp", "weburl"]
+      },
+      else: {
+        properties: {
+          firstname: { type: "string" },
+          lastname: { type: "string" }
+        },
+        required: ["firstname", "lastname"]
+      }
+    };
+
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+
+    const dataC = {
+      mode: "E",      
+      namecorp: "Micro",
+      weburl: "wwww.google.com",
+      firstname: undefined,
+      lastname : undefined
+    }
+    
+    const dataE = {
+      mode: "C",
+      namecorp: undefined,
+      weburl: undefined,
+      firstname: "Albert",
+      lastname : "Einstein"
+    }
+    
+    try{
+      yupschema.validateSync(dataC)
+    }catch(error) { 
+      console.log('---->', error)
+    };
+    
+    let isValid = yupschema.isValidSync(dataC);
+    
+    expect(isValid).toBeTruthy();
+    
+    let isValid2 = yupschema.isValidSync(dataE);
+    
+    expect(isValid2).toBeTruthy();
+
+});

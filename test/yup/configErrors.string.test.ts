@@ -259,9 +259,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         date: {
-          format: {
-            dateTime: "Value does not match date time format"
-          }
+          format: "Value does not match date time format"
         }
       }
     };
@@ -272,7 +270,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.date.format.dateTime);
+    expect(errorMessage).toBe(config.errors.date.format);
   });
 
   it("should show configuration error when value does not match time format", () => {
@@ -291,9 +289,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         time: {
-          format: {
-            time: "Value does not match time format"
-          }
+          format: "Value does not match time format"
         }
       }
     };
@@ -304,7 +300,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.time.format.time);
+    expect(errorMessage).toBe(config.errors.time.format);
   });
 
   it("should show configuration error when value does not match date format", () => {
@@ -323,9 +319,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         date: {
-          format: {
-            date: "Value does not match date format"
-          }
+          format: "Value does not match date format"
         }
       }
     };
@@ -336,7 +330,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.date.format.date);
+    expect(errorMessage).toBe(config.errors.date.format);
   });
 
   it("should show configuration error when value does not match email format", () => {
@@ -355,9 +349,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         email: {
-          format: {
-            email: "Value does not match email format"
-          }
+          format: "Value does not match email format"
         }
       }
     };
@@ -368,7 +360,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.email.format.email);
+    expect(errorMessage).toBe(config.errors.email.format);
   });
 
   it("should show configuration error when value does not match idn email format", () => {
@@ -387,9 +379,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         email: {
-          format: {
-            idnEmail: "Value does not match idn email format"
-          }
+          format: "Value does not match idn email format"
         }
       }
     };
@@ -400,7 +390,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.email.format.idnEmail);
+    expect(errorMessage).toBe(config.errors.email.format);
   });
 
   it("should show configuration error when value does not match hostname format", () => {
@@ -419,9 +409,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         website: {
-          format: {
-            hostname: "Value does not match hostname format"
-          }
+          format: "Value does not match hostname format"
         }
       }
     };
@@ -432,7 +420,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format.hostname);
+    expect(errorMessage).toBe(config.errors.website.format);
   });
 
   it("should show configuration error when value does not match international hostname format", () => {
@@ -451,9 +439,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         website: {
-          format: {
-            idnHostname: "Value does not match idn hostname format"
-          }
+          format: "Value does not match idn hostname format"
         }
       }
     };
@@ -464,7 +450,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format.idnHostname);
+    expect(errorMessage).toBe(config.errors.website.format);
   });
 
   it("should show configuration error when value does not match ipv4 format", () => {
@@ -483,9 +469,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         ipAddress: {
-          format: {
-            ipv4: "Value does not match ipv4 format"
-          }
+          format: "Value does not match ipv4 format"
         }
       }
     };
@@ -496,7 +480,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.ipAddress.format.ipv4);
+    expect(errorMessage).toBe(config.errors.ipAddress.format);
   });
 
   it("should show configuration error when value does not match ipv6 format", () => {
@@ -515,9 +499,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         ipAddress: {
-          format: {
-            ipv6: "Value does not match ipv6 format"
-          }
+          format: "Value does not match ipv6 format"
         }
       }
     };
@@ -528,7 +510,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.ipAddress.format.ipv6);
+    expect(errorMessage).toBe(config.errors.ipAddress.format);
   });
 
   it("should show configuration error when value does not match URI format", () => {
@@ -547,9 +529,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         website: {
-          format: {
-            uri: "Value does not match URI format"
-          }
+          format: "Value does not match URI format"
         }
       }
     };
@@ -560,7 +540,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format.uri);
+    expect(errorMessage).toBe(config.errors.website.format);
   });
 
   it("should show configuration error when value does not match URI relative path format", () => {
@@ -579,9 +559,7 @@ describe("convertToYup() string configuration errors", () => {
     const config = {
       errors: {
         website: {
-          format: {
-            uriReference: "Value does not match URI reference format"
-          }
+          format: "Value does not match URI reference format"
         }
       }
     };
@@ -592,6 +570,6 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format.uriReference);
+    expect(errorMessage).toBe(config.errors.website.format);
   });
 });

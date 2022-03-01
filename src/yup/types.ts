@@ -16,8 +16,14 @@ export type ConfigErrorTypes = {
   [key in NodeTypes]?: string;
 };
 
+// Custom error messaging callback
+
+export type CustomErrorMsgParam = [ string, Record<string, string | number | undefined> ]
+
+export type CustomErrorMsg = (param?: CustomErrorMsgParam) => string
+
 export interface ConfigErrors {
-  [key: string]: ConfigErrors | ConfigErrorTypes;
+  [key: string]: ConfigErrors | ConfigErrorTypes | CustomErrorMsg;
 }
 export interface Config {
   errors?: ConfigErrors;

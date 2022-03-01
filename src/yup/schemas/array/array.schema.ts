@@ -3,14 +3,13 @@ import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
-import { DataTypes, isItemsArray } from "../../../schema";
+import { DataTypes, isItemsArray, SchemaKeywords } from "../../../schema";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
 import { SchemaItem } from "../../types";
-import { getError, getErrorMessage } from "../../config/";
-import { joinPath } from "../../utils";
+import { getErrorMessage } from "../../config/";
 
 /**
  * Initializes a yup array schema derived from a json boolean schema
@@ -53,10 +52,8 @@ const createArraySchema = (
   if (contains) {
     const { type } = contains as JSONSchema7;
 
-    const path = joinPath(description, "contains");
-    const message =
-      getError(path) ||
-      capitalize(`${key} must at least contain one item of type ${type}`);
+    const message = getErrorMessage(description, SchemaKeywords.CONTAINS)
+    || capitalize(`${key} must at least contain one item of type ${type}`);
 
     // `contains` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -66,9 +63,8 @@ const createArraySchema = (
       : Schema;
   } else {
     if (isItemsArray(items)) {
-      const path = joinPath(description, "tuple");
-      const message =
-        getError(path) || capitalize(`${key} must be of same type`);
+      const message = getErrorMessage(description, SchemaKeywords.TUPLE)
+      || capitalize(`${key} must be of same type`);
 
       // `tuple` is a custom yup method. See /yup/addons/index.ts
       // for implementation
@@ -78,10 +74,8 @@ const createArraySchema = (
   }
 
   if (isNumber(minItems)) {
-    const path = joinPath(description, "minItems");
-    const message =
-      getError(path) ||
-      capitalize(`${key} requires a minimum of ${minItems} items`);
+    const message = getErrorMessage(description, SchemaKeywords.MINIMUM_ITEMS)
+    || capitalize(`${key} requires a minimum of ${minItems} items`);
 
     // `minimumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -90,10 +84,8 @@ const createArraySchema = (
   }
 
   if (isNumber(maxItems)) {
-    const path = joinPath(description, "maxItems");
-    const message =
-      getError(path) ||
-      capitalize(`${key} cannot exceed a maximum of ${maxItems} items`);
+    const message = getErrorMessage(description, SchemaKeywords.MAXIMUM_ITEMS)
+    || capitalize(`${key} cannot exceed a maximum of ${maxItems} items`);
 
     // `maximumItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation
@@ -108,9 +100,8 @@ const createArraySchema = (
   Schema = createEnumerableSchema(Schema, [key, value]);
 
   if (uniqueItems) {
-    const path = joinPath(description, "uniqueItems");
-    const message =
-      getError(path) || capitalize(`${key} values are not unique`);
+    const message = getErrorMessage(description, SchemaKeywords.UNIQUE_ITEMS)
+    || capitalize(`${key} values are not unique`);
 
     // `uniqueItems` is a custom yup method. See /yup/addons/index.ts
     // for implementation

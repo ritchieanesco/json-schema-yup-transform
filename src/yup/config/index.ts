@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { ConfigErrors, Config, isConfigError, NodeTypes } from "../types";
+import { ConfigErrors, Config, CustomErrorMsg, CustomErrorMsgParam, isConfigError, NodeTypes } from "../types";
 import { joinPath } from "../utils";
 
 let config: Config = {};
@@ -20,7 +20,7 @@ export const getErrors = (): ConfigErrors | undefined => config.errors;
 
 /** Retrieve specific error from configuration */
 
-export const getError = (path: string | false): string | false => {
+export const getError = (path: string | false): string | CustomErrorMsg | false => {
   const pathArray = path && path.split(".");
   if (!pathArray) return false;
   const errors = getErrors();
@@ -28,10 +28,12 @@ export const getError = (path: string | false): string | false => {
 };
 
 /** Returns 'custom' or 'default' error message */
-export const getErrorMessage = (description: string | false | undefined, type: NodeTypes) => {
-  const customErrorMessage = description
+export const getErrorMessage = (description: string | false | undefined, type: NodeTypes, params?: CustomErrorMsgParam) => {
+  let customErrorMessage = description
     ? getError(joinPath(description, type))
     : undefined;
 
-  return customErrorMessage || getError(joinPath("defaults", type));
+    if (typeof customErrorMessage === "undefined") customErrorMessage = getError(joinPath("defaults", type))
+    if (typeof customErrorMessage === "function") return customErrorMessage(params);
+    return customErrorMessage
 }

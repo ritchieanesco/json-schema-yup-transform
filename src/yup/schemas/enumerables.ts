@@ -13,9 +13,9 @@ export const createEnumerableSchema = <T extends Yup.Schema<any>>(
   Schema: T,
   [key, value]: SchemaItem
 ): T => {
-  const { enum: enums, description } = value;
+  const { enum: enums, description, title } = value;
   if (isArray(enums)) {
-    const message = getErrorMessage(description, SchemaKeywords.ENUM)
+    const message = getErrorMessage(description, SchemaKeywords.ENUM, [ key, { enum: enums.join(","), title } ])
       || capitalize(`${key} does not match any of the enumerables`);
 
     Schema = Schema.concat(Schema.enum(enums, message));

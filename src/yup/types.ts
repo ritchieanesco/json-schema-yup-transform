@@ -1,4 +1,4 @@
-import { JSONSchema7 } from "json-schema";
+import { JSONSchema7, JSONSchema7Type } from "json-schema";
 import isPlainObject from "lodash/isPlainObject";
 import { SchemaKeywords, DataTypes, CompositSchemaTypes } from "../schema";
 
@@ -13,17 +13,17 @@ export type SchemaItem = [string, JSONSchema7];
 export type NodeTypes = SchemaKeywords | CompositSchemaTypes | DataTypes;
 
 export type ConfigErrorTypes = {
-  [key in NodeTypes]?: string;
+  [key in NodeTypes]?: string | CustomErrorMsg;
 };
 
 // Custom error messaging callback
 
-export type CustomErrorMsgParam = [ string, Record<string, string | number | undefined> ]
+export type CustomErrorMsgParam = [ string, Record<string, Omit<JSONSchema7Type, "JSONSchema7Object"|"JSONSchema7Array"> | undefined> ]
 
-export type CustomErrorMsg = (param?: CustomErrorMsgParam) => string
+export type CustomErrorMsg = (param: CustomErrorMsgParam) => string
 
 export interface ConfigErrors {
-  [key: string]: ConfigErrors | ConfigErrorTypes | CustomErrorMsg;
+  [key: string]: ConfigErrors | ConfigErrorTypes;
 }
 export interface Config {
   errors?: ConfigErrors;

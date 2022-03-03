@@ -45,7 +45,7 @@ const createStringSchema = (
   const label = title || capitalize(key);
 
   const defaultMessage =
-    getErrorMessage(description, DataTypes.STRING) ||
+    getErrorMessage(description, DataTypes.STRING, [ key, { title }]) ||
     capitalize(`${label} is not of type string`);
 
   let Schema = Yup.string().typeError(defaultMessage);
@@ -87,7 +87,7 @@ const createStringSchema = (
     const message =
       getErrorMessage(description, SchemaKeywords.PATTERN, [
         key,
-        { title, pattern }
+        { title, pattern: new RegExp(pattern).toString() }
       ]) || `${label} is an incorrect format`;
 
     Schema = Schema.concat(Schema.matches(pattern, message));
@@ -97,7 +97,7 @@ const createStringSchema = (
     const message =
       getErrorMessage(description, SchemaKeywords.REGEX, [
         key,
-        { title, regex }
+        { title, regex: new RegExp(regex).toString() }
       ]) || `${label} is an incorrect format`;
 
     Schema = Schema.concat(Schema.matches(regex, message));

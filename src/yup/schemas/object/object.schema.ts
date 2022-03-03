@@ -22,7 +22,7 @@ const createObjectSchema = (
 
   const label = title || capitalize(key);
 
-  const defaultMessage = getErrorMessage(description, DataTypes.OBJECT)
+  const defaultMessage = getErrorMessage(description, DataTypes.OBJECT, [key, { title }])
     || capitalize(`${label}  is not of type object`);
 
   // Seperate compositional schemas from standard schemas.

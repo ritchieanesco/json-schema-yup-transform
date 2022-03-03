@@ -20,7 +20,7 @@ const createIntegerSchema = (
   } = value;
 
   const label = title || capitalize(key);
-  const defaultMessage = getErrorMessage(description, DataTypes.INTEGER)
+  const defaultMessage = getErrorMessage(description, DataTypes.INTEGER, [key, { title }])
     || `${label} is not of type integer`;
 
   return createBaseNumberSchema(

@@ -12,10 +12,10 @@ export const createConstantSchema = <T extends Yup.Schema<any>>(
   Schema: T,
   [key, value]: SchemaItem
 ): T => {
-  const { const: consts, description } = value;
+  const { const: consts, description, title } = value;
 
   if (consts || consts === null || consts === 0) {
-    const message = getErrorMessage(description, SchemaKeywords.CONST)
+    const message = getErrorMessage(description, SchemaKeywords.CONST, [ key,  { const: consts?.toString(), title} ])
       || capitalize(`${key} does not match constant`);
 
     Schema = Schema.concat(Schema.constant(consts, message));

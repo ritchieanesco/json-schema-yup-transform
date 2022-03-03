@@ -16,4 +16,5 @@ const convertToYup = (
 };
 
 export type Config = yupTransformer.Config;
+export type CustomErrorMsgParam = yupTransformer.CustomErrorMsgParam
 export default convertToYup;

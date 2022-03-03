@@ -19,7 +19,7 @@ export const createAnyOfSchema = (
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
   const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ANYOF) || `${label} does not match alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ANYOF, [key, { title: value.title }]) || `${label} does not match alternatives`;
   const schemas = value.anyOf.map((val) =>
     createValidationSchema([key, val as JSONSchema7], jsonSchema)
   );
@@ -37,7 +37,7 @@ export const createAllOfSchema = (
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
   const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ALLOF) || `${label} does not match all alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ALLOF, [key, { title: value.title }]) || `${label} does not match all alternatives`;
   const schemas = value.allOf
     .filter((el) => typeof el !== "boolean" && el.type)
     .map((val, i) =>
@@ -56,7 +56,7 @@ export const createOneOfSchema = (
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
   const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF) || `${label} does not match one alternative`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF, [key, { title: value.title }]) || `${label} does not match one alternative`;
   const schemas = value.oneOf.map((val, i) =>
     createValidationSchema([`${key}[${i}]`, val as JSONSchema7], jsonSchema)
   );
@@ -76,7 +76,7 @@ export const createNotSchema = (
   jsonSchema: JSONSchema7
 ): Yup.MixedSchema<string> => {
   const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.NOT) || `${label} matches alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.NOT, [key, { title: value.title }]) || `${label} matches alternatives`;
   const schema = createValidationSchema(
     [key, value.not as JSONSchema7],
     jsonSchema

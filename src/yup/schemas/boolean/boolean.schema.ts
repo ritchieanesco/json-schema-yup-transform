@@ -24,7 +24,7 @@ const createBooleanSchema = (
 
   const label = title || capitalize(key);
 
-  const defaultMessage = getErrorMessage(description, DataTypes.BOOLEAN)
+  const defaultMessage = getErrorMessage(description, DataTypes.BOOLEAN, [key, { title }])
     || `${label} is not of type boolean`;
 
   let Schema = Yup.boolean().typeError(defaultMessage);

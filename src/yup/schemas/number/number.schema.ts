@@ -22,7 +22,7 @@ const createNumberSchema = (
   const label = title || capitalize(key);
 
   const defaultMessage =
-    getErrorMessage(description, DataTypes.NUMBER) ||
+    getErrorMessage(description, DataTypes.NUMBER, [key, { title }]) ||
     `${label} is not of type number`;
 
   return createBaseNumberSchema(

@@ -33,7 +33,7 @@ const createArraySchema = (
   const label = title || capitalize(key);
 
   const defaultMessage =
-    getErrorMessage(description, DataTypes.ARRAY) ||
+    getErrorMessage(description, DataTypes.ARRAY, [ key, { title }]) ||
     `${label} is not of type array`;
 
   let Schema = Yup.array().typeError(defaultMessage);
@@ -114,7 +114,7 @@ const createArraySchema = (
     const message =
       getErrorMessage(description, SchemaKeywords.UNIQUE_ITEMS, [
         key,
-        { title }
+        { title, uniqueItems }
       ]) || capitalize(`${key} values are not unique`);
 
     // `uniqueItems` is a custom yup method. See /yup/addons/index.ts

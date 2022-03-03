@@ -28,7 +28,7 @@ export const getError = (path: string | false): string | CustomErrorMsg | false 
 };
 
 /** Returns 'custom' or 'default' error message */
-export const getErrorMessage = (description: string | false | undefined, type: NodeTypes, params?: CustomErrorMsgParam) => {
+export const getErrorMessage = (description: string | false | undefined, type: NodeTypes, params: CustomErrorMsgParam) => {
   let customErrorMessage = description
     ? getError(joinPath(description, type))
     : undefined;

@@ -31,7 +31,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.string);
+    expect(errorMessage).toBe("Default string message");
   });
 
   it("should show configuration CUSTOM error for default string type", () => {
@@ -90,7 +90,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.name.required);
+    expect(errorMessage).toBe("Name (string) is required");
   });
 
   it("should show configuration CUSTOM error for required", () => {
@@ -151,7 +151,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.name.minLength);
+    expect(errorMessage).toBe("Minimum character length error");
   });
 
   it("should show configuration CUSTOM error for minimum character length", () => {
@@ -213,7 +213,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.name.maxLength);
+    expect(errorMessage).toBe("Maximum character length error");
   });
 
   it("should show configuration CUSTOM error for maximum character length", () => {
@@ -274,7 +274,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.postcode.pattern);
+    expect(errorMessage).toBe("Incorrect pattern");
   });
 
   it("should show configuration CUSTOM error for pattern", () => {
@@ -336,7 +336,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.postcode.regex);
+    expect(errorMessage).toBe("Incorrect regex");
   });
 
   it("should show configuration CUSTOM error for regex", () => {
@@ -398,7 +398,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.target.const);
+    expect(errorMessage).toBe("Incorrect constant");
   });
 
   it("should show configuration CUSTOM error for constant", () => {
@@ -458,7 +458,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.target.enum);
+    expect(errorMessage).toBe("Value does not match any of the enums");
   });
 
   it("should show configuration CUSTOM error for enum", () => {
@@ -518,7 +518,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.date.format);
+    expect(errorMessage).toBe("Value does not match date time format");
   });
 
   it("should show configuration CUSTOM error for date-time format", () => {
@@ -579,7 +579,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.time.format);
+    expect(errorMessage).toBe("Value does not match time format");
   });
 
   it("should show configuration CUSTOM error for match time format", () => {
@@ -640,7 +640,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.date.format);
+    expect(errorMessage).toBe("Value does not match date format");
   });
 
   it("should show configuration CUSTOM error for date format", () => {
@@ -701,7 +701,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.email.format);
+    expect(errorMessage).toBe("Value does not match email format");
   });
 
   it("should show configuration CUSTOM error for email format", () => {
@@ -762,7 +762,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.email.format);
+    expect(errorMessage).toBe("Value does not match idn email format");
   });
 
   it("should show configuration CUSTOM error for idn email format", () => {
@@ -823,7 +823,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format);
+    expect(errorMessage).toBe("Value does not match hostname format");
   });
 
   it("should show configuration CUSTOM error for hostname format", () => {
@@ -884,7 +884,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format);
+    expect(errorMessage).toBe("Value does not match idn hostname format");
   });
 
   it("should show configuration CUSTOM error for hostname format", () => {
@@ -945,7 +945,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.ipAddress.format);
+    expect(errorMessage).toBe("Value does not match ipv4 format");
   });
 
   it("should show configuration CUSTOM error for ipv4 format", () => {
@@ -1006,7 +1006,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.ipAddress.format);
+    expect(errorMessage).toBe("Value does not match ipv6 format");
   });
 
   it("should show configuration CUSTOM error for ipv6 format", () => {
@@ -1067,7 +1067,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format);
+    expect(errorMessage).toBe("Value does not match URI format");
   });
 
   it("should show configuration CUSTOM error for match URI format", () => {
@@ -1128,7 +1128,7 @@ describe("convertToYup() string configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.website.format);
+    expect(errorMessage).toBe("Value does not match URI reference format");
   });
 
   it("should show configuration CUSTOM error for URI relative path format", () => {

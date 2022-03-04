@@ -30,7 +30,7 @@ describe("convertToYup() object configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.object);
+    expect(errorMessage).toBe("Default object message");
   });
 
   it("should show configuration CUSTOM error for incorrect data type", () => {
@@ -89,7 +89,7 @@ describe("convertToYup() object configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.address.required);
+    expect(errorMessage).toBe("Address is required");
   });
 
   it("should show configuration CUSTOM error for required", () => {

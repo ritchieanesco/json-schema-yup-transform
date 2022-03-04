@@ -30,7 +30,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.array);
+    expect(errorMessage).toBe("Default array message");
   });
 
   it("should show default configuration CUSTOM callback error for incorrect data type", () => {
@@ -88,7 +88,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.array);
+    expect(errorMessage).toBe("Custom array message");
   });
 
   it("should override defaults configuration CUSTOM callback error for incorrect data type", () => {
@@ -147,7 +147,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.required);
+    expect(errorMessage).toBe("Field is required");
   });
 
   it("should show defaults configuration CUSTOM callback error for required", () => {
@@ -210,7 +210,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.required);
+    expect(errorMessage).toBe("Groceries (array) is required");
   });
 
   it("should show configuration error for minimum required items", () => {
@@ -240,7 +240,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.minItems);
+    expect(errorMessage).toBe("A minimum item of 3 is required");
   });
 
   it("should show configuration CUSTOM error for minimum required items", () => {
@@ -301,7 +301,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.maxItems);
+    expect(errorMessage).toBe("A maximum item of 3 is required");
   });
 
   it("should show configuration CUSTOM error for maximum required items", () => {
@@ -364,7 +364,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.contains);
+    expect(errorMessage).toBe("At least one value should be of type string");
   });
 
   it("should show configuration CUSTOM error when at least one value does not match data type", () => {
@@ -429,7 +429,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.string);
+    expect(errorMessage).toBe("All values should be of type string");
   });
 
   it("should show configuration error when tuple does not match", () => {
@@ -459,7 +459,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.groceries.tuple);
+    expect(errorMessage).toBe("Value does not match expected type");
   });
 
   it("should show configuration error for nested field", () => {
@@ -507,7 +507,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.countries.country.maxLength);
+    expect(errorMessage).toBe("Country is required");
   });
 
   it("should show configuration error when value does not match constant", () => {
@@ -537,7 +537,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.list.const);
+    expect(errorMessage).toBe("Incorrect constant");
   });
 
   it("should show configuration CUSTOM for constant", () => {
@@ -556,7 +556,8 @@ describe("convertToYup() array configuration errors", () => {
     const config: Config = {
       errors: {
         list: {
-          const: ([key, { const: consts }]) => `${key} field does not match ${consts}`
+          const: ([key, { const: consts }]) =>
+            `${key} field does not match ${consts}`
         }
       }
     };
@@ -600,7 +601,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.list.enum);
+    expect(errorMessage).toBe("Incorrect enum");
   });
 
   it("should show configuration CUSTOM error for enum", () => {
@@ -622,7 +623,8 @@ describe("convertToYup() array configuration errors", () => {
     const config: Config = {
       errors: {
         list: {
-          enum: ([key, { enum: enums }]) => `${key} field does not match ${enums}`
+          enum: ([key, { enum: enums }]) =>
+            `${key} field does not match ${enums}`
         }
       }
     };
@@ -666,7 +668,7 @@ describe("convertToYup() array configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.items.uniqueItems);
+    expect(errorMessage).toBe("Incorrect uniqueItems");
   });
 
   it("should show configuration CUSTOM error for unique items", () => {

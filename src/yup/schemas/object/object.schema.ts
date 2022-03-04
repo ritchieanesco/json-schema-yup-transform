@@ -1,6 +1,6 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import capitalize from "lodash/capitalize";
-import { SchemaItem } from "../../types";
+import type { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { getErrorMessage } from "../../config/";

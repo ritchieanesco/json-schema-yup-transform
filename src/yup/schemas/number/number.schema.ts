@@ -1,11 +1,11 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
-import { SchemaItem } from "../../types";
+import type { SchemaItem } from "../../types";
 import { getErrorMessage } from "../../config/";
 import { DataTypes, SchemaKeywords } from "../../../schema";
 

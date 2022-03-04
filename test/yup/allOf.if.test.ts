@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import convertToYup from "../../src";
 
 // Note: Unit tests cover the core functionality. Formats have been excluded

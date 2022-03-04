@@ -5,7 +5,7 @@ import {
   BooleanSchema,
   TestOptionsMessage
 } from "yup";
-import { JSONSchema7Definition, JSONSchema7Type } from "json-schema";
+import type { JSONSchema7Definition, JSONSchema7Type } from "json-schema";
 
 declare module "yup" {
   interface NumberSchema {

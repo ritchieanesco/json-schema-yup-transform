@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import convertToYup from "../../src";
-import { JSONSchema7Extended } from "../../src/schema";
+import type { JSONSchema7Extended } from "../../src/schema";
 
 describe("convertToYup() string", () => {
   it("should validate string type", () => {

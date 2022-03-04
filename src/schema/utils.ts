@@ -1,4 +1,4 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isArray from "lodash/isArray";
 import isPlainObject from "lodash/isPlainObject";
 import isNull from "lodash/isNull";

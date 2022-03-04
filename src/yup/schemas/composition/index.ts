@@ -1,10 +1,10 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import { capitalize } from "lodash";
 import createValidationSchema from "..";
 import Yup from "../../addMethods";
 import { getErrorMessage } from "../../config";
 import { CompositSchemaTypes } from "../../../schema/types"
-import {
+import type {
   AnyOfSchema7,
   AllOfSchema7,
   OneOfSchema7,

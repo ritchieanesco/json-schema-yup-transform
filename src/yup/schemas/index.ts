@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7TypeName } from "json-schema";
+import type { JSONSchema7, JSONSchema7TypeName } from "json-schema";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 import get from "lodash/get";
@@ -12,7 +12,7 @@ import createNumberSchema from "./number";
 import createStringSchema from "./string";
 import Yup from "../addMethods/";
 import { DataTypes, getCompositionType, getPropertyType, hasAllOf, hasAnyOf, hasNot, hasOneOf, isTypeOfValue } from "../../schema/";
-import { SchemaItem } from "../types";
+import type { SchemaItem } from "../types";
 import { createAllOfSchema, createAnyOfSchema, createNotSchema, createOneOfSchema } from "./composition";
 
 /**

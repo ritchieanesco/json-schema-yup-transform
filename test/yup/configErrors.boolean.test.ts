@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import type { Config } from "../../src";
 import convertToYup from "../../src";
 

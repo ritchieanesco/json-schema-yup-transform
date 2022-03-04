@@ -1,10 +1,10 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isBoolean from "lodash/isBoolean";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
-import { SchemaItem } from "../../types";
+import type { SchemaItem } from "../../types";
 import { getErrorMessage } from "../../config/";
 import { DataTypes } from "../../../schema";
 

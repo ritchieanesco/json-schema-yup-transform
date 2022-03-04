@@ -305,6 +305,53 @@ try {
 // => "Custom error message"
 ```
 
+Using error handlers to further customise error messages
+
+```js
+import convertToYup from "json-schema-yup-transformer";
+
+const schema = {
+  type: "object",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "example-custom-error-messages",
+  title: "Exampel of custom error messages",
+  properties: {
+    team: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string"
+        }
+      }
+    }
+  },
+  required: ["name"]
+};
+
+// configuration for custom error messages
+
+const config = {
+  errors: {
+    team: {
+      name: {
+        required: ([key, { required }]) =>
+          `${key} field is invalid. Here is a list of required fields: ${required}`
+      }
+    }
+  }
+};
+
+// check validity
+const yupschema = convertToYup(schema, config);
+let errorMessage;
+try {
+  errorMessage = yupschema.validateSync();
+} catch (e) {
+  errorMessage = e.errors[0];
+}
+// => "name field is invalid. Here is a list of required fields: name"
+```
+
 Setting default error messages for a type
 
 ```js

@@ -30,7 +30,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.number);
+    expect(errorMessage).toBe("Default number message");
   });
 
   it("should show configuration CUSTOM error for incorrect data type", () => {
@@ -89,7 +89,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.age.required);
+    expect(errorMessage).toBe("Age (number) is required");
   });
 
   it("should show configuration CUSTOM error for required", () => {
@@ -152,7 +152,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.minimum);
+    expect(errorMessage).toBe("Does not meet minimum number");
   });
 
   it("should show configuration CUSTOM error for minimum number", () => {
@@ -215,7 +215,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.exclusiveMinimum);
+    expect(errorMessage).toBe("Does not meet exclusive minimum number");
   });
 
   it("should show configuration CUSTOM error for exclusive minimum number", () => {
@@ -278,7 +278,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.maximum);
+    expect(errorMessage).toBe("Does not meet maximum number");
   });
 
   it("should show configuration CUSTOM error for maximum number", () => {
@@ -341,7 +341,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.exclusiveMaximum);
+    expect(errorMessage).toBe("Does not meet exclusive maximum number");
   });
 
   it("should show configuration CUSTOM error for exclusive maximum number", () => {
@@ -404,7 +404,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.multipleOf);
+    expect(errorMessage).toBe("Value is not multiple of 5");
   });
 
   it("should show configuration CUSTOM error for multiple of", () => {
@@ -467,7 +467,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.const);
+    expect(errorMessage).toBe("Value does not match 5");
   });
 
   it("should show configuration CUSTOM error for constant", () => {
@@ -528,7 +528,7 @@ describe("convertToYup() number configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.years.enum);
+    expect(errorMessage).toBe("Value does not match 5 or 9");
   });
 
   it("should show configuration CUSTOM error for enums", () => {

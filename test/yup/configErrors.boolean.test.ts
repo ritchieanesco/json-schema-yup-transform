@@ -30,7 +30,7 @@ describe("convertToYup() boolean configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.defaults.boolean);
+    expect(errorMessage).toBe("Default boolean message");
   });
 
   it("should show configuration CUSTOM error for incorrect data type", () => {
@@ -152,7 +152,7 @@ describe("convertToYup() boolean configuration errors", () => {
     } catch (e) {
       errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe(config.errors.isActive.const);
+    expect(errorMessage).toBe("Incorrect constant");
   });
 
   it("should show configuration CUSTOM error for constant", () => {

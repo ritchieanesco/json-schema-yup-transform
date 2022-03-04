@@ -1,7 +1,7 @@
 import isArray from "lodash/isArray";
 import isPlainObject from "lodash/isPlainObject";
 import has from "lodash/has";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 /**
  * Schema Types

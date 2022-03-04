@@ -12,12 +12,8 @@ import {
   IPV4_REGEX,
   IPV6_REGEX
 } from "./string.constants";
-import {
-  DataTypes,
-  isRegex,
-  JSONSchema7Extended,
-  SchemaKeywords
-} from "../../../schema";
+import type { JSONSchema7Extended } from "../../../schema";
+import { DataTypes, isRegex, SchemaKeywords } from "../../../schema";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
@@ -45,7 +41,7 @@ const createStringSchema = (
   const label = title || capitalize(key);
 
   const defaultMessage =
-    getErrorMessage(description, DataTypes.STRING, [ key, { title }]) ||
+    getErrorMessage(description, DataTypes.STRING, [key, { title }]) ||
     capitalize(`${label} is not of type string`);
 
   let Schema = Yup.string().typeError(defaultMessage);

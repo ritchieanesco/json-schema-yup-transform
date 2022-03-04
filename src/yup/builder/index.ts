@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import has from "lodash/has";
 import get from "lodash/get";
 import omit from "lodash/omit";

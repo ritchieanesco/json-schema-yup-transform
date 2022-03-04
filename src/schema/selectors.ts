@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";

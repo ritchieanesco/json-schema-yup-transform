@@ -5,7 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import isArray from "lodash/isArray";
 import transform from "lodash/transform";
 import flow from "lodash/flow";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import has from "lodash/has";
 import { getDefinitionItem } from "../schema/";
 

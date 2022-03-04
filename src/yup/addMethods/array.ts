@@ -5,7 +5,7 @@ import isBoolean from "lodash/isBoolean";
 import isPlainObject from "lodash/isPlainObject";
 import isArray from "lodash/isArray";
 import isInteger from "lodash/isInteger";
-import { JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7Definition } from "json-schema";
 import { DataTypes } from "../../schema";
 import { validateItemsArray, isUnique } from "./utils";
 

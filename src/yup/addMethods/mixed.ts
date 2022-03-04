@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isEqual from "lodash/isEqual";
 import { isValueEnum } from "./utils";
 

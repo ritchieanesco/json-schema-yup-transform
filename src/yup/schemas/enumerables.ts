@@ -1,7 +1,7 @@
 import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
 import Yup from "../addMethods";
-import { SchemaItem } from "../types";
+import type { SchemaItem } from "../types";
 import { getErrorMessage } from "../config";
 import { SchemaKeywords } from "../../schema";
 

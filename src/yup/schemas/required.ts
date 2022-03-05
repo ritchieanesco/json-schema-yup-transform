@@ -9,7 +9,7 @@ import { getErrorMessage } from "../config";
  * Add required schema should subschema is required
  */
 
-export const createRequiredSchema = <T extends Yup.Schema<any>>(
+export const createRequiredSchema = <T extends Yup.Schema<unknown>>(
   Schema: T,
   jsonSchema: JSONSchema7,
   [key, value]: SchemaItem

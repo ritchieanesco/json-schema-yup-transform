@@ -17,7 +17,7 @@ export const buildProperties = (
     [key: string]: JSONSchema7Definition;
   },
   jsonSchema: JSONSchema7
-): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<any> } => {
+): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<unknown> } => {
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
@@ -163,7 +163,7 @@ const createIsThenOtherwiseSchemaItem = (
   required: JSONSchema7["required"]
 ):
   | {
-      [key: string]: Yup.Lazy | Yup.MixedSchema<any>;
+      [key: string]: Yup.Lazy | Yup.MixedSchema<unknown>;
     }
   | false => {
   const item: JSONSchema7 = {
@@ -206,7 +206,7 @@ const createIsThenOtherwiseSchema = (
       thenSchema.required
     );
     let matchingElseSchemaItem:
-      | { [key: string]: Yup.MixedSchema<any> | Yup.Lazy }
+      | { [key: string]: Yup.MixedSchema<unknown> | Yup.Lazy }
       | false = false;
 
     if (

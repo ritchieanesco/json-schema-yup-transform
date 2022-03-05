@@ -8,7 +8,7 @@ import { SchemaKeywords } from "../../schema";
  * Add constant yup method when schema constant is declared
  */
 
-export const createConstantSchema = <T extends Yup.Schema<any>>(
+export const createConstantSchema = <T extends Yup.Schema<unknown>>(
   Schema: T,
   [key, value]: SchemaItem
 ): T => {

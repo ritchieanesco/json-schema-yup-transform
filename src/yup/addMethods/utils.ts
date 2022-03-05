@@ -1,4 +1,4 @@
-import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 import isPlainObject from "lodash/isPlainObject";
@@ -11,11 +11,12 @@ import {
   getItemsArrayItem,
   isTypeOfValue
 } from "../../schema";
+import type { JSONSchema7Type } from "../types"
 
 /**
  * Checks if input is one of enum
  */
-export const isValueEnum = (enums: JSONSchema7["enum"], value: any): boolean =>
+export const isValueEnum = (enums: JSONSchema7["enum"], value: unknown): boolean =>
   isArray(enums) && enums.some((item) => isEqual(item, value));
 
 /**
@@ -23,8 +24,8 @@ export const isValueEnum = (enums: JSONSchema7["enum"], value: any): boolean =>
  * validates const and enums for string, number and integers
  */
 
-export const validateItemsArray = (items: JSONSchema7Definition[]) => (
-  item: string | number,
+export const validateItemsArray = (items: JSONSchema7Type[]) => (
+  item: JSONSchema7Type,
   index: number
 ): boolean => {
   const schemaItem = getItemsArrayItem(items, index);

@@ -3,6 +3,7 @@ import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";
 import { DEFINITION_ROOT } from "./constants";
+import type { JSONSchema7Type } from "../yup/types"
 import { CompositSchemaTypes, isSchemaObject } from "./types";
 
 /**
@@ -89,6 +90,6 @@ const get$RefValue = (ref: string): string => {
  */
 
 export const getItemsArrayItem = (
-  items: JSONSchema7Definition[],
+  items: (JSONSchema7Type)[],
   index: number
-): boolean | JSONSchema7 | undefined => nth(items, index);
+): JSONSchema7Type | undefined => nth(items, index);

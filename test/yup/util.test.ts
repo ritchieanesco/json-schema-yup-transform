@@ -1,4 +1,4 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import {
   getObjectHead,
   removeEmptyObjects,
@@ -7,6 +7,7 @@ import {
   applyPaths,
   normalize
 } from "../../src/yup/utils";
+import type { JSONSchema7Type } from "../../src/yup/types"
 import { validateItemsArray } from "../../src/yup/addMethods/utils";
 
 describe("removeEmptyObjects()", () => {
@@ -710,7 +711,7 @@ describe("validateItemsArray()", () => {
       { type: "number" },
       { type: "boolean" }
     ];
-    const arr: any[] = [5, true];
+    const arr: JSONSchema7Type[] = [5, true];
     const validator = validateItemsArray(schm);
     const result = arr.every(validator);
     expect(result).toBeTruthy();
@@ -718,7 +719,7 @@ describe("validateItemsArray()", () => {
 
   it("should NOT validate tuple with undefined schema", () => {
     const schm: JSONSchema7["items"] = [false];
-    const arr: any[] = [5, true];
+    const arr: JSONSchema7Type[] = [5, true];
     const validator = validateItemsArray(schm);
     const result = arr.every(validator);
     expect(result).toBeFalsy();

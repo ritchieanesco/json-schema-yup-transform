@@ -29,7 +29,7 @@ export function enums(
   value: JSONSchema7["enum"],
   message: string
 ): Yup.MixedSchema {
-  return this.test("test-enum", message, function(input) {
+  return this.test("test-enum", message, function(input: JSONSchema7["enum"]) {
     const { path, createError } = this;
     return isValueEnum(value, input) || createError({ path, message });
   });

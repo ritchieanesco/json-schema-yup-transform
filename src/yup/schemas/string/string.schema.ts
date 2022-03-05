@@ -1,5 +1,4 @@
 import isNumber from "lodash/isNumber";
-import isString from "lodash/isString";
 import capitalize from "lodash/capitalize";
 import Yup from "../../addMethods";
 import {
@@ -13,7 +12,7 @@ import {
   IPV6_REGEX
 } from "./string.constants";
 import type { JSONSchema7Extended } from "../../../schema";
-import { DataTypes, isRegex, SchemaKeywords } from "../../../schema";
+import { DataTypes, SchemaKeywords } from "../../../schema";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
@@ -46,7 +45,7 @@ const createStringSchema = (
 
   let Schema = Yup.string().typeError(defaultMessage);
 
-  if (isString(defaults)) {
+  if (defaults) {
     Schema = Schema.concat(Schema.default(defaults));
   }
 
@@ -79,24 +78,26 @@ const createStringSchema = (
     Schema = Schema.concat(Schema.max(maxLength, message));
   }
 
-  if (isRegex(pattern)) {
+  if (pattern) {
+    const reg = new RegExp(pattern);
     const message =
       getErrorMessage(description, SchemaKeywords.PATTERN, [
         key,
-        { title, pattern: new RegExp(pattern).toString() }
+        { title, pattern: reg.toString() }
       ]) || `${label} is an incorrect format`;
 
-    Schema = Schema.concat(Schema.matches(pattern, message));
+    Schema = Schema.concat(Schema.matches(reg, message));
   }
 
-  if (isRegex(regex)) {
+  if (regex) {
+    const reg = new RegExp(regex);
     const message =
       getErrorMessage(description, SchemaKeywords.REGEX, [
         key,
-        { title, regex: new RegExp(regex).toString() }
+        { title, regex: reg.toString() }
       ]) || `${label} is an incorrect format`;
 
-    Schema = Schema.concat(Schema.matches(regex, message));
+    Schema = Schema.concat(Schema.matches(reg, message));
   }
 
   if (format) {

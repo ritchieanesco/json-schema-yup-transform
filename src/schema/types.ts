@@ -106,8 +106,6 @@ export interface NotSchema7 extends JSONSchema7 {
  * String pattern key type guard
  */
 
-export const isRegex = (regexp: any): regexp is RegExp => regexp;
-
 export const hasAnyOf = (value: JSONSchema7): value is AnyOfSchema7 =>
   !!value.anyOf;
 

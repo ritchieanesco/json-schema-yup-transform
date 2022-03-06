@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() allOf", () => {
   it("should validate data types", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

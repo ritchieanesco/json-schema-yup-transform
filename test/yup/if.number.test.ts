@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() number conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -39,7 +39,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -76,7 +76,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -130,7 +130,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches minimum number", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -171,7 +171,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches maximum number", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -212,7 +212,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional when dependency matches a multiple of", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -253,7 +253,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate required conditionals", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -289,7 +289,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional constant when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -326,7 +326,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional enum when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -369,7 +369,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional minimum number when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -411,7 +411,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional maximum number when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -453,7 +453,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate conditional multiple of number when dependency matches constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -495,7 +495,7 @@ describe("convertToYup() number conditions", () => {
   });
 
   it("should validate other conditional", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

@@ -1,10 +1,10 @@
 import * as Yup from "yup";
+import type { JSONSchemaExtended } from "../../src/schema";
 import convertToYup from "../../src";
-import type { JSONSchema7Extended } from "../../src/schema";
 
 describe("convertToYup() string", () => {
   it("should validate string type", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -29,7 +29,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -59,7 +59,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should throw error if value type is not one of multiple types", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -79,7 +79,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate required", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -111,7 +111,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate minimum character length", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -145,7 +145,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate maximum character length", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -179,7 +179,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate pattern", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -218,7 +218,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate constant", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -252,7 +252,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate enum", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -292,7 +292,7 @@ describe("convertToYup() string", () => {
 
   it("should set default value", () => {
     const defaultValue = "Roger";
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -319,7 +319,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should not validate empty value if field has multiple types", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -345,7 +345,7 @@ describe("convertToYup() string", () => {
   });
 
   it("should validate regex", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -385,7 +385,7 @@ describe("convertToYup() string", () => {
 
   it("should use title as label in error message", () => {
     const fieldTitle = "First Name";
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -411,7 +411,7 @@ describe("convertToYup() string", () => {
 
 
   it("should validate multiple types in a nested object", () => {
-    const schema: JSONSchema7Extended = {
+    const schema: JSONSchemaExtended = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

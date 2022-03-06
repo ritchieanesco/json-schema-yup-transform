@@ -1,8 +1,20 @@
-import type { JSONSchema7, JSONSchema7TypeName } from "json-schema";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 import get from "lodash/get";
 import has from "lodash/has";
+import type { JSONSchema, JSONSchemaTypeName } from "../../schema";
+import {
+  DataTypes,
+  getCompositionType,
+  getPropertyType,
+  hasAllOf,
+  hasAnyOf,
+  hasNot,
+  hasOneOf,
+  isTypeOfValue
+} from "../../schema";
+import Yup from "../addMethods";
+import type { SchemaItem } from "../types";
 import createArraySchema from "./array";
 import createBooleanSchema from "./boolean";
 import createIntegerSchema from "./integer";
@@ -10,10 +22,12 @@ import createObjectSchema from "./object";
 import createNullSchema from "./null";
 import createNumberSchema from "./number";
 import createStringSchema from "./string";
-import Yup from "../addMethods/";
-import { DataTypes, getCompositionType, getPropertyType, hasAllOf, hasAnyOf, hasNot, hasOneOf, isTypeOfValue } from "../../schema/";
-import type { SchemaItem } from "../types";
-import { createAllOfSchema, createAnyOfSchema, createNotSchema, createOneOfSchema } from "./composition";
+import {
+  createAllOfSchema,
+  createAnyOfSchema,
+  createNotSchema,
+  createOneOfSchema
+} from "./composition";
 
 /**
  * Validates the input data type against the schema type and returns
@@ -21,10 +35,10 @@ import { createAllOfSchema, createAnyOfSchema, createNotSchema, createOneOfSchem
  */
 
 const getTypeOfValue = (
-  types: JSONSchema7TypeName[],
+  types: JSONSchemaTypeName[],
   value: unknown
-): JSONSchema7TypeName => {
-  const filteredType: JSONSchema7TypeName[] = types.filter(
+): JSONSchemaTypeName => {
+  const filteredType: JSONSchemaTypeName[] = types.filter(
     (item) => has(isTypeOfValue, item) && isTypeOfValue[item](value)
   );
   const index = types.indexOf(filteredType[0]);
@@ -37,7 +51,7 @@ const getTypeOfValue = (
 
 const getValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.MixedSchema<unknown> => {
   if (hasAnyOf(value)) {
     return createAnyOfSchema([key, value], jsonSchema);
@@ -64,10 +78,10 @@ const getValidationSchema = (
     [DataTypes.ARRAY]: createArraySchema,
     [DataTypes.BOOLEAN]: createBooleanSchema,
     [DataTypes.NULL]: createNullSchema,
-    [DataTypes.OBJECT]: createObjectSchema,
+    [DataTypes.OBJECT]: createObjectSchema
   };
 
-  return schemaMap[type as JSONSchema7TypeName]([key, value], jsonSchema);
+  return schemaMap[type as JSONSchemaTypeName]([key, value], jsonSchema);
 };
 
 /**
@@ -77,10 +91,10 @@ const getValidationSchema = (
 
 const getLazyValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.Lazy =>
   Yup.lazy((inputValue) => {
-    const type = get(value, "type") as JSONSchema7TypeName[];
+    const type = get(value, "type") as JSONSchemaTypeName[];
     // include a check for undefined as Formik 2.1.4
     // coeerces empty strings to undefined
     const valueType = type.includes("null")
@@ -100,7 +114,7 @@ const getLazyValidationSchema = (
 
 const createValidationSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.Lazy | Yup.MixedSchema<unknown> => {
   const type = getPropertyType(value) || getCompositionType(value);
   if (isArray(type)) {

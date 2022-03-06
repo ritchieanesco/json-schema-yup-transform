@@ -1,7 +1,12 @@
 import isArray from "lodash/isArray";
 import isPlainObject from "lodash/isPlainObject";
 import has from "lodash/has";
-import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type {
+  JSONSchema7,
+  JSONSchema7Definition,
+  JSONSchema7Type as UJSONSchema7Type,
+  JSONSchema7TypeName as UJSONSchema7TypeName
+} from "json-schema";
 
 /**
  * Schema Types
@@ -21,10 +26,10 @@ export enum DataTypes {
  * Composite schema types
  */
 export enum CompositSchemaTypes {
-  ALLOF = 'allOf',
-  ANYOF = 'anyOf',
-  ONEOF = 'oneOf',
-  NOT = 'not',
+  ALLOF = "allOf",
+  ANYOF = "anyOf",
+  ONEOF = "oneOf",
+  NOT = "not"
 }
 
 export enum SchemaKeywords {
@@ -59,12 +64,22 @@ export enum SchemaKeywords {
   UNIQUE_ITEMS = "uniqueItems"
 }
 
-export type JSONSchema7DefinitionExtended = JSONSchema7Extended | boolean;
+export type JSONSchema = JSONSchema7;
+export type JSONSchemaDefinition = JSONSchema7Definition;
+export type JSONSchemaTypeName = UJSONSchema7TypeName;
+export type JSONSchemaType = UJSONSchema7Type;
+export type JSONSchemaBasicType = Omit<
+  JSONSchemaType,
+  "JSONSchema7Object" | "JSONSchema7Array"
+>;
 
-export interface JSONSchema7Extended extends JSONSchema7 {
+export type NodeTypes = SchemaKeywords | CompositSchemaTypes | DataTypes;
+
+export type JSONSchemaDefinitionExtended = JSONSchemaExtended | boolean;
+export interface JSONSchemaExtended extends JSONSchema {
   regex?: string;
   properties?: {
-    [key: string]: JSONSchema7DefinitionExtended;
+    [key: string]: JSONSchemaDefinitionExtended;
   };
 }
 
@@ -73,47 +88,45 @@ export interface JSONSchema7Extended extends JSONSchema7 {
  */
 
 export const isSchemaObject = (
-  items: JSONSchema7Definition | JSONSchema7Definition[] | undefined | unknown
-): items is JSONSchema7 => isPlainObject(items);
+  items: JSONSchemaDefinition | JSONSchemaDefinition[] | undefined | unknown
+): items is JSONSchema => isPlainObject(items);
 
 /**
  * Tuple type guard array items key
  */
 
 export const isItemsArray = (
-  items: JSONSchema7Definition | JSONSchema7Definition[] | undefined
-): items is JSONSchema7Definition[] =>
+  items: JSONSchemaDefinition | JSONSchemaDefinition[] | undefined
+): items is JSONSchemaDefinition[] =>
   isArray(items) && items.every((item) => has(item, "type"));
 
-
-export interface AnyOfSchema7 extends JSONSchema7 {
-  anyOf: JSONSchema7Definition[]
+export interface AnyOfSchema extends JSONSchema {
+  anyOf: JSONSchemaDefinition[];
 }
 
-export interface AllOfSchema7 extends JSONSchema7 {
-  allOf: JSONSchema7Definition[]
+export interface AllOfSchema extends JSONSchema {
+  allOf: JSONSchemaDefinition[];
 }
 
-export interface OneOfSchema7 extends JSONSchema7 {
-  oneOf: JSONSchema7Definition[]
+export interface OneOfSchema extends JSONSchema {
+  oneOf: JSONSchemaDefinition[];
 }
 
-export interface NotSchema7 extends JSONSchema7 {
-  not: JSONSchema7Definition
+export interface NotSchema extends JSONSchema {
+  not: JSONSchemaDefinition;
 }
 
 /**
  * String pattern key type guard
  */
 
-export const hasAnyOf = (value: JSONSchema7): value is AnyOfSchema7 =>
+export const hasAnyOf = (value: JSONSchema): value is AnyOfSchema =>
   !!value.anyOf;
 
-export const hasAllOf = (value: JSONSchema7): value is AllOfSchema7 =>
+export const hasAllOf = (value: JSONSchema): value is AllOfSchema =>
   !!value.allOf;
 
-export const hasOneOf = (value: JSONSchema7): value is OneOfSchema7 =>
+export const hasOneOf = (value: JSONSchema): value is OneOfSchema =>
   !!value.oneOf;
 
-export const hasNot = (value: JSONSchema7): value is NotSchema7 =>
-  !!value.not;
+export const hasNot = (value: JSONSchema): value is NotSchema => !!value.not;

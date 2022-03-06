@@ -5,7 +5,7 @@ import isBoolean from "lodash/isBoolean";
 import isPlainObject from "lodash/isPlainObject";
 import isArray from "lodash/isArray";
 import isInteger from "lodash/isInteger";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchemaDefinitionExtended } from "../../schema";
 import { DataTypes } from "../../schema";
 import { validateItemsArray, isUnique } from "./utils";
 
@@ -90,10 +90,10 @@ export function contains(
 
 export function tuple(
   this: Yup.ArraySchema<unknown>,
-  items: (boolean | JSONSchema7)[],
+  items: JSONSchemaDefinitionExtended[],
   message: string
 ): Yup.ArraySchema<unknown> {
-  return this.test("test-tuple", message, function (input: (boolean | JSONSchema7)[]) {
+  return this.test("test-tuple", message, function (input: JSONSchemaDefinitionExtended[]) {
     const { path, createError } = this;
     const validator = validateItemsArray(items);
     const isValid = input.every(validator);

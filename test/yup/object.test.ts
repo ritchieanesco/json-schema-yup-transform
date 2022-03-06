@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() object", () => {
   it("should validate object type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -33,7 +33,7 @@ describe("convertToYup() object", () => {
     expect(isValid).toBeFalsy();
   });
   it("should validate required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -52,7 +52,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate nested object type", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -131,7 +131,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -161,7 +161,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate fields from definitions", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -205,7 +205,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate fields from definitions", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -230,7 +230,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate fields using definition id", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -275,7 +275,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should bypass field if not an object", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -301,7 +301,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -331,7 +331,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should throw error when type key is missing", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -348,7 +348,7 @@ describe("convertToYup() object", () => {
   });
 
   it("should return undefined when properties does not exist", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

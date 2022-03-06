@@ -5,7 +5,7 @@ import {
   BooleanSchema,
   TestOptionsMessage
 } from "yup";
-import type { JSONSchema7Definition, JSONSchema7Type } from "json-schema";
+import type { JSONSchemaDefinition, JSONSchemaType } from "../../schema/"
 
 declare module "yup" {
   interface NumberSchema {
@@ -18,7 +18,7 @@ declare module "yup" {
   interface ArraySchema<T> {
     list(type: string, message: string): this;
     contains(type: string, message: string): this;
-    tuple(items: JSONSchema7Definition[], message: string): this;
+    tuple(items: JSONSchemaDefinition[], message: string): this;
     minimumItems(count: number, message: string): this;
     maximumItems(count: number, message: string): this;
     uniqueItems(enable: boolean, message?: string): this;
@@ -26,7 +26,7 @@ declare module "yup" {
 
   interface Schema<T> {
     required(message: TestOptionsMessage): this;
-    constant(value: JSONSchema7Type, message?: string): this;
-    enum(value: JSONSchema7Type[], message?: string): this;
+    constant(value: JSONSchemaType, message?: string): this;
+    enum(value: JSONSchemaType[], message?: string): this;
   }
 }

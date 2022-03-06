@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() array items tuple", () => {
   it("should validate data types", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -69,7 +69,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate string const", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -103,7 +103,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate number const", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -137,7 +137,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate integer const", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -171,7 +171,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should NOT validate object const", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -205,7 +205,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate array const", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -239,7 +239,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate string enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -278,7 +278,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate number enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -317,7 +317,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate integer enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -356,7 +356,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should validate array enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -398,7 +398,7 @@ describe("convertToYup() array items tuple", () => {
   });
 
   it("should not validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

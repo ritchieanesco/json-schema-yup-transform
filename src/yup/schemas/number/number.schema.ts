@@ -1,13 +1,13 @@
-import type { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
+import { DataTypes, SchemaKeywords } from "../../../schema";
+import type { JSONSchema } from "../../../schema"
+import type { SchemaItem } from "../../types";
+import { getErrorMessage } from "../../config";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
 import { createEnumerableSchema } from "../enumerables";
-import type { SchemaItem } from "../../types";
-import { getErrorMessage } from "../../config/";
-import { DataTypes, SchemaKeywords } from "../../../schema";
 
 /**
  * Initializes a yup number schema derived from a json number schema
@@ -15,7 +15,7 @@ import { DataTypes, SchemaKeywords } from "../../../schema";
 
 const createNumberSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.NumberSchema<number> => {
   const { description, title } = value;
 
@@ -38,7 +38,7 @@ const createNumberSchema = (
 export const createBaseNumberSchema = (
   Schema: Yup.NumberSchema,
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.NumberSchema<number> => {
   const {
     description,

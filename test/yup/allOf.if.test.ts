@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 // Note: Unit tests cover the core functionality. Formats have been excluded
@@ -7,7 +7,7 @@ import convertToYup from "../../src";
 
 describe("convertToYup() string conditions", () => {
   it("should validate single if statement in allOf", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -41,7 +41,7 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeFalsy();
   });
   it("should ignore non-relevant if statements in allOf", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -75,7 +75,7 @@ describe("convertToYup() string conditions", () => {
     expect(isValid).toBeTruthy();
   });
   it("should validate multiple if statement in allOf", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -163,7 +163,7 @@ describe("convertToYup() string conditions", () => {
     expect(isValid2).toBeTruthy();
   });
   it("should validate deep schema", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

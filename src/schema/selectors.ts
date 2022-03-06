@@ -1,20 +1,19 @@
-import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";
 import { DEFINITION_ROOT } from "./constants";
-import type { JSONSchema7Type } from "../yup/types"
-import { CompositSchemaTypes, isSchemaObject } from "./types";
+import type { JSONSchema, JSONSchemaDefinition, JSONSchemaBasicType } from "."
+import { CompositSchemaTypes, isSchemaObject } from ".";
 
 /**
  * Retrieve definitions property value
  */
 
 export const getDefinitions = (
-  schema: JSONSchema7
+  schema: JSONSchema
 ):
   | {
-      [key: string]: JSONSchema7Definition;
+      [key: string]: JSONSchemaDefinition;
     }
   | undefined => schema.definitions;
 
@@ -23,9 +22,9 @@ export const getDefinitions = (
  */
 
 export const getDefinitionItem = (
-  schema: JSONSchema7,
+  schema: JSONSchema,
   ref: string
-): boolean | JSONSchema7 | undefined => {
+): boolean | JSONSchema | undefined => {
   const definitions = getDefinitions(schema);
   if (!definitions) {
     return;
@@ -46,19 +45,19 @@ export const getDefinitionItem = (
  */
 
 export const getProperties = (
-  schema: JSONSchema7
+  schema: JSONSchema
 ):
   | {
-      [key: string]: JSONSchema7Definition;
+      [key: string]: JSONSchemaDefinition;
     }
   | undefined => schema.properties;
 
 export const getPropertyType = (
-  propertyItem: JSONSchema7
-): JSONSchema7["type"] => propertyItem.type;
+  propertyItem: JSONSchema
+): JSONSchema["type"] => propertyItem.type;
 
 export const getCompositionType = (
-  propertyItem: JSONSchema7
+  propertyItem: JSONSchema
 ): CompositSchemaTypes | false | undefined => (
   propertyItem.anyOf && CompositSchemaTypes.ANYOF
   || propertyItem.allOf && CompositSchemaTypes.ALLOF
@@ -70,7 +69,7 @@ export const getCompositionType = (
  * Retrieve required property value
  */
 
-export const getRequired = (schema: JSONSchema7): JSONSchema7["required"] =>
+export const getRequired = (schema: JSONSchema): JSONSchema["required"] =>
   schema.required;
 
 /**
@@ -90,6 +89,6 @@ const get$RefValue = (ref: string): string => {
  */
 
 export const getItemsArrayItem = (
-  items: (JSONSchema7Type)[],
+  items: (JSONSchemaBasicType)[],
   index: number
-): JSONSchema7Type | undefined => nth(items, index);
+): JSONSchemaBasicType | undefined => nth(items, index);

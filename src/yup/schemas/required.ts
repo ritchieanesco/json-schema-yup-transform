@@ -1,5 +1,5 @@
-import type { JSONSchema7 } from "json-schema";
 import capitalize from "lodash/capitalize";
+import type { JSONSchema } from "../../schema";
 import { isRequiredField, SchemaKeywords } from "../../schema";
 import Yup from "../addMethods";
 import type { SchemaItem } from "../types";
@@ -11,7 +11,7 @@ import { getErrorMessage } from "../config";
 
 export const createRequiredSchema = <T extends Yup.Schema<unknown>>(
   Schema: T,
-  jsonSchema: JSONSchema7,
+  jsonSchema: JSONSchema,
   [key, value]: SchemaItem
 ): T => {
   if (!isRequiredField(jsonSchema, key)) return Schema;

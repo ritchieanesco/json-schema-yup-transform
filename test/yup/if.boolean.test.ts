@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() boolean conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -38,7 +38,7 @@ describe("convertToYup() boolean conditions", () => {
   });
 
   it("should validate conditional when dependency matches constant", () => {
-    let schema: JSONSchema7 = {
+    let schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -113,7 +113,7 @@ describe("convertToYup() boolean conditions", () => {
   });
 
   it("should validate required conditional", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

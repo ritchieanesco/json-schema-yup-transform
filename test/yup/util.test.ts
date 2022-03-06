@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema, JSONSchemaBasicType } from "../../src/schema"
 import {
   getObjectHead,
   removeEmptyObjects,
@@ -7,7 +7,6 @@ import {
   applyPaths,
   normalize
 } from "../../src/yup/utils";
-import type { JSONSchema7Type } from "../../src/yup/types"
 import { validateItemsArray } from "../../src/yup/addMethods/utils";
 
 describe("removeEmptyObjects()", () => {
@@ -96,7 +95,7 @@ describe("removeEmptyObjects()", () => {
 
 describe("applyPaths()", () => {
   it("should add node paths to all fields", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "vehicles",
       description: "Vehicles",
@@ -292,7 +291,7 @@ describe("applyPaths()", () => {
 
 describe("applyIfTypes()", () => {
   it("should not add types if property schema has no type property", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -316,7 +315,7 @@ describe("applyIfTypes()", () => {
   });
 
   it("should not add types if property schema is empty", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -340,7 +339,7 @@ describe("applyIfTypes()", () => {
   });
 
   it("should not add types if schema is empty", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -361,7 +360,7 @@ describe("applyIfTypes()", () => {
     expect(applyIfTypes(schema)).toEqual(schema);
   });
   it("should not add types if property item is empty", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -383,7 +382,7 @@ describe("applyIfTypes()", () => {
   });
 
   it("should not add types if schema property item is not an object", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -404,7 +403,7 @@ describe("applyIfTypes()", () => {
     expect(applyIfTypes(schema)).toEqual(schema);
   });
   it("should add types to all if schemas", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "vehicles",
       description: "Vehicles",
@@ -707,19 +706,19 @@ describe("getObjectHead()", () => {
 
 describe("validateItemsArray()", () => {
   it("should validate tuple with defined schema", () => {
-    const schm: JSONSchema7["items"] = [
+    const schm: JSONSchema["items"] = [
       { type: "number" },
       { type: "boolean" }
     ];
-    const arr: JSONSchema7Type[] = [5, true];
+    const arr: JSONSchemaBasicType[] = [5, true];
     const validator = validateItemsArray(schm);
     const result = arr.every(validator);
     expect(result).toBeTruthy();
   });
 
   it("should NOT validate tuple with undefined schema", () => {
-    const schm: JSONSchema7["items"] = [false];
-    const arr: JSONSchema7Type[] = [5, true];
+    const schm: JSONSchema["items"] = [false];
+    const arr: JSONSchemaBasicType[] = [5, true];
     const validator = validateItemsArray(schm);
     const result = arr.every(validator);
     expect(result).toBeFalsy();

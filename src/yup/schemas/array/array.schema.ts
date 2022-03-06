@@ -1,9 +1,9 @@
-import type { JSONSchema7 } from "json-schema";
 import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
 import capitalize from "lodash/capitalize";
 import { DataTypes, isItemsArray, SchemaKeywords } from "../../../schema";
+import type { JSONSchema } from "../../../schema"
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { createConstantSchema } from "../constant";
@@ -17,7 +17,7 @@ import { getErrorMessage } from "../../config/";
 
 const createArraySchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.ArraySchema<unknown> => {
   const {
     description,
@@ -51,7 +51,7 @@ const createArraySchema = (
   // allow one or the other
 
   if (contains) {
-    const { type } = contains as JSONSchema7;
+    const { type } = contains as JSONSchema;
 
     const message =
       getErrorMessage(description, SchemaKeywords.CONTAINS, [

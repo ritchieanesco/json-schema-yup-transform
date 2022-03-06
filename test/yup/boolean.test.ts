@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() boolean", () => {
   it("should validate boolean type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -39,7 +39,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -64,7 +64,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should validate required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -96,7 +96,7 @@ describe("convertToYup() boolean", () => {
 
   it("should set default value", () => {
     const defaultValue = true;
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -123,7 +123,7 @@ describe("convertToYup() boolean", () => {
   });
 
   it("should validate constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -158,7 +158,7 @@ describe("convertToYup() boolean", () => {
 
   it("should use title as label in error message", () => {
     const fieldTitle = "Is Active";
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

@@ -1,12 +1,12 @@
-import type { JSONSchema7 } from "json-schema";
 import isBoolean from "lodash/isBoolean";
 import capitalize from "lodash/capitalize";
+import { DataTypes } from "../../../schema";
+import type { JSONSchema } from "../../../schema"
 import Yup from "../../addMethods";
-import { createRequiredSchema } from "../required";
-import { createConstantSchema } from "../constant";
 import type { SchemaItem } from "../../types";
 import { getErrorMessage } from "../../config/";
-import { DataTypes } from "../../../schema";
+import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
 
 /**
  * Initializes a yup boolean schema derived from a json boolean schema
@@ -14,7 +14,7 @@ import { DataTypes } from "../../../schema";
 
 const createBooleanSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.BooleanSchema<boolean> => {
   const {
     description,

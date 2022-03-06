@@ -1,10 +1,10 @@
-import type { JSONSchema7 } from "json-schema";
 import capitalize from "lodash/capitalize";
+import { DataTypes } from "../../../schema";
+import type { JSONSchema } from "../../../schema"
 import type { SchemaItem } from "../../types";
 import Yup from "../../addMethods";
 import { createRequiredSchema } from "../required";
 import { getErrorMessage } from "../../config/";
-import { DataTypes } from "../../../schema";
 import { buildProperties } from "../../builder";
 
 /**
@@ -13,8 +13,7 @@ import { buildProperties } from "../../builder";
 
 const createObjectSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
-): Yup.ObjectSchema<object> => {
+  jsonSchema: JSONSchema): Yup.ObjectSchema<object> => {
   const {
     description,
     title

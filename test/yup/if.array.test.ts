@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() array conditions", () => {
   it("should validate all fields with exception to conditional fields", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -33,7 +33,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate conditional when dependency matches minimum items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -80,7 +80,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate conditional when dependency matches maximum items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -127,7 +127,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate an item of objects", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -211,7 +211,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate $ref items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -336,7 +336,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate nested conditions", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "crs",
       description: "CRS",
@@ -500,7 +500,7 @@ describe("convertToYup() array conditions", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

@@ -1,6 +1,12 @@
 import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
+import type { JSONSchemaExtended } from "../../../schema";
+import { DataTypes, SchemaKeywords } from "../../../schema";
 import Yup from "../../addMethods";
+import { getErrorMessage } from "../../config/";
+import { createRequiredSchema } from "../required";
+import { createConstantSchema } from "../constant";
+import { createEnumerableSchema } from "../enumerables";
 import {
   INTERNATIONAL_EMAIL_REGEX,
   ISO_8601_DATE_TIME_REGEX,
@@ -11,20 +17,14 @@ import {
   IPV4_REGEX,
   IPV6_REGEX
 } from "./string.constants";
-import type { JSONSchema7Extended } from "../../../schema";
-import { DataTypes, SchemaKeywords } from "../../../schema";
-import { createRequiredSchema } from "../required";
-import { createConstantSchema } from "../constant";
-import { createEnumerableSchema } from "../enumerables";
-import { getErrorMessage } from "../../config/";
 
 /**
  * Initializes a yup string schema derived from a json string schema
  */
 
 const createStringSchema = (
-  [key, value]: [string, JSONSchema7Extended],
-  jsonSchema: JSONSchema7Extended
+  [key, value]: [string, JSONSchemaExtended],
+  jsonSchema: JSONSchemaExtended
 ): Yup.StringSchema<string> => {
   const {
     description,
@@ -107,7 +107,7 @@ const createStringSchema = (
 };
 
 export const stringSchemaFormat = (
-  [key, value]: [string, JSONSchema7Extended],
+  [key, value]: [string, JSONSchemaExtended],
   Schema: Yup.StringSchema
 ) => {
   const { format, description, title } = value;

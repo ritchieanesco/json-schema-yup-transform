@@ -1,4 +1,3 @@
-import type { JSONSchema7 } from "json-schema";
 import isArray from "lodash/isArray";
 import isPlainObject from "lodash/isPlainObject";
 import isNull from "lodash/isNull";
@@ -7,12 +6,14 @@ import isNumber from "lodash/isNumber";
 import isBoolean from "lodash/isBoolean";
 import isInteger from "lodash/isInteger";
 import { getRequired } from "./selectors";
-import { DataTypes } from "./types";
+import { DataTypes } from ".";
+import type { JSONSchema } from ".";
+
 /**
  * Returns a boolean if ID is a required field
  */
 
-export const isRequiredField = (schema: JSONSchema7, id: string): boolean => {
+export const isRequiredField = (schema: JSONSchema, id: string): boolean => {
   const requiredList = getRequired(schema);
   return isArray(requiredList) && requiredList.includes(id);
 };

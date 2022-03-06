@@ -1,10 +1,10 @@
-import type { JSONSchema7 } from "json-schema";
 import capitalize from "lodash/capitalize";
+import { DataTypes } from "../../../schema";
+import type { JSONSchema } from "../../../schema"
 import Yup from "../../addMethods";
-import { createBaseNumberSchema } from "../number";
 import type { SchemaItem } from "../../types";
 import { getErrorMessage } from "../../config/";
-import { DataTypes } from "../../../schema";
+import { createBaseNumberSchema } from "../number";
 
 /**
  * Initializes a yup integer schema derived from a json humber schema
@@ -12,7 +12,7 @@ import { DataTypes } from "../../../schema";
 
 const createIntegerSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.NumberSchema<number> => {
   const {
     description,

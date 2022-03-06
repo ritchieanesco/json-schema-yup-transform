@@ -5,9 +5,9 @@ import isEmpty from "lodash/isEmpty";
 import isArray from "lodash/isArray";
 import transform from "lodash/transform";
 import flow from "lodash/flow";
-import type { JSONSchema7 } from "json-schema";
 import has from "lodash/has";
-import { getDefinitionItem } from "../schema/";
+import { getDefinitionItem } from "../schema";
+import type { JSONSchema } from "../schema";
 
 /**
  * Concatenates the schema field path and schema key in order to retrieve error message
@@ -34,30 +34,30 @@ export const getObjectHead = <T>(obj: T): false | [string, T[keyof T]] => {
 
 /** Recursively removes any empty objects */
 
-export const removeEmptyObjects = (schema: JSONSchema7) => {
-  const cleaner = (result: JSONSchema7, value: any, key: string) => {
+export const removeEmptyObjects = (schema: JSONSchema) => {
+  const cleaner = (result: JSONSchema, value: any, key: string) => {
     const isCollection = isPlainObject(value);
     const cleaned = isCollection ? cleanObject(value) : value;
     if (isCollection && isEmpty(cleaned)) return;
     isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
   };
-  const cleanObject = (schema: JSONSchema7) => transform(schema, cleaner);
+  const cleanObject = (schema: JSONSchema) => transform(schema, cleaner);
   return isPlainObject(schema) ? cleanObject(schema) : schema;
 };
 
 /** Replace all $ref instances with their definition */
 
-export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
-  const replaceRefs = (result: JSONSchema7, value: any, key: string) => {
+export const transformRefs = (schema: JSONSchema): JSONSchema => {
+  const replaceRefs = (result: JSONSchema, value: any, key: string) => {
     const hasRef = get(value, "$ref");
     const replaced = hasRef
       ? getDefinitionItem(schema, get(value, "$ref"))
-      : (isPlainObject(value) || isArray(value))
+      : isPlainObject(value) || isArray(value)
       ? replaceAllRefs(value)
       : value;
     result[key] = replaced;
   };
-  const replaceAllRefs = (schema: JSONSchema7): JSONSchema7 =>
+  const replaceAllRefs = (schema: JSONSchema): JSONSchema =>
     transform(schema, replaceRefs);
   return isPlainObject(schema) ? replaceAllRefs(schema) : schema;
 };
@@ -67,9 +67,9 @@ export const transformRefs = (schema: JSONSchema7): JSONSchema7 => {
  * to lookup the type in the properties schema
  * */
 
-export const applyIfTypes = (schema: JSONSchema7): JSONSchema7 => {
-  const addType = (schema: JSONSchema7): JSONSchema7 =>
-    transform(schema, (result: JSONSchema7, value: any, key: string) => {
+export const applyIfTypes = (schema: JSONSchema): JSONSchema => {
+  const addType = (schema: JSONSchema): JSONSchema =>
+    transform(schema, (result: JSONSchema, value: any, key: string) => {
       if (key === "if" && !isEmpty(value)) {
         const properties = get(schema, "properties");
         const ifProperties = get(value, "properties");
@@ -102,7 +102,7 @@ export const applyIfTypes = (schema: JSONSchema7): JSONSchema7 => {
  * This will remove any existing description values!
  */
 
-export const applyPaths = (schema: JSONSchema7): JSONSchema7 => {
+export const applyPaths = (schema: JSONSchema): JSONSchema => {
   const invalidKeys = [
     "properties",
     "then",
@@ -111,8 +111,8 @@ export const applyPaths = (schema: JSONSchema7): JSONSchema7 => {
     "else",
     "items"
   ];
-  const addPath = (schema: JSONSchema7, path: string = ""): JSONSchema7 =>
-    transform(schema, (result: JSONSchema7, value: any, key: string) => {
+  const addPath = (schema: JSONSchema, path: string = ""): JSONSchema =>
+    transform(schema, (result: JSONSchema, value: any, key: string) => {
       /** Target field node only */
       const isField = has(value, "type") && !has(value, "properties");
       if (isField) {
@@ -136,7 +136,7 @@ export const applyPaths = (schema: JSONSchema7): JSONSchema7 => {
  * missing type properties to if schemas
  */
 
-export const normalize = (schema: JSONSchema7): JSONSchema7 => {
+export const normalize = (schema: JSONSchema): JSONSchema => {
   const normalizer = flow([
     removeEmptyObjects,
     transformRefs,

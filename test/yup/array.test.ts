@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() array", () => {
   it("should validate array type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -43,7 +43,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -68,7 +68,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -99,7 +99,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate minItems", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -136,7 +136,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate maxItems", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -175,7 +175,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -209,7 +209,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -246,7 +246,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should validate unique items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -310,7 +310,7 @@ describe("convertToYup() array", () => {
   });
 
   it("should not validate unique items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -348,7 +348,7 @@ describe("convertToYup() array", () => {
 
   it("should use title as label in error message", () => {
     const fieldTitle = "Item Types";
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

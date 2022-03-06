@@ -1,11 +1,11 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import type { Config } from "../../src";
 import convertToYup from "../../src";
 
 describe("convertToYup() object configuration errors", () => {
   it("should show configuration error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -34,7 +34,7 @@ describe("convertToYup() object configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -63,7 +63,7 @@ describe("convertToYup() object configuration errors", () => {
   });
 
   it("should show configuration error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -93,7 +93,7 @@ describe("convertToYup() object configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

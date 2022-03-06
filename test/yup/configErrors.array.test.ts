@@ -1,11 +1,11 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 import type { Config } from "../../src";
 
 describe("convertToYup() array configuration errors", () => {
   it("should show default configuration error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -34,7 +34,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show default configuration CUSTOM callback error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -63,7 +63,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should override defaults configuration error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -92,7 +92,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should override defaults configuration CUSTOM callback error for incorrect data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -121,7 +121,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show defaults configuration error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -151,7 +151,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show defaults configuration CUSTOM callback error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -184,7 +184,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show custom configuration error for required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -214,7 +214,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error for minimum required items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -244,7 +244,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for minimum required items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -275,7 +275,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error for maximum required items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -305,7 +305,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for maximum required items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -336,7 +336,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when at least one value does not match data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -368,7 +368,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error when at least one value does not match data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -401,7 +401,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when all values do not match data type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -433,7 +433,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when tuple does not match", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -463,7 +463,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error for nested field", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -511,7 +511,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when value does not match constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -541,7 +541,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM for constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -572,7 +572,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when value does not match enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -605,7 +605,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -639,7 +639,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration error when values are not unique", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -672,7 +672,7 @@ describe("convertToYup() array configuration errors", () => {
   });
 
   it("should show configuration CUSTOM error for unique items", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

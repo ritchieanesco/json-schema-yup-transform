@@ -1,10 +1,10 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() number", () => {
   it("should validate number type", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -27,7 +27,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate multiple types", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -57,7 +57,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate required", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -88,7 +88,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate minimum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -121,7 +121,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive minimum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -154,7 +154,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate maximum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -187,7 +187,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive maximum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -220,7 +220,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate minimum and maximum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -246,7 +246,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate exclusive minimum and exclusive maximum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -280,7 +280,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should throw error when maximum and exclusive maximum are used together", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -301,7 +301,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should throw error when minimum and exclusive minimum are used together", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -322,7 +322,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate multiple of", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -355,7 +355,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -386,7 +386,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate falsy constant", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -406,7 +406,7 @@ describe("convertToYup() number", () => {
   });
 
   it("should validate enum", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -443,7 +443,7 @@ describe("convertToYup() number", () => {
 
   it("should set default value", () => {
     const defaultValue = 7;
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -470,7 +470,7 @@ describe("convertToYup() number", () => {
 
   it("should use title as label in error message", () => {
     const fieldTitle = "My Age";
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

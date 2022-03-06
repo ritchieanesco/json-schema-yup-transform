@@ -1,4 +1,4 @@
-import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
 import has from "lodash/has";
 import get from "lodash/get";
 import omit from "lodash/omit";
@@ -14,9 +14,9 @@ import { getObjectHead } from "../utils";
 
 export const buildProperties = (
   properties: {
-    [key: string]: JSONSchema7Definition;
+    [key: string]: JSONSchemaDefinition;
   },
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<unknown> } => {
   let schema = {};
 
@@ -88,7 +88,7 @@ export const buildProperties = (
  * Determine schema has a if schema
  */
 
-const hasIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
+const hasIfSchema = (jsonSchema: JSONSchema, key: string): boolean => {
   const { if: ifSchema } = jsonSchema;
   if (!isSchemaObject(ifSchema)) return false;
   const { properties } = ifSchema;
@@ -99,7 +99,7 @@ const hasIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
  * Determine schema has at least one if schemas inside an allOf array
  */
 
-const hasAllOfIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
+const hasAllOfIfSchema = (jsonSchema: JSONSchema, key: string): boolean => {
   const { allOf } = jsonSchema;
 
   if (!allOf) {
@@ -117,7 +117,7 @@ const hasAllOfIfSchema = (jsonSchema: JSONSchema7, key: string): boolean => {
  */
 
 const isValidator =
-  ([key, value]: [string, JSONSchema7], jsonSchema: JSONSchema7) =>
+  ([key, value]: [string, JSONSchema], jsonSchema: JSONSchema) =>
   (val: unknown): boolean => {
     const conditionalSchema = createValidationSchema([key, value], jsonSchema);
     const result: boolean = conditionalSchema.isValidSync(val);
@@ -127,7 +127,7 @@ const isValidator =
 /** Build `is`, `then`, `otherwise` validation schema */
 
 const createConditionalSchema = (
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): false | { [key: string]: Yup.MixedSchema } => {
   const ifSchema = get(jsonSchema, "if");
   if (!isSchemaObject(ifSchema)) return false;
@@ -159,14 +159,14 @@ const createConditionalSchema = (
 /** `createIsThenOtherwiseSchemaItem` accepts an item from the "else" and "then" schemas and returns a yup schema for each item which will be used for the then or otherwise methods in when. */
 
 const createIsThenOtherwiseSchemaItem = (
-  [key, value]: [string, NonNullable<JSONSchema7>],
-  required: JSONSchema7["required"]
+  [key, value]: [string, NonNullable<JSONSchema>],
+  required: JSONSchema["required"]
 ):
   | {
       [key: string]: Yup.Lazy | Yup.MixedSchema<unknown>;
     }
   | false => {
-  const item: JSONSchema7 = {
+  const item: JSONSchema = {
     properties: { [key]: { ...value } }
   };
   if (required && required.includes(key)) {
@@ -181,8 +181,8 @@ const createIsThenOtherwiseSchemaItem = (
 
 const createIsThenOtherwiseSchema = (
   [ifSchemaKey, callback]: [string, (val: unknown) => boolean],
-  thenSchema: JSONSchema7,
-  elseSchema?: JSONSchema7Definition
+  thenSchema: JSONSchema,
+  elseSchema?: JSONSchemaDefinition
 ): false | { [key: string]: Yup.MixedSchema } => {
   if (!thenSchema.properties) return false;
 
@@ -215,7 +215,7 @@ const createIsThenOtherwiseSchema = (
       thenKey in elseSchema.properties
     ) {
       matchingElseSchemaItem = createIsThenOtherwiseSchemaItem(
-        [thenKey, elseSchema.properties[thenKey] as JSONSchema7],
+        [thenKey, elseSchema.properties[thenKey] as JSONSchema],
         elseSchema.required
       );
       // Remove matching else schema keys from list so remaining else schema keys can be handled separately.
@@ -238,7 +238,7 @@ const createIsThenOtherwiseSchema = (
         k in elseSchema.properties
       ) {
         const elseSchemaItem = createIsThenOtherwiseSchemaItem(
-          [k, elseSchema.properties[k] as JSONSchema7],
+          [k, elseSchema.properties[k] as JSONSchema],
           elseSchema.required
         );
         if (elseSchemaItem) {
@@ -276,7 +276,7 @@ const createIsThenOtherwiseSchema = (
  */
 
 export const build = (
-  jsonSchema: JSONSchema7
+  jsonSchema: JSONSchema
 ): Yup.ObjectSchema<object> | undefined => {
   const properties = getProperties(jsonSchema);
 

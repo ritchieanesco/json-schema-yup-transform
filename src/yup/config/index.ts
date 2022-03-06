@@ -1,7 +1,7 @@
 import get from "lodash/get";
-import type { ConfigErrors, Config, CustomErrorMsg, CustomErrorMsgParam, NodeTypes } from "../types";
+import type { NodeTypes } from "../../schema"
+import type { ConfigErrors, Config, CustomErrorMsg, CustomErrorMsgParam } from "../types";
 import { isConfigError } from "../types";
-
 import { joinPath } from "../utils";
 
 let config: Config = {};

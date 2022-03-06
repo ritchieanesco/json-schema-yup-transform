@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { JSONSchema7 } from "json-schema";
+import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 
 describe("convertToYup() string format", () => {
@@ -8,7 +8,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate date-time format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -63,7 +63,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate time format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -108,7 +108,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate date format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -147,7 +147,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate email format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -202,7 +202,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate IDN email format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -267,7 +267,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate hostname format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -305,7 +305,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate international hostname format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -350,7 +350,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate ipv4 format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -398,7 +398,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate ipv6 format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -446,7 +446,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate uri format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -499,7 +499,7 @@ describe("convertToYup() string format", () => {
   });
 
   it("should validate uri relative path format", () => {
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -540,7 +540,7 @@ describe("convertToYup() string format", () => {
   it("should render warning for iri use", () => {
     const spy = jest.spyOn(console, "warn");
 
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",
@@ -562,7 +562,7 @@ describe("convertToYup() string format", () => {
   it("should render warning for iri use", () => {
     const spy = jest.spyOn(console, "warn");
 
-    const schema: JSONSchema7 = {
+    const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "test",

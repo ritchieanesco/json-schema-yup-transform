@@ -1,9 +1,9 @@
-import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
+import * as Yup from "yup";
 import has from "lodash/has";
 import get from "lodash/get";
 import omit from "lodash/omit";
 import isPlainObject from "lodash/isPlainObject";
-import Yup from "../addMethods/";
+import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
 import { getProperties, isSchemaObject } from "../../schema/";
 import createValidationSchema from "../schemas/";
 import { getObjectHead } from "../utils";
@@ -17,7 +17,7 @@ export const buildProperties = (
     [key: string]: JSONSchemaDefinition;
   },
   jsonSchema: JSONSchema
-): {} | { [key: string]: Yup.Lazy | Yup.MixedSchema<unknown> } => {
+)=> {
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
@@ -31,7 +31,7 @@ export const buildProperties = (
       const objSchema = build(value);
       if (objSchema) {
         const ObjectSchema = createValidationSchema([key, value], jsonSchema);
-        schema = { ...schema, [key]: ObjectSchema.concat(objSchema) };
+        schema = { ...schema, [key]: (ObjectSchema as Yup.ObjectSchema<any>).concat(objSchema) };
       }
     } else if (
       type === "array" &&
@@ -45,7 +45,7 @@ export const buildProperties = (
       );
       schema = {
         ...schema,
-        [key]: ArraySchema.concat(Yup.array(build(items)))
+        [key]: (ArraySchema as Yup.ArraySchema<any>).concat(Yup.array(build(items)))
       };
     } else if (type === "array" && isSchemaObject(items)) {
       const ArraySchema = createValidationSchema(
@@ -54,7 +54,7 @@ export const buildProperties = (
       );
       schema = {
         ...schema,
-        [key]: ArraySchema.concat(
+        [key]: (ArraySchema as Yup.ArraySchema<any>).concat(
           Yup.array(createValidationSchema([key, items], jsonSchema))
         )
       };
@@ -128,7 +128,7 @@ const isValidator =
 
 const createConditionalSchema = (
   jsonSchema: JSONSchema
-): false | { [key: string]: Yup.MixedSchema } => {
+) => {
   const ifSchema = get(jsonSchema, "if");
   if (!isSchemaObject(ifSchema)) return false;
 
@@ -161,11 +161,7 @@ const createConditionalSchema = (
 const createIsThenOtherwiseSchemaItem = (
   [key, value]: [string, NonNullable<JSONSchema>],
   required: JSONSchema["required"]
-):
-  | {
-      [key: string]: Yup.Lazy | Yup.MixedSchema<unknown>;
-    }
-  | false => {
+) => {
   const item: JSONSchema = {
     properties: { [key]: { ...value } }
   };
@@ -183,7 +179,7 @@ const createIsThenOtherwiseSchema = (
   [ifSchemaKey, callback]: [string, (val: unknown) => boolean],
   thenSchema: JSONSchema,
   elseSchema?: JSONSchemaDefinition
-): false | { [key: string]: Yup.MixedSchema } => {
+) => {
   if (!thenSchema.properties) return false;
 
   let thenKeys = Object.keys(thenSchema.properties);
@@ -205,9 +201,7 @@ const createIsThenOtherwiseSchema = (
       [thenKey, thenIItem],
       thenSchema.required
     );
-    let matchingElseSchemaItem:
-      | { [key: string]: Yup.MixedSchema<unknown> | Yup.Lazy }
-      | false = false;
+    let matchingElseSchemaItem = false;
 
     if (
       isSchemaObject(elseSchema) &&
@@ -277,7 +271,7 @@ const createIsThenOtherwiseSchema = (
 
 export const build = (
   jsonSchema: JSONSchema
-): Yup.ObjectSchema<object> | undefined => {
+): Yup.ObjectSchema<any> | undefined => {
   const properties = getProperties(jsonSchema);
 
   if (!properties) return properties;

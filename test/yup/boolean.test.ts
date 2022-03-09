@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { JSONSchema } from "../../src/schema"
+import type { JSONSchema } from "../../src/schema";
 import convertToYup from "../../src";
 
 describe("convertToYup() boolean", () => {
@@ -15,7 +15,7 @@ describe("convertToYup() boolean", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       enable: true
@@ -50,7 +50,7 @@ describe("convertToYup() boolean", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       terms: true
@@ -76,7 +76,7 @@ describe("convertToYup() boolean", () => {
       },
       required: ["enable"]
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -88,8 +88,8 @@ describe("convertToYup() boolean", () => {
     expect(valid).toBeFalsy();
     try {
       valid = yupschema.validateSync({});
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Enable is required");
   });
@@ -110,7 +110,7 @@ describe("convertToYup() boolean", () => {
       required: ["consent"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema
       .test(
         "is-default",
@@ -135,7 +135,7 @@ describe("convertToYup() boolean", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       isActive: true
@@ -150,8 +150,8 @@ describe("convertToYup() boolean", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ isActive: false });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Isactive does not match constant");
   });
@@ -171,12 +171,12 @@ describe("convertToYup() boolean", () => {
       }
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ isActive: "test" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(`${fieldTitle} is not of type boolean`);
   });

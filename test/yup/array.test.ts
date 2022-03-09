@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { JSONSchema } from "../../src/schema"
+import type { JSONSchema } from "../../src/schema";
 import convertToYup from "../../src";
 
 describe("convertToYup() array", () => {
@@ -15,7 +15,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema.isValidSync({
       items: []
     });
@@ -54,7 +54,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       items: ["a", "b"]
@@ -80,7 +80,7 @@ describe("convertToYup() array", () => {
       },
       required: ["items"]
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -92,8 +92,8 @@ describe("convertToYup() array", () => {
     expect(valid).toBeFalsy();
     try {
       valid = yupschema.validateSync({});
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Items is required");
   });
@@ -111,7 +111,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({});
@@ -129,8 +129,8 @@ describe("convertToYup() array", () => {
 
     try {
       valid = yupschema.validateSync({ items: ["a", "b"] });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Items requires a minimum of 3 items");
   });
@@ -148,7 +148,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({});
@@ -168,8 +168,8 @@ describe("convertToYup() array", () => {
       valid = yupschema.validateSync({
         items: ["a", "b", "c", "d", "e", "f", "g"]
       });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Items cannot exceed a maximum of 6 items");
   });
@@ -187,7 +187,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       list: ["a", "b"]
@@ -202,8 +202,8 @@ describe("convertToYup() array", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["b"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("List does not match constant");
   });
@@ -224,7 +224,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       list: ["a", "b"]
@@ -239,8 +239,8 @@ describe("convertToYup() array", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["b"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("List does not match any of the enumerables");
   });
@@ -258,7 +258,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -303,8 +303,8 @@ describe("convertToYup() array", () => {
 
     try {
       valid = yupschema.validateSync({ items: ["b", "b"] });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Items values are not unique");
   });
@@ -322,7 +322,7 @@ describe("convertToYup() array", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -361,12 +361,12 @@ describe("convertToYup() array", () => {
       }
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ item: "test" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(`${fieldTitle} is not of type array`);
   });

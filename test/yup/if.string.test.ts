@@ -31,7 +31,7 @@ describe("convertToYup() string conditions", () => {
         properties: {}
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -64,7 +64,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -96,7 +96,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -129,7 +129,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -159,7 +159,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -188,7 +188,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada"
@@ -229,7 +229,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -272,7 +272,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -315,7 +315,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -358,7 +358,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -401,7 +401,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -444,7 +444,7 @@ describe("convertToYup() string conditions", () => {
         required: ["postal_code"]
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -480,7 +480,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -523,7 +523,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -572,7 +572,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -615,7 +615,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -663,7 +663,7 @@ describe("convertToYup() string conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Canada",
@@ -711,7 +711,7 @@ describe("convertToYup() string conditions", () => {
       }
     };
 
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema.isValidSync({
       postcode: 3000,
       product: "ABC"
@@ -752,7 +752,7 @@ describe("convertToYup() string conditions", () => {
         required: ["postal_code", "state"]
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       country: "Australia",
@@ -803,7 +803,7 @@ it("should validate other conditional", () => {
       }
     };
 
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     const dataC = {
       mode: "E",      

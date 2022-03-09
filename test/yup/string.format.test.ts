@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { JSONSchema } from "../../src/schema"
+import type { JSONSchema } from "../../src/schema";
 import convertToYup from "../../src";
 
 describe("convertToYup() string format", () => {
@@ -20,7 +20,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       event: "2018-11-13T20:20:39+00:00"
     });
@@ -56,8 +56,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Event is an invalid date and time format");
   });
@@ -75,7 +75,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({ event: "20:20:39+00:00" });
     expect(valid).toBeTruthy();
 
@@ -101,8 +101,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Event is an invalid time format");
   });
@@ -120,7 +120,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       event: "2018-11-13"
     });
@@ -140,8 +140,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ event: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Event is an invalid date format");
   });
@@ -159,7 +159,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       email: "test@test.com"
     });
@@ -195,8 +195,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ email: "test" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Email is an invalid email format");
   });
@@ -214,7 +214,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       email: "用户@maimail.com"
     });
@@ -260,8 +260,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ email: "test" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Email is an invalid international email format");
   });
@@ -279,7 +279,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       website: "example.org"
     });
@@ -298,8 +298,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Website is an invalid hostname format");
   });
@@ -317,7 +317,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       website: "xn-fsqu00a.xn-0zwm56d"
     });
@@ -341,8 +341,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "Website is an invalid international hostname format"
@@ -362,7 +362,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       website: "8.8.8.8"
     });
@@ -391,8 +391,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Website is an invalid ipv4 format");
   });
@@ -410,7 +410,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       website: "1200:0000:AB00:1234:0000:2552:7777:1313"
     });
@@ -439,8 +439,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Website is an invalid ipv6 format");
   });
@@ -458,7 +458,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       website: "http://example.org/test?id=123"
     });
@@ -492,8 +492,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Website is an invalid URI format");
   });
@@ -511,7 +511,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let valid = yupschema.isValidSync({
       website: "/tutorial1/"
@@ -531,8 +531,8 @@ describe("convertToYup() string format", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ website: "http://example.org" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Website is an invalid URI reference format");
   });
@@ -552,7 +552,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     yupschema.isValidSync({
       website: "/tutorial1/"
     });
@@ -574,7 +574,7 @@ describe("convertToYup() string format", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     yupschema.isValidSync({
       website: "/tutorial1/"
     });

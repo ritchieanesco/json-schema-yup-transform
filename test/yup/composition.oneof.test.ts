@@ -18,7 +18,7 @@ describe("convertToYup() oneOf", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -64,7 +64,7 @@ describe("convertToYup() oneOf", () => {
       required: ["entity"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({

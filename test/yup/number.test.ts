@@ -15,7 +15,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema.isValidSync({
       name: 123
     });
@@ -38,7 +38,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: 123
@@ -69,7 +69,7 @@ describe("convertToYup() number", () => {
       },
       required: ["years"]
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -81,8 +81,8 @@ describe("convertToYup() number", () => {
     expect(valid).toBeFalsy();
     try {
       valid = yupschema.validateSync({});
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years is required");
   });
@@ -100,7 +100,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -114,8 +114,8 @@ describe("convertToYup() number", () => {
 
     try {
       valid = yupschema.validateSync({ years: 4 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years requires a minimum value of 5");
   });
@@ -133,7 +133,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -147,8 +147,8 @@ describe("convertToYup() number", () => {
 
     try {
       valid = yupschema.validateSync({ years: 4 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years requires a exclusive minimum value of 5");
   });
@@ -166,7 +166,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     // testing rule is inclusive
@@ -180,8 +180,8 @@ describe("convertToYup() number", () => {
 
     try {
       valid = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years cannot exceed a maximum value of 5");
   });
@@ -199,7 +199,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -213,8 +213,8 @@ describe("convertToYup() number", () => {
 
     try {
       valid = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years cannot exceed a exclusive maximum value of 5");
   });
@@ -233,7 +233,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -259,7 +259,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -334,7 +334,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     // testing rule is inclusive
@@ -348,8 +348,8 @@ describe("convertToYup() number", () => {
 
     try {
       valid = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years requires a multiple of 5");
   });
@@ -367,7 +367,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -379,8 +379,8 @@ describe("convertToYup() number", () => {
     expect(valid).toBeFalsy();
     try {
       valid = yupschema.validateSync({ years: 3 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years does not match constant");
   });
@@ -398,7 +398,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       years: 0
     });
@@ -418,7 +418,7 @@ describe("convertToYup() number", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid;
 
     valid = yupschema.isValidSync({
@@ -435,8 +435,8 @@ describe("convertToYup() number", () => {
     expect(valid).toBeFalsy();
     try {
       valid = yupschema.validateSync({ years: 4 });
-    } catch (e) {
-      valid = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
     expect(valid).toBe("Years does not match any of the enumerables");
   });
@@ -457,7 +457,7 @@ describe("convertToYup() number", () => {
       required: ["age"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema
       .test(
         "is-default",
@@ -483,12 +483,12 @@ describe("convertToYup() number", () => {
       }
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ age: "Forty" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(`${fieldTitle} is not of type number`);
   });

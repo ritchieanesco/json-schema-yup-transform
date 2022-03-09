@@ -15,7 +15,7 @@ describe("convertToYup() null", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema.isValidSync({
       name: null
     });

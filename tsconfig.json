@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "module": "commonjs",
-    "target": "ES6",
+    "target": "ES2020",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
@@ -22,7 +22,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
-    "lib": ["DOM", "ES6"],
+    "lib": ["DOM", "ES2020"],
     "rootDir": "src",
     "outDir": "dist",
     "moduleResolution": "node",

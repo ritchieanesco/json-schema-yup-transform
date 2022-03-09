@@ -1,4 +1,4 @@
-import type { JSONSchema, JSONSchemaBasicType } from "../../src/schema"
+import type { JSONSchema } from "../../src/schema"
 import {
   getObjectHead,
   removeEmptyObjects,
@@ -7,7 +7,6 @@ import {
   applyPaths,
   normalize
 } from "../../src/yup/utils";
-import { validateItemsArray } from "../../src/yup/addMethods/utils";
 
 describe("removeEmptyObjects()", () => {
   it("should remove empty objects", () => {
@@ -701,26 +700,5 @@ describe("getObjectHead()", () => {
     expect(getObjectHead({ a: "1", b: "2", c: "2" })).toEqual(["a", "1"]);
     expect(getObjectHead("test")).toBeFalsy();
     expect(getObjectHead({})).toBeFalsy();
-  });
-});
-
-describe("validateItemsArray()", () => {
-  it("should validate tuple with defined schema", () => {
-    const schm: JSONSchema["items"] = [
-      { type: "number" },
-      { type: "boolean" }
-    ];
-    const arr: JSONSchemaBasicType[] = [5, true];
-    const validator = validateItemsArray(schm);
-    const result = arr.every(validator);
-    expect(result).toBeTruthy();
-  });
-
-  it("should NOT validate tuple with undefined schema", () => {
-    const schm: JSONSchema["items"] = [false];
-    const arr: JSONSchemaBasicType[] = [5, true];
-    const validator = validateItemsArray(schm);
-    const result = arr.every(validator);
-    expect(result).toBeFalsy();
   });
 });

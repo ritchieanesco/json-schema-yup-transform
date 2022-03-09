@@ -15,7 +15,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: "test"
@@ -40,7 +40,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: "test"
@@ -70,7 +70,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     expect(() => {
       yupschema.isValidSync({
         name: []
@@ -92,7 +92,7 @@ describe("convertToYup() string", () => {
       required: ["name"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       name: "test"
     });
@@ -104,8 +104,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name is required");
   });
@@ -123,7 +123,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       name: "abcdef"
     });
@@ -138,8 +138,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "abcd" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name requires a minimum of 6 characters");
   });
@@ -157,7 +157,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       name: "abcdef"
     });
@@ -172,8 +172,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "abcdefgh" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name cannot exceed a maximum of 6 characters");
   });
@@ -191,7 +191,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       name: "555-1212"
     });
@@ -211,8 +211,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name is an incorrect format");
   });
@@ -230,7 +230,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: "test"
@@ -245,8 +245,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name does not match constant");
   });
@@ -264,7 +264,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: "test"
@@ -284,8 +284,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name does not match any of the enumerables");
   });
@@ -306,7 +306,7 @@ describe("convertToYup() string", () => {
       required: ["name"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let isValid = yupschema
       .test(
         "is-default",
@@ -331,7 +331,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       name: ""
@@ -357,7 +357,7 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let valid = yupschema.isValidSync({
       name: "555-1212"
     });
@@ -377,8 +377,8 @@ describe("convertToYup() string", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "(800)FLOWERS" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Name is an incorrect format");
   });
@@ -399,16 +399,15 @@ describe("convertToYup() string", () => {
       required: ["name"]
     };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ name: "" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(`${fieldTitle} is required`);
   });
-
 
   it("should validate multiple types in a nested object", () => {
     const schema: JSONSchemaExtended = {
@@ -427,12 +426,12 @@ describe("convertToYup() string", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     expect(() => {
       yupschema.isValidSync({
         address: {
-        name: ""
+          name: ""
         }
       });
     }).toBeTruthy();
@@ -440,11 +439,9 @@ describe("convertToYup() string", () => {
     expect(() => {
       yupschema.isValidSync({
         address: {
-        name: null
+          name: null
         }
       });
     }).toBeTruthy();
-
   });
-
 });

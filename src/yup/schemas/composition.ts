@@ -1,9 +1,9 @@
+import * as Yup from "yup";
 import { capitalize } from "lodash";
-import { CompositSchemaTypes } from "../../../schema"
-import type { AnyOfSchema, AllOfSchema, JSONSchema, OneOfSchema , NotSchema } from "../../../schema"
-import createValidationSchema from "..";
-import Yup from "../../addMethods";
-import { getErrorMessage } from "../../config";
+import { CompositSchemaTypes } from "../../schema"
+import type { AnyOfSchema, AllOfSchema, JSONSchema, OneOfSchema , NotSchema } from "../../schema"
+import createValidationSchema from ".";
+import { getErrorMessage } from "../config";
 
 /**
  * To validate against anyOf, the given data must be valid against any (one or more) of the given subschemas.
@@ -11,7 +11,7 @@ import { getErrorMessage } from "../../config";
 export const createAnyOfSchema = (
   [key, value]: [string, AnyOfSchema],
   jsonSchema: JSONSchema
-): Yup.MixedSchema<string> => {
+) => {
   const label = value.title || capitalize(key);
   const message = getErrorMessage(value.description, CompositSchemaTypes.ANYOF, [key, { title: value.title }]) || `${label} does not match alternatives`;
   const schemas = value.anyOf.map((val) =>
@@ -29,7 +29,7 @@ export const createAnyOfSchema = (
 export const createAllOfSchema = (
   [key, value]: [string, AllOfSchema],
   jsonSchema: JSONSchema
-): Yup.MixedSchema<string> => {
+) => {
   const label = value.title || capitalize(key);
   const message = getErrorMessage(value.description, CompositSchemaTypes.ALLOF, [key, { title: value.title }]) || `${label} does not match all alternatives`;
   const schemas = value.allOf
@@ -48,7 +48,7 @@ export const createAllOfSchema = (
 export const createOneOfSchema = (
   [key, value]: [string, OneOfSchema],
   jsonSchema: JSONSchema
-): Yup.MixedSchema<string> => {
+) => {
   const label = value.title || capitalize(key);
   const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF, [key, { title: value.title }]) || `${label} does not match one alternative`;
   const schemas = value.oneOf.map((val, i) =>
@@ -68,7 +68,7 @@ export const createOneOfSchema = (
 export const createNotSchema = (
   [key, value]: [string, NotSchema],
   jsonSchema: JSONSchema
-): Yup.MixedSchema<string> => {
+) => {
   const label = value.title || capitalize(key);
   const message = getErrorMessage(value.description, CompositSchemaTypes.NOT, [key, { title: value.title }]) || `${label} matches alternatives`;
   const schema = createValidationSchema(

@@ -24,7 +24,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       consent: false
@@ -58,7 +58,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       consent: false
@@ -97,7 +97,7 @@ describe("convertToYup() boolean conditions", () => {
         }
       }
     };
-    yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     isValid = yupschema.isValidSync({
       consent: true,
@@ -134,7 +134,7 @@ describe("convertToYup() boolean conditions", () => {
         required: ["phone"]
       }
     };
-    const yupschema = convertToYup(schema) as Yup.ObjectSchema;
+    const yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
     let isValid = yupschema.isValidSync({
       consent: true,

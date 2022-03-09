@@ -6,7 +6,6 @@ import isNumber from "lodash/isNumber";
 import isBoolean from "lodash/isBoolean";
 import isInteger from "lodash/isInteger";
 import { getRequired } from "./selectors";
-import { DataTypes } from ".";
 import type { JSONSchema } from ".";
 
 /**
@@ -24,12 +23,13 @@ export const isRequiredField = (schema: JSONSchema, id: string): boolean => {
  * to ensure the field value type are supported
  */
 
+
 export const isTypeOfValue = {
-  [DataTypes.STRING]: isString,
-  [DataTypes.NUMBER]: isNumber,
-  [DataTypes.BOOLEAN]: isBoolean,
-  [DataTypes.OBJECT]: isPlainObject,
-  [DataTypes.NULL]: isNull,
-  [DataTypes.ARRAY]: isArray,
-  [DataTypes.INTEGER]: isInteger
+  "string": isString,
+  "number": isNumber,
+  "boolean": isBoolean,
+  "object": isPlainObject,
+  "null": isNull,
+  "array": isArray,
+  "integer": isInteger
 };

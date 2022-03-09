@@ -1,13 +1,15 @@
-import Yup from "../../addMethods";
+import * as Yup from "yup";
 
 /**
  * Initializes a yup null schema. Allows fields to be optional.
  */
 
-const createNullSchema = (): Yup.MixedSchema<unknown> => {
+const createNullSchema = (
+  schema: Yup.NumberSchema | Yup.StringSchema | Yup.BooleanSchema
+) => {
   // Mark the schema as not required. Passing undefined
   // as value will not fail validation.
-  return Yup.mixed().notRequired();
+  return schema.nullable();
 };
 
 export default createNullSchema;

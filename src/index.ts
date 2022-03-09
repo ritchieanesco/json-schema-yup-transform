@@ -1,5 +1,5 @@
 import { JSONSchema7 } from "json-schema";
-import Yup from "./yup/addMethods";
+import * as Yup from "yup";
 import * as yupTransformer from "./yup";
 import { normalize } from "./yup/utils";
 
@@ -9,7 +9,7 @@ import { normalize } from "./yup/utils";
 const convertToYup = (
   schema: JSONSchema7,
   config?: yupTransformer.Config
-): Yup.ObjectSchema<object> | undefined => {
+): Yup.ObjectSchema<any> | undefined => {
   config && yupTransformer.setConfiguration(config);
   const normalizedSchema = normalize(schema);
   return yupTransformer.default(normalizedSchema);

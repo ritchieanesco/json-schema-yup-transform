@@ -114,10 +114,7 @@ const createArraySchema = (
       yupSchema.test({
         name: "constant",
         message: `${label} does not match constant`,
-        test: (field: unknown): boolean => {
-          if (field === undefined) return true;
-          return isEqual(field, value.const);
-        }
+        test: (field: unknown): boolean => isEqual(field, value.const)
       })
     );
   }

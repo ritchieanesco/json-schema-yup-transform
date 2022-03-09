@@ -17,13 +17,14 @@ export const buildProperties = (
     [key: string]: JSONSchemaDefinition;
   },
   jsonSchema: JSONSchema
-)=> {
+) => {
   let schema = {};
 
   for (let [key, value] of Object.entries(properties)) {
     if (!isSchemaObject(value)) {
       continue;
     }
+
     const { properties, type, items } = value;
 
     // If item is object type call this function again
@@ -31,7 +32,10 @@ export const buildProperties = (
       const objSchema = build(value);
       if (objSchema) {
         const ObjectSchema = createValidationSchema([key, value], jsonSchema);
-        schema = { ...schema, [key]: (ObjectSchema as Yup.ObjectSchema<any>).concat(objSchema) };
+        schema = {
+          ...schema,
+          [key]: (ObjectSchema as Yup.ObjectSchema<any>).concat(objSchema)
+        };
       }
     } else if (
       type === "array" &&
@@ -45,7 +49,9 @@ export const buildProperties = (
       );
       schema = {
         ...schema,
-        [key]: (ArraySchema as Yup.ArraySchema<any>).concat(Yup.array(build(items)))
+        [key]: (ArraySchema as Yup.ArraySchema<any>).concat(
+          Yup.array(build(items))
+        )
       };
     } else if (type === "array" && isSchemaObject(items)) {
       const ArraySchema = createValidationSchema(
@@ -58,26 +64,27 @@ export const buildProperties = (
           Yup.array(createValidationSchema([key, items], jsonSchema))
         )
       };
-    } else {
-      // Check if item has a then or else schema
-      const condition = hasIfSchema(jsonSchema, key)
-        ? createConditionalSchema(jsonSchema)
-        : {};
-      // Check if item has if schema in allOf array
-      const conditions = hasAllOfIfSchema(jsonSchema, key)
-        ? jsonSchema.allOf?.reduce((all, schema) => {
-            if (typeof schema === "boolean") {
-              return all;
-            }
-            return { ...all, ...createConditionalSchema(schema) };
-          }, [])
-        : [];
-      const newSchema = createValidationSchema([key, value], jsonSchema);
+    } else if (hasIfSchema(jsonSchema, key)) {
       schema = {
         ...schema,
-        [key]: key in schema ? schema[key].concat(newSchema) : newSchema,
-        ...condition,
-        ...conditions
+        ...createConditionalSchema(jsonSchema)
+      };
+    } else if (hasAllOfIfSchema(jsonSchema, key)) {
+      schema = {
+        ...schema,
+        ...jsonSchema.allOf?.reduce((all, schema) => {
+          if (typeof schema === "boolean") {
+            return all;
+          }
+          return { ...all, ...createConditionalSchema(schema) };
+        }, [])
+      };
+    } else {
+      schema = {
+        ...schema,
+        ...(key in schema
+          ? {}
+          : { [key]: createValidationSchema([key, value], jsonSchema) })
       };
     }
   }
@@ -126,9 +133,7 @@ const isValidator =
 
 /** Build `is`, `then`, `otherwise` validation schema */
 
-const createConditionalSchema = (
-  jsonSchema: JSONSchema
-) => {
+const createConditionalSchema = (jsonSchema: JSONSchema) => {
   const ifSchema = get(jsonSchema, "if");
   if (!isSchemaObject(ifSchema)) return false;
 
@@ -201,6 +206,7 @@ const createIsThenOtherwiseSchema = (
       [thenKey, thenIItem],
       thenSchema.required
     );
+
     let matchingElseSchemaItem = false;
 
     if (
@@ -235,10 +241,11 @@ const createIsThenOtherwiseSchema = (
           [k, elseSchema.properties[k] as JSONSchema],
           elseSchema.required
         );
+
         if (elseSchemaItem) {
           schema[k] = {
             // Hardcode false as else schema's should handle "unhappy" path.
-            is: (schema: unknown) => callback(schema) === false,
+            is: (schema: unknown) => !callback(schema),
             then: elseSchemaItem
           };
         }
@@ -247,7 +254,7 @@ const createIsThenOtherwiseSchema = (
   }
 
   // Generate Yup.when schemas from the schema object.
-  const conditionalSchemas = Object.keys(schema).reduce((accum, next) => {
+  const conditionals = Object.keys(schema).reduce((accum, next) => {
     accum[next] = Yup.mixed().when(ifSchemaKey, { ...schema[next] });
     return accum;
   }, {});
@@ -260,8 +267,7 @@ const createIsThenOtherwiseSchema = (
       ...createConditionalSchema(elseSchema)
     };
   }
-
-  return { ...conditionalSchemas, ...nestedConditionalSchemas };
+  return { ...conditionals, ...nestedConditionalSchemas };
 };
 
 /**
@@ -276,8 +282,8 @@ export const build = (
 
   if (!properties) return properties;
 
-  let Schema = buildProperties(properties, jsonSchema);
-  return Yup.object().shape(Schema);
+  let schema = buildProperties(properties, jsonSchema);
+  return Yup.object().shape(schema);
 };
 
 export default build;

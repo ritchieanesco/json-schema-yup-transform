@@ -24,6 +24,7 @@ const createStringSchema = (
   [key, value]: [string, JSONSchemaExtended],
   jsonSchema: JSONSchemaExtended
 ): Yup.StringSchema => {
+
   const { minLength, maxLength, pattern, format, regex } = value;
 
   const label = value.title || capitalize(key);
@@ -42,10 +43,7 @@ const createStringSchema = (
       yupSchema.test({
         name: "constant",
         message: `${label} does not match constant`,
-        test: (field: unknown): boolean => {
-          if (field === undefined) return true;
-          return isEqual(field, value.const);
-        }
+        test: (field: unknown): boolean => isEqual(field, value.const)
       })
     );
   }
@@ -55,10 +53,7 @@ const createStringSchema = (
       yupSchema.test({
         name: "enum",
         message: `${label} does not match any of the enumerables`,
-        test: (field: unknown): boolean => {
-          if (field === undefined) return true;
-          return (value.enum as unknown[]).some((item) => isEqual(item, field));
-        }
+        test: (field: unknown): boolean => (value.enum as unknown[]).some((item) => isEqual(item, field))
       })
     );
   }

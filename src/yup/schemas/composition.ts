@@ -51,14 +51,14 @@ export const createOneOfSchema = (
 ) => {
   const label = value.title || capitalize(key);
   const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF, [key, { title: value.title }]) || `${label} does not match one alternative`;
-  const schemas = value.oneOf.map((val, i) =>
-    createValidationSchema([`${key}[${i}]`, val as JSONSchema], jsonSchema)
-  );
+  const schemas = value.oneOf.map((val) => {
+    return createValidationSchema([key, val as JSONSchema], jsonSchema)
+  });
 
   return Yup.mixed().test("one-of-schema", message, function (current) {
-    return (
-      schemas.filter((s) => s.isValidSync(current, this.options)).length === 1
-    );
+    return schemas.filter((s) =>  {
+      return s.isValidSync(current)
+    }).length === 1
   });
 };
 

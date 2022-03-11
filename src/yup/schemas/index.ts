@@ -99,8 +99,6 @@ const getValidationSchema = (
     return createObjectSchema([key, value], jsonSchema)
   }
 
-  console.log("value type", value.type)
-
   throw new Error("No matching schema")
 
 };

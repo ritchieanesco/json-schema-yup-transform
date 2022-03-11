@@ -434,31 +434,6 @@ describe("convertToYup() array conditions", () => {
 
     let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
 
-    // let yupschema = Yup.object({
-    //   isTaxResidentOnly: Yup.string().required(),
-    //   countries: Yup.array().when("isTaxResidentOnly", {
-    //     is: "false",
-    //     then: Yup.array().min(1).max(5).of(Yup.object({
-    //       country: Yup.string().min(1).max(30).required(),
-    //       hasID: Yup.string().required(),
-    //       id: Yup.string().when("hasID", {
-    //         is: "true",
-    //         then: Yup.string().min(1).max(8).required()
-    //       }),
-    //       idReason: Yup.string().when("hasID", {
-    //         is: "false",
-    //         then: Yup.string().min(1).max(150).required()
-    //       }),
-    //       idNoExplanation: Yup.string().when("idReason", {
-    //         is: "UNOBTAINABLE",
-    //         then: Yup.string().min(1).max(8).required()
-    //       })
-    //     }))
-    //   })
-    // })
-
-    console.log(JSON.stringify(yupschema));
-
     let isValid = yupschema.isValidSync({
       isTaxResidentOnly: "false",
       countries: [

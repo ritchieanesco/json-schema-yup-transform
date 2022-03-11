@@ -25,14 +25,13 @@ const createObjectSchema = (
 
   let yupSchema: Yup.AnyObjectSchema;
   if (isComposition) {
-    let shape =
-      value.properties && buildProperties(value.properties, jsonSchema);
+    let shape = value.properties && buildProperties(value.properties, jsonSchema);
     (value.required ?? []).forEach((requiredField) => {
       if (
         shape !== undefined &&
         (value.required as string[]).includes(requiredField)
       ) {
-        shape[requiredField].concat(yupSchema.required());
+        shape[requiredField] = shape[requiredField].required();
       }
     });
     yupSchema = Yup.object(shape).typeError(defaultMessage);
@@ -42,7 +41,6 @@ const createObjectSchema = (
 
   const required = jsonSchema.type === "object" ? jsonSchema.required : value.required
   if (required?.includes(key)) yupSchema = yupSchema.concat(yupSchema.required());
-
   return yupSchema;
 };
 

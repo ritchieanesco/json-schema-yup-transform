@@ -69,14 +69,14 @@ describe("convertToYup() oneOf", () => {
 
     valid = yupschema.isValidSync({
       entity: {
-        personName: "jane doe"
+          personName: "jane doe"
       }
     });
     expect(valid).toBeTruthy();
 
     valid = yupschema.isValidSync({
       entity: {
-        companyName: "things incorporated"
+          companyName: "things incorporated"
       }
     });
     expect(valid).toBeTruthy();

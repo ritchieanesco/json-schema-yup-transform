@@ -1,7 +1,6 @@
 import * as Yup from "yup";
 import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
-import isEqual from "lodash/isEqual";
 import isString from "lodash/isString";
 import isRelativeUrl from "is-relative-url";
 import type { JSONSchemaExtended } from "../../schema";
@@ -15,6 +14,12 @@ import {
   IPV4_REGEX,
   IPV6_REGEX
 } from "./constant";
+import {
+  createConstantSchema,
+  createDefaultSchema,
+  createEnumSchema,
+  createRequiredSchema
+} from "./util";
 
 /**
  * Initializes a yup string schema derived from a json string schema
@@ -24,39 +29,31 @@ const createStringSchema = (
   [key, value]: [string, JSONSchemaExtended],
   jsonSchema: JSONSchemaExtended
 ): Yup.StringSchema => {
-
   const { minLength, maxLength, pattern, format, regex } = value;
 
   const label = value.title || capitalize(key);
 
   let yupSchema = Yup.string().typeError(`${label} is not of type string`);
 
-  if (isString(value.default))
-    yupSchema = yupSchema.concat(yupSchema.default(value.default));
+  yupSchema = createDefaultSchema<Yup.StringSchema>(yupSchema, [
+    isString(value.default),
+    value.default
+  ]);
 
-  if (jsonSchema.required?.includes(key)) {
-    yupSchema = yupSchema.concat(yupSchema.required(`${label} is required`));
-  }
+  yupSchema = createRequiredSchema<Yup.StringSchema>(yupSchema, [
+    label,
+    { key, required: jsonSchema.required }
+  ]);
 
-  if (typeof value.const !== "undefined") {
-    yupSchema = yupSchema.concat(
-      yupSchema.test({
-        name: "constant",
-        message: `${label} does not match constant`,
-        test: (field: unknown): boolean => isEqual(field, value.const)
-      })
-    );
-  }
+  yupSchema = createConstantSchema<Yup.StringSchema>(yupSchema, [
+    label,
+    value.const as string
+  ]);
 
-  if (Array.isArray(value.enum)) {
-    yupSchema = yupSchema.concat(
-      yupSchema.test({
-        name: "enum",
-        message: `${label} does not match any of the enumerables`,
-        test: (field: unknown): boolean => (value.enum as unknown[]).some((item) => isEqual(item, field))
-      })
-    );
-  }
+  yupSchema = createEnumSchema<Yup.StringSchema>(yupSchema, [
+    label,
+    value.enum
+  ]);
 
   if (isNumber(value.minLength)) {
     yupSchema = yupSchema.concat(

@@ -12,6 +12,12 @@ import uniq from "lodash/uniq";
 import { isSchemaObject, getItemsArrayItem, isTypeOfValue } from "../../schema";
 import type { SchemaItem } from "../types";
 import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
+import {
+  createConstantSchema,
+  createDefaultSchema,
+  createEnumSchema,
+  createRequiredSchema
+} from "./util";
 
 const validateTuple =
   (items: JSONSchemaDefinition[]) =>
@@ -55,11 +61,15 @@ const createArraySchema = (
 
   let yupSchema = Yup.array().typeError(`${label} is not of type array`);
 
-  if (Array.isArray(value.default))
-    yupSchema = yupSchema.concat(yupSchema.default(value.default));
+  yupSchema = createDefaultSchema<Yup.ArraySchema<any>>(yupSchema, [
+    Array.isArray(value.default),
+    value.default
+  ]);
 
-  if (jsonSchema.required?.includes(key))
-    yupSchema = yupSchema.concat(yupSchema.required(`${label} is required`));
+  yupSchema = createRequiredSchema<Yup.ArraySchema<any>>(yupSchema, [
+    label,
+    { key, required: jsonSchema.required }
+  ]);
 
   if (typeof value.contains?.type === "string") {
     const { type } = value.contains;
@@ -90,9 +100,7 @@ const createArraySchema = (
         message: "${path} is not a tuple",
         test: (field: any[] | undefined): boolean => {
           if (field === undefined) return true;
-          const validate = validateTuple(
-            value.items as JSONSchemaDefinition[]
-          );
+          const validate = validateTuple(value.items as JSONSchemaDefinition[]);
           return field.every(validate);
         }
       })
@@ -109,28 +117,15 @@ const createArraySchema = (
     yupSchema = yupSchema.concat(yupSchema.max(value.maxItems, message));
   }
 
-  if (typeof value.const !== "undefined") {
-    yupSchema = yupSchema.concat(
-      yupSchema.test({
-        name: "constant",
-        message: `${label} does not match constant`,
-        test: (field: unknown): boolean => isEqual(field, value.const)
-      })
-    );
-  }
+  yupSchema = createConstantSchema<Yup.ArraySchema<any>>(yupSchema, [
+    label,
+    value.const as string
+  ]);
 
-  if (Array.isArray(value.enum)) {
-    yupSchema = yupSchema.concat(
-      yupSchema.test({
-        name: "enum",
-        message: `${label} does not match any of the enumerables`,
-        test: (field: unknown): boolean => {
-          if (field === undefined) return true;
-          return (value.enum as unknown[]).some((item) => isEqual(item, field));
-        }
-      })
-    );
-  }
+  yupSchema = createEnumSchema<Yup.ArraySchema<any>>(yupSchema, [
+    label,
+    value.enum
+  ]);
 
   if (value.uniqueItems) {
     yupSchema = yupSchema.concat(

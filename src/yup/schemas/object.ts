@@ -3,6 +3,7 @@ import capitalize from "lodash/capitalize";
 import type { JSONSchema } from "../../schema";
 import type { SchemaItem } from "../types";
 import { buildProperties } from "../builder";
+import { createRequiredSchema } from "./util";
 
 /**
  * Initializes a yup object schema derived from a json object schema
@@ -25,7 +26,8 @@ const createObjectSchema = (
 
   let yupSchema: Yup.AnyObjectSchema;
   if (isComposition) {
-    let shape = value.properties && buildProperties(value.properties, jsonSchema);
+    let shape =
+      value.properties && buildProperties(value.properties, jsonSchema);
     (value.required ?? []).forEach((requiredField) => {
       if (
         shape !== undefined &&
@@ -39,8 +41,13 @@ const createObjectSchema = (
     yupSchema = Yup.object().typeError(defaultMessage);
   }
 
-  const required = jsonSchema.type === "object" ? jsonSchema.required : value.required
-  if (required?.includes(key)) yupSchema = yupSchema.concat(yupSchema.required());
+  const required =
+    jsonSchema.type === "object" ? jsonSchema.required : value.required;
+  yupSchema = createRequiredSchema<Yup.AnyObjectSchema>(yupSchema, [
+    label,
+    { key, required }
+  ]);
+
   return yupSchema;
 };
 

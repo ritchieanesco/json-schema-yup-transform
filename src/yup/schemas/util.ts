@@ -4,13 +4,13 @@ import type { JSONSchema } from "../../schema";
 
 export const createConstantSchema = <T extends Yup.BaseSchema>(
   schema: T,
-  [label, value]: [string, string | undefined]
+  [message, value]: [string, string | undefined]
 ): T => {
   if (typeof value === "undefined") return schema;
   return schema.concat(
     schema.test({
       name: "constant",
-      message: `${label} does not match constant`,
+      message,
       test: (field: unknown): boolean => isEqual(field, value)
     })
   );
@@ -18,13 +18,13 @@ export const createConstantSchema = <T extends Yup.BaseSchema>(
 
 export const createEnumSchema = <T extends Yup.BaseSchema>(
   schema: T,
-  [label, value]: [string, unknown[] | undefined]
+  [message, value]: [string, unknown[] | undefined]
 ): T => {
   if (!Array.isArray(value)) return schema;
   return schema.concat(
     schema.test({
       name: "enum",
-      message: `${label} does not match any of the enumerables`,
+      message,
       test: (field: unknown): boolean =>
         value.some((item) => isEqual(item, field))
     })
@@ -38,11 +38,12 @@ interface RequiredKey {
 
 export const createRequiredSchema = <T extends Yup.BaseSchema>(
   schema: T,
-  [label, { required, key }]: [string, RequiredKey]
+  [message, { required, key }]: [string, RequiredKey]
 ): T => {
   if (!required?.includes(key)) return schema;
-  return schema.concat(schema.required(`${label} is required`));
+  return schema.concat(schema.required(message));
 };
+
 
 export const createDefaultSchema = <T extends Yup.BaseSchema>(schema: T, [ predicate, value ]: [ boolean, JSONSchema["default"] ]): T => {
     return predicate ? schema.concat(schema.default(value)) : schema;

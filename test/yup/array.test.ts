@@ -345,29 +345,4 @@ describe("convertToYup() array", () => {
     });
     expect(valid).toBeTruthy();
   });
-
-  it("should use title as label in error message", () => {
-    const fieldTitle = "Item Types";
-    const schema: JSONSchema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        item: {
-          type: "array",
-          title: fieldTitle
-        }
-      }
-    };
-
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({ item: "test" });
-    } catch (e: unknown) {
-      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(`${fieldTitle} is not of type array`);
-  });
 });

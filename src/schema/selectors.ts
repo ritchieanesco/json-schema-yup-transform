@@ -66,13 +66,6 @@ export const getCompositionType = (
 );
 
 /**
- * Retrieve required property value
- */
-
-export const getRequired = (schema: JSONSchema): JSONSchema["required"] =>
-  schema.required;
-
-/**
  * Retrieve reference id from `$ref` attribute
  */
 

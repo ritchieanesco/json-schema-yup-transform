@@ -17,7 +17,7 @@ import {
 
 const createBooleanSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema
+  required: JSONSchema["required"]
 ): Yup.BooleanSchema => {
   const {
     const: _const,
@@ -51,12 +51,12 @@ const createBooleanSchema = (
   const requiredErrorMessage =
     getErrorMessage(description, SchemaKeywords.REQUIRED, [
       key,
-      { title, required: jsonSchema.required?.join(",") }
+      { title, required: required?.join(",") }
     ]);
 
   yupSchema = createRequiredSchema<Yup.BooleanSchema>(yupSchema, [
     requiredErrorMessage,
-    { key, required: jsonSchema.required }
+    { key, required }
   ]);
 
   return yupSchema;

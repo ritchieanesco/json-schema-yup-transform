@@ -17,7 +17,7 @@ import {
 
 const createNumberSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema
+  required: JSONSchema["required"]
 ): Yup.NumberSchema => {
   const defaultMessage =
     getErrorMessage(value.description, DataTypes.NUMBER, [
@@ -28,7 +28,7 @@ const createNumberSchema = (
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage),
     [key, value],
-    jsonSchema
+    required
   );
 };
 /**
@@ -38,7 +38,7 @@ const createNumberSchema = (
 export const createBaseNumberSchema = (
   yupSchema: Yup.NumberSchema,
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema
+  required: JSONSchema["required"]
 ): Yup.NumberSchema => {
   const {
     const: _const,
@@ -165,12 +165,12 @@ export const createBaseNumberSchema = (
   const requiredErrorMessage = getErrorMessage(
     description,
     SchemaKeywords.REQUIRED,
-    [key, { title, required: jsonSchema.required?.join(",") }]
+    [key, { title, required: required?.join(",") }]
   );
 
   yupSchema = createRequiredSchema<Yup.NumberSchema>(yupSchema, [
     requiredErrorMessage,
-    { key, required: jsonSchema.required }
+    { key, required }
   ]);
 
   return yupSchema;

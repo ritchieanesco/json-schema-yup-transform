@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { isNumber, isString } from "lodash";
 import isRelativeUrl from "is-relative-url";
 import { DataTypes, SchemaKeywords } from "../../schema";
-import type { JSONSchemaExtended } from "../../schema";
+import type { JSONSchema, JSONSchemaExtended } from "../../schema";
 import { getErrorMessage } from "../config";
 import {
   INTERNATIONAL_EMAIL_REGEX,
@@ -27,7 +27,7 @@ import {
 
 const createStringSchema = (
   [key, value]: [string, JSONSchemaExtended],
-  jsonSchema: JSONSchemaExtended
+  required: JSONSchema["required"]
 ): Yup.StringSchema => {
   const {
     const: _const,
@@ -39,7 +39,6 @@ const createStringSchema = (
     minLength,
     pattern,
     regex,
-    required,
     title
   } = value;
 
@@ -62,7 +61,7 @@ const createStringSchema = (
 
   yupSchema = createRequiredSchema<Yup.StringSchema>(yupSchema, [
     requiredErrorMessage,
-    { key, required: jsonSchema.required }
+    { key, required }
   ]);
 
   const constantErrorMessage = getErrorMessage(
@@ -137,7 +136,7 @@ const createStringSchema = (
 };
 
 export const createStringSchemaFormat = (
-  [key, value]: [string, JSONSchemaExtended],
+  [key, value]: [string, JSONSchema],
   yupSchema: Yup.StringSchema
 ): Yup.StringSchema => {
   const { description, format, title } = value;

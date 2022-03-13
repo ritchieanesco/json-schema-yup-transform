@@ -73,23 +73,23 @@ const getValidationSchema = (
   }
 
   if (value.type === DataTypes.STRING) {
-    return createStringSchema([key, value], jsonSchema)
+    return createStringSchema([key, value], jsonSchema.required)
   }
 
   if (value.type === DataTypes.NUMBER) {
-    return createNumberSchema([key, value], jsonSchema)
+    return createNumberSchema([key, value], jsonSchema.required)
   }
 
   if (value.type === DataTypes.INTEGER) {
-    return createIntegerSchema([key, value], jsonSchema)
+    return createIntegerSchema([key, value], jsonSchema.required)
   }
 
   if (value.type === DataTypes.ARRAY) {
-    return createArraySchema([key, value], jsonSchema)
+    return createArraySchema([key, value], jsonSchema.required)
   }
 
   if (value.type === DataTypes.BOOLEAN) {
-    return createBooleanSchema([key, value], jsonSchema)
+    return createBooleanSchema([key, value], jsonSchema.required)
   }
 
   if (value.type === DataTypes.OBJECT) {

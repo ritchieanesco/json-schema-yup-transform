@@ -11,7 +11,7 @@ import { createBaseNumberSchema } from "./number";
 
 const createIntegerSchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema
+  required: JSONSchema["required"]
 ): Yup.NumberSchema => {
   const defaultMessage =
     getErrorMessage(value.description, DataTypes.INTEGER, [
@@ -22,7 +22,7 @@ const createIntegerSchema = (
   return createBaseNumberSchema(
     Yup.number().typeError(defaultMessage).integer().strict(true),
     [key, value],
-    jsonSchema
+    required
   );
 };
 

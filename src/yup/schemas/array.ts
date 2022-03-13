@@ -63,7 +63,7 @@ const validateTuple =
 
 const createArraySchema = (
   [key, value]: SchemaItem,
-  jsonSchema: JSONSchema
+  required: JSONSchema["required"]
 ): Yup.ArraySchema<any> => {
   const {
     const: _const,
@@ -91,11 +91,11 @@ const createArraySchema = (
   const requiredErrorMessage = getErrorMessage(
     description,
     SchemaKeywords.REQUIRED,
-    [key, { title, required: jsonSchema.required?.join(",") }]
+    [key, { title, required: required?.join(",") }]
   );
   yupSchema = createRequiredSchema<Yup.ArraySchema<any>>(yupSchema, [
     requiredErrorMessage,
-    { key, required: jsonSchema.required }
+    { key, required }
   ]);
 
   if (typeof value.contains?.type === "string") {

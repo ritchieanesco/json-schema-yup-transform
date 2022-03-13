@@ -149,7 +149,7 @@ export const createBaseNumberSchema = (
 
   yupSchema = createConstantSchema<Yup.NumberSchema>(yupSchema, [
     constantErrorMessage,
-    _const as string
+    _const
   ]);
 
   const enumErrorMessage = getErrorMessage(description, SchemaKeywords.ENUM, [

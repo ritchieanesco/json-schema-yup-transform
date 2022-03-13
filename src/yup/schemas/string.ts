@@ -74,7 +74,7 @@ const createStringSchema = (
 
   yupSchema = createConstantSchema<Yup.StringSchema>(yupSchema, [
     constantErrorMessage,
-    _const as string
+    _const
   ]);
 
   const enumErrorMessage = getErrorMessage(description, SchemaKeywords.ENUM, [

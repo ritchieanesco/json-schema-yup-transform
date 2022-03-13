@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 import isEqual from "lodash/isEqual";
-import type { JSONSchema } from "../../schema";
+import type { JSONSchema, JSONSchemaType } from "../../schema";
 
 export const createConstantSchema = <T extends Yup.BaseSchema>(
   schema: T,
-  [message, value]: [string | null, string | undefined]
+  [message, value]: [string | null, JSONSchemaType | undefined]
 ): T => {
   if (typeof value === "undefined") return schema;
   return schema.concat(

@@ -45,7 +45,7 @@ const createBooleanSchema = (
 
   yupSchema = createConstantSchema<Yup.BooleanSchema>(yupSchema, [
     constantErrorMessage,
-    _const as string
+    _const
   ]);
 
   const requiredErrorMessage =

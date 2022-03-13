@@ -13,7 +13,7 @@ import {
   isSchemaObject,
   getItemsArrayItem,
   isTypeOfValue,
-  SchemaKeywords
+  SchemaKeywords,
 } from "../../schema";
 import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
 import { getErrorMessage } from "../config";
@@ -119,7 +119,7 @@ const createArraySchema = (
             if (type === "boolean") return fn(isBoolean);
             if (type === "object") return fn(isPlainObject);
             if (type === "array") return fn(isArray);
-          }
+          } 
           return false;
         }
       })
@@ -167,7 +167,7 @@ const createArraySchema = (
     ]);
   yupSchema = createConstantSchema<Yup.ArraySchema<any>>(yupSchema, [
     constantErrorMessage,
-    _const as string
+    _const
   ]);
 
   const enumErrorMessage =

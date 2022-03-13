@@ -4,7 +4,6 @@ import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import { getErrorMessage } from "../config";
 import type { SchemaItem } from "../types";
-
 import {
   createConstantSchema,
   createDefaultSchema,

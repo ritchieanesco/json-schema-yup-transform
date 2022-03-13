@@ -3,6 +3,8 @@ import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
 import isString from "lodash/isString";
 import isRelativeUrl from "is-relative-url";
+import { getErrorMessage } from "../config";
+import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchemaExtended } from "../../schema";
 import {
   INTERNATIONAL_EMAIL_REGEX,
@@ -29,67 +31,113 @@ const createStringSchema = (
   [key, value]: [string, JSONSchemaExtended],
   jsonSchema: JSONSchemaExtended
 ): Yup.StringSchema => {
-  const { minLength, maxLength, pattern, format, regex } = value;
+  const {
+    const: _const,
+    default: _default,
+    description,
+    enum: _enum,
+    format,
+    maxLength,
+    minLength,
+    pattern,
+    regex,
+    required,
+    title
+  } = value;
 
-  const label = value.title || capitalize(key);
+  const label = title || capitalize(key);
 
-  let yupSchema = Yup.string().typeError(`${label} is not of type string`);
+  const defaultMessage =
+    getErrorMessage(description, DataTypes.STRING, [key, { title }]) ||
+    `${label} is not of type string`;
+
+  let yupSchema = Yup.string().typeError(defaultMessage);
 
   yupSchema = createDefaultSchema<Yup.StringSchema>(yupSchema, [
-    isString(value.default),
-    value.default
+    isString(_default),
+    _default
   ]);
 
+  const requiredErrorMessage =
+    getErrorMessage(description, SchemaKeywords.REQUIRED, [
+      key,
+      { title, required: required?.join(",") }
+    ]) || `${label} is required`;
+
   yupSchema = createRequiredSchema<Yup.StringSchema>(yupSchema, [
-    label,
+    requiredErrorMessage,
     { key, required: jsonSchema.required }
   ]);
 
+  const constantErrorMessage =
+    getErrorMessage(description, SchemaKeywords.CONST, [
+      key,
+      { const: _const?.toString(), title }
+    ]) || `${label} does not match constant`;
+
   yupSchema = createConstantSchema<Yup.StringSchema>(yupSchema, [
-    label,
-    value.const as string
+    constantErrorMessage,
+    _const as string
   ]);
+
+  const enumErrorMessage =
+    getErrorMessage(description, SchemaKeywords.ENUM, [
+      key,
+      { enum: _enum?.join(","), title }
+    ]) || `${label} does not match any of the enumerables`;
 
   yupSchema = createEnumSchema<Yup.StringSchema>(yupSchema, [
-    label,
-    value.enum
+    enumErrorMessage,
+    _enum
   ]);
 
-  if (isNumber(value.minLength)) {
-    yupSchema = yupSchema.concat(
-      yupSchema.min(
-        value.minLength,
-        `${label} requires a minimum of ${minLength} characters`
-      )
-    );
+  if (isNumber(minLength)) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.MINIMUM_LENGTH, [
+        key,
+        { title, minLength }
+      ]) || `${label} requires a minimum of ${minLength} characters`;
+
+    yupSchema = yupSchema.concat(yupSchema.min(minLength, message));
   }
 
-  if (isNumber(value.maxLength)) {
-    yupSchema = yupSchema.concat(
-      yupSchema.max(
-        value.maxLength,
-        `${label} cannot exceed a maximum of ${maxLength} characters`
-      )
-    );
+  if (isNumber(maxLength)) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.MAXIMUM_LENGTH, [
+        key,
+        { title, maxLength }
+      ]) || `${label} cannot exceed a maximum of ${maxLength} characters`;
+
+    yupSchema = yupSchema.concat(yupSchema.max(maxLength, message));
   }
 
   if (typeof pattern !== "undefined") {
+    const message =
+      getErrorMessage(description, SchemaKeywords.PATTERN, [
+        key,
+        { title, pattern: pattern.toString() }
+      ]) || `${label} is an incorrect format`;
+
     yupSchema = yupSchema.concat(
-      yupSchema.matches(new RegExp(pattern), `${label} is an incorrect format`)
+      yupSchema.matches(new RegExp(pattern), message)
     );
   }
 
   if (typeof regex !== "undefined") {
-    yupSchema = yupSchema.concat(
-      yupSchema.matches(new RegExp(regex), `${label} is an incorrect format`)
-    );
+    const message =
+      getErrorMessage(description, SchemaKeywords.REGEX, [
+        key,
+        { title, regex: regex.toString() }
+      ]) || `${label} is an incorrect format`;
+
+    yupSchema = yupSchema.concat(yupSchema.matches(new RegExp(regex), message));
   }
 
-  if (format) {
+  if (format)
     yupSchema = yupSchema.concat(
       createStringSchemaFormat([key, value], yupSchema)
     );
-  }
+
   return yupSchema;
 };
 
@@ -97,59 +145,72 @@ export const createStringSchemaFormat = (
   [key, value]: [string, JSONSchemaExtended],
   yupSchema: Yup.StringSchema
 ): Yup.StringSchema => {
-  const { format } = value;
+  const { description, format, title } = value;
 
-  const label = value.title || capitalize(key);
+  const label = title || capitalize(key);
+  const message = getErrorMessage(description, SchemaKeywords.FORMAT, [
+    key,
+    { title, format }
+  ]);
 
   if (format === "date-time")
     return yupSchema.matches(
       ISO_8601_DATE_TIME_REGEX,
-      `${label} is an invalid date and time format`
+      message ?? `${label} is an invalid date and time format`
     );
 
   if (format === "time")
     return yupSchema.matches(
       ISO_8601_TIME_REGEX,
-      `${label} is an invalid time format`
+      message ?? `${label} is an invalid time format`
     );
 
   if (format === "date")
-    return yupSchema.matches(DATE_REGEX, `${label} is an invalid date format`);
+    return yupSchema.matches(
+      DATE_REGEX,
+      message ?? `${label} is an invalid date format`
+    );
 
   if (format === "email")
-    return yupSchema.email(`${label} is an invalid email format`);
+    return yupSchema.email(message ?? `${label} is an invalid email format`);
 
   if (format === "idn-email")
     return yupSchema.matches(
       INTERNATIONAL_EMAIL_REGEX,
-      `${label} is an invalid international email format`
+      message ?? `${label} is an invalid international email format`
     );
 
   if (format === "hostname")
     return yupSchema.matches(
       HOSTNAME_REGEX,
-      `${label} is an invalid hostname format`
+      message ?? `${label} is an invalid hostname format`
     );
 
   if (format === "idn-hostname")
     return yupSchema.matches(
       INTERNATIONAL_HOSTNAME_REGEX,
-      `${label} is an invalid international hostname format`
+      message ?? `${label} is an invalid international hostname format`
     );
 
   if (format === "ipv4")
-    return yupSchema.matches(IPV4_REGEX, `${label} is an invalid ipv4 format`);
+    return yupSchema.matches(
+      IPV4_REGEX,
+      message ?? `${label} is an invalid ipv4 format`
+    );
 
   if (format === "ipv6")
-    return yupSchema.matches(IPV6_REGEX, `${label} is an invalid ipv6 format`);
+    return yupSchema.matches(
+      IPV6_REGEX,
+      message ?? `${label} is an invalid ipv6 format`
+    );
 
   if (format === "uri")
-    return yupSchema.url(`${label} is an invalid URI format`);
+    return yupSchema.url(message ?? `${label} is an invalid URI format`);
 
   if (format === "uri-reference") {
     return yupSchema.test({
       name: "uri-reference",
-      message: `${label} is an invalid URI reference format`,
+      message: message ?? `${label} is an invalid URI reference format`,
       test: (field: string | undefined): boolean => {
         if (field === undefined) return true;
         return isRelativeUrl(field);

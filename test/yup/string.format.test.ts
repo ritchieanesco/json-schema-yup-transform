@@ -7,7 +7,7 @@ describe("convertToYup() string format", () => {
     jest.spyOn(console, "warn").mockImplementation(() => {});
   });
 
-  it("should validate date-time format", () => {
+  it.only("should validate date-time format", () => {
     const schema: JSONSchema = {
       type: "object",
       $schema: "http://json-schema.org/draft-07/schema#",

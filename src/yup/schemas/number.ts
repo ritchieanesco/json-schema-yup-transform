@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import isNumber from "lodash/isNumber";
+import { isNumber } from "lodash";
 import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import { getErrorMessage } from "../config";

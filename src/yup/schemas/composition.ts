@@ -1,9 +1,8 @@
 import * as Yup from "yup";
-import { capitalize } from "lodash";
 import { CompositSchemaTypes } from "../../schema"
 import type { AnyOfSchema, AllOfSchema, JSONSchema, OneOfSchema , NotSchema } from "../../schema"
-import createValidationSchema from ".";
 import { getErrorMessage } from "../config";
+import createValidationSchema from ".";
 
 /**
  * To validate against anyOf, the given data must be valid against any (one or more) of the given subschemas.
@@ -12,8 +11,7 @@ export const createAnyOfSchema = (
   [key, value]: [string, AnyOfSchema],
   jsonSchema: JSONSchema
 ) => {
-  const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ANYOF, [key, { title: value.title }]) || `${label} does not match alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ANYOF, [key, { title: value.title }]) || "This field does not match alternatives";
   const schemas = value.anyOf.map((val) =>
     createValidationSchema([key, val as JSONSchema], jsonSchema)
   );
@@ -30,8 +28,7 @@ export const createAllOfSchema = (
   [key, value]: [string, AllOfSchema],
   jsonSchema: JSONSchema
 ) => {
-  const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ALLOF, [key, { title: value.title }]) || `${label} does not match all alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ALLOF, [key, { title: value.title }]) || "This field does not match all alternatives";
   const schemas = value.allOf
     .filter((el) => typeof el !== "boolean" && el.type)
     .map((val, i) =>
@@ -49,8 +46,7 @@ export const createOneOfSchema = (
   [key, value]: [string, OneOfSchema],
   jsonSchema: JSONSchema
 ) => {
-  const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF, [key, { title: value.title }]) || `${label} does not match one alternative`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.ONEOF, [key, { title: value.title }]) || "This field does not match one alternative";
   const schemas = value.oneOf.map((val) => {
     return createValidationSchema([key, val as JSONSchema], jsonSchema)
   });
@@ -69,8 +65,7 @@ export const createNotSchema = (
   [key, value]: [string, NotSchema],
   jsonSchema: JSONSchema
 ) => {
-  const label = value.title || capitalize(key);
-  const message = getErrorMessage(value.description, CompositSchemaTypes.NOT, [key, { title: value.title }]) || `${label} matches alternatives`;
+  const message = getErrorMessage(value.description, CompositSchemaTypes.NOT, [key, { title: value.title }]) || "This field matches alternatives";
   const schema = createValidationSchema(
     [key, value.not as JSONSchema],
     jsonSchema

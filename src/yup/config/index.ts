@@ -1,4 +1,4 @@
-import get from "lodash/get";
+import { get } from "lodash";
 import type { JSONSchema, NodeTypes } from "../../schema";
 import type {
   ConfigErrors,

@@ -1,8 +1,5 @@
 import * as Yup from "yup";
-import has from "lodash/has";
-import get from "lodash/get";
-import omit from "lodash/omit";
-import isPlainObject from "lodash/isPlainObject";
+import { get, has, isPlainObject, omit } from "lodash";
 import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
 import { getProperties, isSchemaObject } from "../../schema/";
 import createValidationSchema from "../schemas/";

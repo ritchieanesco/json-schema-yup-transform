@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import isEqual from "lodash/isEqual";
+import { isEqual } from "lodash";
 import type { JSONSchema, JSONSchemaType } from "../../schema";
 
 export const createConstantSchema = <T extends Yup.BaseSchema>(

@@ -1,5 +1,6 @@
+
+import { isPlainObject } from "lodash";
 import type { JSONSchema, JSONSchemaType, NodeTypes } from "../schema"
-import isPlainObject from "lodash/isPlainObject";
 
 export const isConfigError = (
   errors: undefined | ConfigErrors

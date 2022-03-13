@@ -1,19 +1,21 @@
 import * as Yup from "yup";
-import isEqual from "lodash/isEqual";
-import isBoolean from "lodash/isBoolean";
-import isNumber from "lodash/isNumber";
-import isInteger from "lodash/isInteger";
-import isString from "lodash/isString";
-import isArray from "lodash/isArray";
-import isPlainObject from "lodash/isPlainObject";
+import {
+  isArray,
+  isBoolean,
+  isEqual,
+  isInteger,
+  isNumber,
+  isPlainObject,
+  isString,
+  uniq
+} from "lodash";
 import stringifyObject from "stringify-object";
-import uniq from "lodash/uniq";
 import {
   DataTypes,
   isSchemaObject,
   getItemsArrayItem,
   isTypeOfValue,
-  SchemaKeywords,
+  SchemaKeywords
 } from "../../schema";
 import type { JSONSchema, JSONSchemaDefinition } from "../../schema";
 import { getErrorMessage } from "../config";
@@ -86,11 +88,11 @@ const createArraySchema = (
     _default
   ]);
 
-  const requiredErrorMessage =
-    getErrorMessage(description, SchemaKeywords.REQUIRED, [
-      key,
-      { title, required: jsonSchema.required?.join(",") }
-    ]);
+  const requiredErrorMessage = getErrorMessage(
+    description,
+    SchemaKeywords.REQUIRED,
+    [key, { title, required: jsonSchema.required?.join(",") }]
+  );
   yupSchema = createRequiredSchema<Yup.ArraySchema<any>>(yupSchema, [
     requiredErrorMessage,
     { key, required: jsonSchema.required }
@@ -119,7 +121,7 @@ const createArraySchema = (
             if (type === "boolean") return fn(isBoolean);
             if (type === "object") return fn(isPlainObject);
             if (type === "array") return fn(isArray);
-          } 
+          }
           return false;
         }
       })
@@ -160,21 +162,20 @@ const createArraySchema = (
     yupSchema = yupSchema.concat(yupSchema.max(maxItems, message));
   }
 
-  const constantErrorMessage =
-    getErrorMessage(description, SchemaKeywords.CONST, [
-      key,
-      { const: _const?.toString(), title }
-    ]);
+  const constantErrorMessage = getErrorMessage(
+    description,
+    SchemaKeywords.CONST,
+    [key, { const: _const?.toString(), title }]
+  );
   yupSchema = createConstantSchema<Yup.ArraySchema<any>>(yupSchema, [
     constantErrorMessage,
     _const
   ]);
 
-  const enumErrorMessage =
-    getErrorMessage(description, SchemaKeywords.ENUM, [
-      key,
-      { enum: _enum?.join(","), title }
-    ]);
+  const enumErrorMessage = getErrorMessage(description, SchemaKeywords.ENUM, [
+    key,
+    { enum: _enum?.join(","), title }
+  ]);
   yupSchema = createEnumSchema<Yup.ArraySchema<any>>(yupSchema, [
     enumErrorMessage,
     _enum

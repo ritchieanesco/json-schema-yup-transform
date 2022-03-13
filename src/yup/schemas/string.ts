@@ -1,6 +1,5 @@
 import * as Yup from "yup";
-import isNumber from "lodash/isNumber";
-import isString from "lodash/isString";
+import { isNumber, isString } from "lodash";
 import isRelativeUrl from "is-relative-url";
 import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchemaExtended } from "../../schema";

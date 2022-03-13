@@ -1,6 +1,4 @@
-import get from "lodash/get";
-import nth from "lodash/nth";
-import findKey from "lodash/findKey";
+import { findKey, get, nth } from "lodash";
 import { DEFINITION_ROOT } from "./constants";
 import type { JSONSchema, JSONSchemaDefinition, JSONSchemaBasicType } from "."
 import { CompositSchemaTypes, isSchemaObject } from ".";

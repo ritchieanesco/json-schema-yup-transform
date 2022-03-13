@@ -1,11 +1,13 @@
-import get from "lodash/get";
-import head from "lodash/head";
-import isPlainObject from "lodash/isPlainObject";
-import isEmpty from "lodash/isEmpty";
-import isArray from "lodash/isArray";
-import transform from "lodash/transform";
-import flow from "lodash/flow";
-import has from "lodash/has";
+import {
+  flow,
+  get,
+  has,
+  head,
+  isArray,
+  isEmpty,
+  isPlainObject,
+  transform
+} from "lodash";
 import { getDefinitionItem } from "../schema";
 import type { JSONSchema } from "../schema";
 

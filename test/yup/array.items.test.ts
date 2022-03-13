@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import isEqual from "lodash/isEqual";
+import { isEqual } from "lodash";
 import type { JSONSchema } from "../../src/schema"
 import convertToYup from "../../src";
 

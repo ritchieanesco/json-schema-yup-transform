@@ -1,8 +1,5 @@
 import * as Yup from "yup";
-import isArray from "lodash/isArray";
-import isString from "lodash/isString";
-import get from "lodash/get";
-import has from "lodash/has";
+import { get, has, isArray, isString } from "lodash";
 import type { JSONSchema, JSONSchemaTypeName } from "../../schema";
 import {
   DataTypes,

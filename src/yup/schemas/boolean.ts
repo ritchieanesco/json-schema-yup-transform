@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import isBoolean from "lodash/isBoolean";
+import { isBoolean } from "lodash";
 import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import { getErrorMessage } from "../config";

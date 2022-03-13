@@ -1,8 +1,9 @@
 import * as Yup from "yup";
-import capitalize from "lodash/capitalize";
+import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import type { SchemaItem } from "../types";
 import { buildProperties } from "../builder";
+import { getErrorMessage } from "../config";
 import { createRequiredSchema } from "./util";
 
 /**
@@ -13,9 +14,11 @@ const createObjectSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema
 ): Yup.AnyObjectSchema => {
-  const label = value.title || capitalize(key);
-
-  const defaultMessage = `${label}  is not of type object`;
+  const defaultMessage =
+    getErrorMessage(value.description, DataTypes.OBJECT, [
+      key,
+      { title: value.title }
+    ]) || "This field is not of type object";
 
   // Seperate compositional schemas from standard schemas.
   // Standard schemas return Object schemas, compositional schemas return mixed or lazy schemas.
@@ -43,8 +46,15 @@ const createObjectSchema = (
 
   const required =
     jsonSchema.type === "object" ? jsonSchema.required : value.required;
+
+  const requiredErrorMessage = getErrorMessage(
+    value.description,
+    SchemaKeywords.REQUIRED,
+    [key, { title: value.title, required: required?.join(",") }]
+  );
+
   yupSchema = createRequiredSchema<Yup.AnyObjectSchema>(yupSchema, [
-    label,
+    requiredErrorMessage,
     { key, required }
   ]);
 

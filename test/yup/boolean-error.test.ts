@@ -27,8 +27,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ termsConditions: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Default boolean message");
   });
@@ -56,8 +56,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ termsConditions: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("termsConditions field is invalid");
   });
@@ -86,8 +86,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(config.errors.termsConditions.required);
   });
@@ -117,8 +117,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "termsConditions field is invalid. It is listed as a required field: termsConditions"
@@ -149,8 +149,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ isActive: false });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Incorrect constant");
   });
@@ -180,8 +180,8 @@ describe("convertToYup() boolean configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ isActive: false });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "isActive is invalid. Needs to match the constant true"

@@ -27,8 +27,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ age: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Default number message");
   });
@@ -56,8 +56,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ age: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("age field is invalid");
   });
@@ -86,8 +86,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Age (number) is required");
   });
@@ -117,8 +117,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "age field is required. i.e. Required fields are age"
@@ -149,8 +149,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 3 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Does not meet minimum number");
   });
@@ -180,8 +180,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 3 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years field is invalid. Needs a minimum number of 5"
@@ -212,8 +212,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 3 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Does not meet exclusive minimum number");
   });
@@ -243,8 +243,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 3 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years is invalid. It needs a minimum value of 5"
@@ -275,8 +275,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Does not meet maximum number");
   });
@@ -306,8 +306,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years is invalid. It needs a maximum value of 5"
@@ -338,8 +338,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Does not meet exclusive maximum number");
   });
@@ -369,8 +369,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError)  errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years is invalid. It needs a maximum value of 5"
@@ -401,8 +401,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Value is not multiple of 5");
   });
@@ -432,8 +432,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years is invalid. Value needs to be a multiple of 5"
@@ -464,8 +464,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Value does not match 5");
   });
@@ -495,8 +495,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("years is invalid. It needs to match 5");
   });
@@ -525,8 +525,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Value does not match 5 or 9");
   });
@@ -556,8 +556,8 @@ describe("convertToYup() number configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ years: 7 });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(
       "years is invalid. Value needs to match one of the following enums 5,9"

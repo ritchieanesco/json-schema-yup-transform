@@ -33,28 +33,5 @@ describe("convertToYup() integer", () => {
     expect(isValid).toBeFalsy();
   });
 
-  it("should use title as label in error message", () => {
-    const fieldTitle = "Phone Number";
-    const schema: JSONSchema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        phone: {
-          type: "integer",
-          title: fieldTitle
-        }
-      }
-    };
 
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({ phone: "phone" });
-    } catch (e: unknown) {
-      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(`${fieldTitle} is not of type integer`);
-  });
 });

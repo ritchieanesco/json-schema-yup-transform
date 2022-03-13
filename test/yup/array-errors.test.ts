@@ -27,8 +27,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Default array message");
   });
@@ -56,8 +56,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("groceries custom array error message");
   });
@@ -85,8 +85,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Custom array message");
   });
@@ -114,8 +114,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: "ABC" });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("groceries custom array message");
   });
@@ -144,43 +144,10 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Field is required");
-  });
-
-  it("should show defaults configuration CUSTOM callback error for required", () => {
-    const schema: JSONSchema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        groceries: {
-          type: "array"
-        }
-      },
-      required: ["groceries"]
-    };
-    const config: Config = {
-      errors: {
-        defaults: {
-          required: ([key, { required }]) =>
-            `${key} field is one of the required fields. i.e. ${required}`
-        }
-      }
-    };
-    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(
-      "groceries field is one of the required fields. i.e. groceries"
-    );
   });
 
   it("should show custom configuration error for required", () => {
@@ -207,11 +174,45 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({});
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Groceries (array) is required");
   });
+
+  it("should show configuration CUSTOM callback error for required", () => {
+    const schema: JSONSchema = {
+      type: "object",
+      $schema: "http://json-schema.org/draft-07/schema#",
+      $id: "test",
+      title: "Test",
+      properties: {
+        groceries: {
+          type: "array"
+        }
+      },
+      required: ["groceries"]
+    };
+    const config: Config = {
+      errors: {
+        groceries: {
+          required: ([key, { required }]) =>
+            `${key} field is one of the required fields. i.e. ${required}`
+        }
+      }
+    };
+    const yupschema = convertToYup(schema, config) as Yup.ObjectSchema<any>;
+    let errorMessage;
+    try {
+      errorMessage = yupschema.validateSync({});
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
+    }
+    expect(errorMessage).toBe(
+      "groceries field is one of the required fields. i.e. groceries"
+    );
+  });
+
 
   it("should show configuration error for minimum required items", () => {
     const schema: JSONSchema = {
@@ -237,8 +238,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("A minimum item of 3 is required");
   });
@@ -268,8 +269,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("groceries field requires a minimum of 3");
   });
@@ -298,8 +299,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [1, 2, 3, 4, 5] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("A maximum item of 3 is required");
   });
@@ -329,8 +330,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [1, 2, 3, 4, 5] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("groceries field is only allowed a maximum of 3");
   });
@@ -361,8 +362,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [null] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("At least one value should be of type string");
   });
@@ -394,8 +395,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [null] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("groceries field needs a string type");
   });
@@ -426,8 +427,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [null] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("All values should be of type string");
   });
@@ -456,8 +457,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ groceries: [null] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Value does not match expected type");
   });
@@ -504,8 +505,8 @@ describe("convertToYup() array configuration errors", () => {
       errorMessage = yupschema.validateSync({
         countries: [{ country: "Singapore" }]
       });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Country is required");
   });
@@ -534,8 +535,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["c"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Incorrect constant");
   });
@@ -565,8 +566,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["c"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe(`list field does not match a,b`);
   });
@@ -598,8 +599,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["c"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Incorrect enum");
   });
@@ -632,8 +633,8 @@ describe("convertToYup() array configuration errors", () => {
     let errorMessage;
     try {
       errorMessage = yupschema.validateSync({ list: ["c"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("list field does not match a,b,c,d");
   });
@@ -665,8 +666,8 @@ describe("convertToYup() array configuration errors", () => {
 
     try {
       errorMessage = yupschema.validateSync({ items: ["b", "b"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("Incorrect uniqueItems");
   });
@@ -699,8 +700,8 @@ describe("convertToYup() array configuration errors", () => {
 
     try {
       errorMessage = yupschema.validateSync({ items: ["b", "b"] });
-    } catch (e) {
-      errorMessage = e.errors[0];
+    } catch (e: unknown) {
+      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
     expect(errorMessage).toBe("items field has unique items");
   });

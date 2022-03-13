@@ -95,7 +95,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Items is required");
+    expect(valid).toBe("This field is required");
   });
 
   it("should validate minItems", () => {
@@ -132,7 +132,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Items requires a minimum of 3 items");
+    expect(valid).toBe("This field requires a minimum of 3 items");
   });
 
   it("should validate maxItems", () => {
@@ -171,7 +171,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Items cannot exceed a maximum of 6 items");
+    expect(valid).toBe("This field cannot exceed a maximum of 6 items");
   });
 
   it("should validate constant", () => {
@@ -205,7 +205,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("List does not match constant");
+    expect(errorMessage).toBe("This field does not match constant");
   });
 
   it("should validate enum", () => {
@@ -242,7 +242,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("List does not match any of the enumerables");
+    expect(errorMessage).toBe("This field does not match any of the enumerables");
   });
 
   it("should validate unique items", () => {
@@ -306,7 +306,7 @@ describe("convertToYup() array", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Items values are not unique");
+    expect(valid).toBe("This field do not have unique values");
   });
 
   it("should not validate unique items", () => {

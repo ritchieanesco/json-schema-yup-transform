@@ -1,7 +1,6 @@
 import * as Yup from "yup";
 import isNumber from "lodash/isNumber";
-import capitalize from "lodash/capitalize";
-import { SchemaKeywords } from "../../schema";
+import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import { getErrorMessage } from "../config";
 import type { SchemaItem } from "../types";
@@ -20,10 +19,14 @@ const createNumberSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema
 ): Yup.NumberSchema => {
-  const label = value.title || capitalize(key);
+  const defaultMessage =
+    getErrorMessage(value.description, DataTypes.NUMBER, [
+      key,
+      { title: value.title }
+    ]) || "This field is not of type number";
 
   return createBaseNumberSchema(
-    Yup.number().typeError(`${label} is not of type number`),
+    Yup.number().typeError(defaultMessage),
     [key, value],
     jsonSchema
   );
@@ -47,11 +50,8 @@ export const createBaseNumberSchema = (
     minimum,
     maximum,
     multipleOf,
-    required,
     title
   } = value;
-
-  const label = capitalize(key);
 
   const isMinNumber = isNumber(minimum);
   const isMaxNumber = isNumber(maximum);
@@ -81,7 +81,7 @@ export const createBaseNumberSchema = (
       getErrorMessage(description, SchemaKeywords.MINIMUM, [
         key,
         { title, minimum }
-      ]) || `${label} requires a minimum value of ${minimum}`;
+      ]) || `This field requires a minimum value of ${minimum}`;
 
     yupSchema = yupSchema.concat(yupSchema.min(minimum as number, message));
   }
@@ -92,7 +92,7 @@ export const createBaseNumberSchema = (
         key,
         { title, exclusiveMinimum }
       ]) ||
-      `${label} requires a exclusive minimum value of ${exclusiveMinimum}`;
+      `This field requires a exclusive minimum value of ${exclusiveMinimum}`;
 
     yupSchema = yupSchema.concat(
       yupSchema.min((exclusiveMinimum as number) + 1, message)
@@ -105,7 +105,7 @@ export const createBaseNumberSchema = (
       getErrorMessage(description, SchemaKeywords.MAXIMUM, [
         key,
         { title, maximum }
-      ]) || capitalize(`${label} cannot exceed a maximum value of ${maximum}`);
+      ]) || `This field cannot exceed a maximum value of ${maximum}`;
 
     yupSchema = yupSchema.concat(yupSchema.max(maximum as number, message));
   }
@@ -116,10 +116,7 @@ export const createBaseNumberSchema = (
         key,
         { title, exclusiveMaximum }
       ]) ||
-      capitalize(
-        `${label} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
-      );
-
+      `This field cannot exceed a exclusive maximum value of ${exclusiveMaximum}`;
     yupSchema = yupSchema.concat(
       yupSchema.max((exclusiveMaximum as number) - 1, message)
     );
@@ -130,7 +127,7 @@ export const createBaseNumberSchema = (
       getErrorMessage(description, SchemaKeywords.MULTIPLE_OF, [
         key,
         { title, multipleOf }
-      ]) || capitalize(`${label} requires a multiple of ${multipleOf}`);
+      ]) || `This field requires a multiple of ${multipleOf}`;
 
     yupSchema = yupSchema.concat(
       yupSchema.test({
@@ -144,33 +141,32 @@ export const createBaseNumberSchema = (
     );
   }
 
-  const constantErrorMessage =
-    getErrorMessage(description, SchemaKeywords.CONST, [
-      key,
-      { const: _const?.toString(), title }
-    ]) || `${label} does not match constant`;
+  const constantErrorMessage = getErrorMessage(
+    description,
+    SchemaKeywords.CONST,
+    [key, { const: _const?.toString(), title }]
+  );
 
   yupSchema = createConstantSchema<Yup.NumberSchema>(yupSchema, [
     constantErrorMessage,
     _const as string
   ]);
 
-  const enumErrorMessage =
-    getErrorMessage(description, SchemaKeywords.ENUM, [
-      key,
-      { enum: _enum?.join(","), title }
-    ]) || `${label} does not match any of the enumerables`;
+  const enumErrorMessage = getErrorMessage(description, SchemaKeywords.ENUM, [
+    key,
+    { enum: _enum?.join(","), title }
+  ]);
 
   yupSchema = createEnumSchema<Yup.NumberSchema>(yupSchema, [
     enumErrorMessage,
     _enum
   ]);
 
-  const requiredErrorMessage =
-    getErrorMessage(description, SchemaKeywords.REQUIRED, [
-      key,
-      { title, required: required?.join(",") }
-    ]) || `${label} is required`;
+  const requiredErrorMessage = getErrorMessage(
+    description,
+    SchemaKeywords.REQUIRED,
+    [key, { title, required: jsonSchema.required?.join(",") }]
+  );
 
   yupSchema = createRequiredSchema<Yup.NumberSchema>(yupSchema, [
     requiredErrorMessage,

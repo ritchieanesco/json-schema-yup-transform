@@ -56,7 +56,7 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type string");
+    expect(valid).toBe("This field must at least contain one item of type string");
   });
 
   it("should validate numbers", () => {
@@ -102,7 +102,7 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type number");
+    expect(valid).toBe("This field must at least contain one item of type number");
   });
 
   it("should validate integers", () => {
@@ -153,7 +153,7 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type integer");
+    expect(valid).toBe("This field must at least contain one item of type integer");
   });
 
   it("should validate booleans", () => {
@@ -199,7 +199,7 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type boolean");
+    expect(valid).toBe("This field must at least contain one item of type boolean");
   });
 
   it("should validate objects", () => {
@@ -245,7 +245,7 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type object");
+    expect(valid).toBe("This field must at least contain one item of type object");
   });
 
   it("should validate array", () => {
@@ -291,6 +291,6 @@ describe("convertToYup() array contains", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Things must at least contain one item of type array");
+    expect(valid).toBe("This field must at least contain one item of type array");
   });
 });

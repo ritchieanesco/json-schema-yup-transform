@@ -91,7 +91,7 @@ describe("convertToYup() boolean", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Enable is required");
+    expect(valid).toBe("This field is required");
   });
 
   it("should set default value", () => {
@@ -153,31 +153,7 @@ describe("convertToYup() boolean", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Isactive does not match constant");
+    expect(errorMessage).toBe("This field does not match constant");
   });
 
-  it("should use title as label in error message", () => {
-    const fieldTitle = "Is Active";
-    const schema: JSONSchema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        isActive: {
-          type: "boolean",
-          title: fieldTitle
-        }
-      }
-    };
-
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({ isActive: "test" });
-    } catch (e: unknown) {
-      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(`${fieldTitle} is not of type boolean`);
-  });
 });

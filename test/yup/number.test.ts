@@ -84,7 +84,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years is required");
+    expect(valid).toBe("This field is required");
   });
 
   it("should validate minimum", () => {
@@ -117,7 +117,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years requires a minimum value of 5");
+    expect(valid).toBe("This field requires a minimum value of 5");
   });
 
   it("should validate exclusive minimum", () => {
@@ -150,7 +150,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years requires a exclusive minimum value of 5");
+    expect(valid).toBe("This field requires a exclusive minimum value of 5");
   });
 
   it("should validate maximum", () => {
@@ -183,7 +183,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years cannot exceed a maximum value of 5");
+    expect(valid).toBe("This field cannot exceed a maximum value of 5");
   });
 
   it("should validate exclusive maximum", () => {
@@ -216,7 +216,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years cannot exceed a exclusive maximum value of 5");
+    expect(valid).toBe("This field cannot exceed a exclusive maximum value of 5");
   });
 
   it("should validate minimum and maximum", () => {
@@ -351,7 +351,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years requires a multiple of 5");
+    expect(valid).toBe("This field requires a multiple of 5");
   });
 
   it("should validate constant", () => {
@@ -382,7 +382,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years does not match constant");
+    expect(valid).toBe("This field does not match constant");
   });
 
   it("should validate falsy constant", () => {
@@ -438,7 +438,7 @@ describe("convertToYup() number", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) valid = e.errors[0];
     }
-    expect(valid).toBe("Years does not match any of the enumerables");
+    expect(valid).toBe("This field does not match any of the enumerables");
   });
 
   it("should set default value", () => {
@@ -468,28 +468,4 @@ describe("convertToYup() number", () => {
     expect(isValid).toBeTruthy();
   });
 
-  it("should use title as label in error message", () => {
-    const fieldTitle = "My Age";
-    const schema: JSONSchema = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        age: {
-          type: "number",
-          title: fieldTitle
-        }
-      }
-    };
-
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({ age: "Forty" });
-    } catch (e: unknown) {
-      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(`${fieldTitle} is not of type number`);
-  });
 });

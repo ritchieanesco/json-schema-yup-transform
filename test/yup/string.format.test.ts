@@ -59,7 +59,7 @@ describe("convertToYup() string format", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Event is an invalid date and time format");
+    expect(errorMessage).toBe("This field is an invalid date and time format");
   });
 
   it("should validate time format", () => {

@@ -1,7 +1,6 @@
 import * as Yup from "yup";
 import isBoolean from "lodash/isBoolean";
-import capitalize from "lodash/capitalize";
-import { SchemaKeywords } from "../../schema";
+import { DataTypes, SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
 import { getErrorMessage } from "../config";
 import type { SchemaItem } from "../types";
@@ -24,12 +23,14 @@ const createBooleanSchema = (
     const: _const,
     default: _default,
     description,
-    required,
     title
   } = value;
-  const label = capitalize(key);
 
-  let yupSchema = Yup.boolean().typeError(`${label} is not of type boolean`);
+  const defaultMessage =
+    getErrorMessage(description, DataTypes.BOOLEAN, [key, { title }]) ||
+    "This field is not of type boolean";
+
+  let yupSchema = Yup.boolean().typeError(defaultMessage);
 
   yupSchema = createDefaultSchema<Yup.BooleanSchema>(yupSchema, [
     isBoolean(_default),
@@ -40,7 +41,7 @@ const createBooleanSchema = (
     getErrorMessage(description, SchemaKeywords.CONST, [
       key,
       { const: _const?.toString(), title }
-    ]) || `${label} does not match constant`;
+    ]);
 
   yupSchema = createConstantSchema<Yup.BooleanSchema>(yupSchema, [
     constantErrorMessage,
@@ -50,8 +51,8 @@ const createBooleanSchema = (
   const requiredErrorMessage =
     getErrorMessage(description, SchemaKeywords.REQUIRED, [
       key,
-      { title, required: required?.join(",") }
-    ]) || `${label} is required`;
+      { title, required: jsonSchema.required?.join(",") }
+    ]);
 
   yupSchema = createRequiredSchema<Yup.BooleanSchema>(yupSchema, [
     requiredErrorMessage,

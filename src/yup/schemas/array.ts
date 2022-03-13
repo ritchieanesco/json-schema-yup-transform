@@ -5,7 +5,6 @@ import isNumber from "lodash/isNumber";
 import isInteger from "lodash/isInteger";
 import isString from "lodash/isString";
 import isArray from "lodash/isArray";
-import capitalize from "lodash/capitalize";
 import isPlainObject from "lodash/isPlainObject";
 import stringifyObject from "stringify-object";
 import uniq from "lodash/uniq";
@@ -72,16 +71,13 @@ const createArraySchema = (
     items,
     maxItems,
     minItems,
-    required,
     title,
     uniqueItems
   } = value;
 
-  const label = capitalize(key);
-
   const defaultError =
     getErrorMessage(description, DataTypes.ARRAY, [key, { title }]) ||
-    `${label} is not of type array`;
+    `This field is not of type array`;
 
   let yupSchema = Yup.array().typeError(defaultError);
 
@@ -93,8 +89,8 @@ const createArraySchema = (
   const requiredErrorMessage =
     getErrorMessage(description, SchemaKeywords.REQUIRED, [
       key,
-      { title, required: required?.join(",") }
-    ]) || `${label} is required`;
+      { title, required: jsonSchema.required?.join(",") }
+    ]);
   yupSchema = createRequiredSchema<Yup.ArraySchema<any>>(yupSchema, [
     requiredErrorMessage,
     { key, required: jsonSchema.required }
@@ -107,7 +103,7 @@ const createArraySchema = (
       getErrorMessage(description, SchemaKeywords.CONTAINS, [
         key,
         { title, contains: type?.toString() }
-      ]) || `${label} must at least contain one item of type ${type}`;
+      ]) || `This field must at least contain one item of type ${type}`;
 
     yupSchema = yupSchema.concat(
       yupSchema.test({
@@ -131,7 +127,7 @@ const createArraySchema = (
   } else if (Array.isArray(items)) {
     const message =
       getErrorMessage(description, SchemaKeywords.TUPLE, [key, { title }]) ||
-      `${label} must be of same type`;
+      `This field must be of same type`;
 
     yupSchema = yupSchema.concat(
       yupSchema.test({
@@ -151,7 +147,7 @@ const createArraySchema = (
       getErrorMessage(description, SchemaKeywords.MINIMUM_ITEMS, [
         key,
         { title, minItems }
-      ]) || `${label} requires a minimum of ${minItems} items`;
+      ]) || `This field requires a minimum of ${minItems} items`;
     yupSchema = yupSchema.concat(yupSchema.min(minItems, message));
   }
 
@@ -160,7 +156,7 @@ const createArraySchema = (
       getErrorMessage(description, SchemaKeywords.MAXIMUM_ITEMS, [
         key,
         { title, maxItems }
-      ]) || `${label} cannot exceed a maximum of ${maxItems} items`;
+      ]) || `This field cannot exceed a maximum of ${maxItems} items`;
     yupSchema = yupSchema.concat(yupSchema.max(maxItems, message));
   }
 
@@ -168,7 +164,7 @@ const createArraySchema = (
     getErrorMessage(description, SchemaKeywords.CONST, [
       key,
       { const: _const?.toString(), title }
-    ]) || `${label} does not match constant`;
+    ]);
   yupSchema = createConstantSchema<Yup.ArraySchema<any>>(yupSchema, [
     constantErrorMessage,
     _const as string
@@ -178,7 +174,7 @@ const createArraySchema = (
     getErrorMessage(description, SchemaKeywords.ENUM, [
       key,
       { enum: _enum?.join(","), title }
-    ]) || `${label} does not match any of the enumerables`;
+    ]);
   yupSchema = createEnumSchema<Yup.ArraySchema<any>>(yupSchema, [
     enumErrorMessage,
     _enum
@@ -189,7 +185,7 @@ const createArraySchema = (
       getErrorMessage(description, SchemaKeywords.UNIQUE_ITEMS, [
         key,
         { title, uniqueItems }
-      ]) || `${label} values are not unique`;
+      ]) || `This field do not have unique values`;
 
     yupSchema = yupSchema.concat(
       yupSchema.test({

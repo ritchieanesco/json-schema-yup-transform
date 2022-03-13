@@ -107,7 +107,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is required");
+    expect(errorMessage).toBe("This field is required");
   });
 
   it("should validate minimum character length", () => {
@@ -141,7 +141,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name requires a minimum of 6 characters");
+    expect(errorMessage).toBe("This field requires a minimum of 6 characters");
   });
 
   it("should validate maximum character length", () => {
@@ -175,7 +175,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name cannot exceed a maximum of 6 characters");
+    expect(errorMessage).toBe("This field cannot exceed a maximum of 6 characters");
   });
 
   it("should validate pattern", () => {
@@ -214,7 +214,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is an incorrect format");
+    expect(errorMessage).toBe("This field is an incorrect format");
   });
 
   it("should validate constant", () => {
@@ -248,7 +248,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name does not match constant");
+    expect(errorMessage).toBe("This field does not match constant");
   });
 
   it("should validate enum", () => {
@@ -287,7 +287,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name does not match any of the enumerables");
+    expect(errorMessage).toBe("This field does not match any of the enumerables");
   });
 
   it("should set default value", () => {
@@ -380,33 +380,7 @@ describe("convertToYup() string", () => {
     } catch (e: unknown) {
       if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
     }
-    expect(errorMessage).toBe("Name is an incorrect format");
-  });
-
-  it("should use title as label in error message", () => {
-    const fieldTitle = "First Name";
-    const schema: JSONSchemaExtended = {
-      type: "object",
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "test",
-      title: "Test",
-      properties: {
-        name: {
-          type: "string",
-          title: fieldTitle
-        }
-      },
-      required: ["name"]
-    };
-
-    let yupschema = convertToYup(schema) as Yup.ObjectSchema<any>;
-    let errorMessage;
-    try {
-      errorMessage = yupschema.validateSync({ name: "" });
-    } catch (e: unknown) {
-      if (e instanceof Yup.ValidationError) errorMessage = e.errors[0];
-    }
-    expect(errorMessage).toBe(`${fieldTitle} is required`);
+    expect(errorMessage).toBe("This field is an incorrect format");
   });
 
   it("should validate multiple types in a nested object", () => {

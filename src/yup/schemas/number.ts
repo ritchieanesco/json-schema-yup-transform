@@ -1,8 +1,10 @@
 import * as Yup from "yup";
 import isNumber from "lodash/isNumber";
 import capitalize from "lodash/capitalize";
-import type { SchemaItem } from "../types";
+import { SchemaKeywords } from "../../schema";
 import type { JSONSchema } from "../../schema";
+import { getErrorMessage } from "../config";
+import type { SchemaItem } from "../types";
 import {
   createConstantSchema,
   createDefaultSchema,
@@ -35,14 +37,31 @@ export const createBaseNumberSchema = (
   [key, value]: SchemaItem,
   jsonSchema: JSONSchema
 ): Yup.NumberSchema => {
-  const label = value.title || capitalize(key);
+  const {
+    const: _const,
+    default: _default,
+    description,
+    enum: _enum,
+    exclusiveMaximum,
+    exclusiveMinimum,
+    minimum,
+    maximum,
+    multipleOf,
+    required,
+    title
+  } = value;
 
-  const isMinNumber = isNumber(value.minimum);
-  const isMaxNumber = isNumber(value.maximum);
-  const isExclusiveMaxNumber = isNumber(value.exclusiveMaximum);
-  const isExclusiveMinNumber = isNumber(value.exclusiveMinimum);
+  const label = capitalize(key);
 
-  yupSchema = createDefaultSchema<Yup.NumberSchema>(yupSchema, [ isNumber(value.default),  value.default])
+  const isMinNumber = isNumber(minimum);
+  const isMaxNumber = isNumber(maximum);
+  const isExclusiveMaxNumber = isNumber(exclusiveMaximum);
+  const isExclusiveMinNumber = isNumber(exclusiveMinimum);
+
+  yupSchema = createDefaultSchema<Yup.NumberSchema>(yupSchema, [
+    isNumber(_default),
+    _default
+  ]);
 
   if (isExclusiveMinNumber && isMinNumber) {
     throw new Error(
@@ -57,67 +76,104 @@ export const createBaseNumberSchema = (
   }
 
   // Minimum value is inclusive
-  if (isMinNumber)
-    yupSchema = yupSchema.concat(
-      yupSchema.min(
-        value.minimum as number,
-        `${label} requires a minimum value of ${value.minimum}`
-      )
-    );
+  if (isMinNumber) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.MINIMUM, [
+        key,
+        { title, minimum }
+      ]) || `${label} requires a minimum value of ${minimum}`;
+
+    yupSchema = yupSchema.concat(yupSchema.min(minimum as number, message));
+  }
 
   if (isExclusiveMinNumber) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.EXCLUSIVE_MINIMUM, [
+        key,
+        { title, exclusiveMinimum }
+      ]) ||
+      `${label} requires a exclusive minimum value of ${exclusiveMinimum}`;
+
     yupSchema = yupSchema.concat(
-      yupSchema.min(
-        (value.exclusiveMinimum as number) + 1,
-        `${label} requires a exclusive minimum value of ${value.exclusiveMinimum}`
-      )
+      yupSchema.min((exclusiveMinimum as number) + 1, message)
     );
   }
 
   // Maximum value is inclusive
   if (isMaxNumber) {
-    yupSchema = yupSchema.concat(
-      yupSchema.max(
-        value.maximum as number,
-        `${label} cannot exceed a maximum value of ${value.maximum}`
-      )
-    );
+    const message =
+      getErrorMessage(description, SchemaKeywords.MAXIMUM, [
+        key,
+        { title, maximum }
+      ]) || capitalize(`${label} cannot exceed a maximum value of ${maximum}`);
+
+    yupSchema = yupSchema.concat(yupSchema.max(maximum as number, message));
   }
 
   if (isExclusiveMaxNumber) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.EXCLUSIVE_MAXIMUM, [
+        key,
+        { title, exclusiveMaximum }
+      ]) ||
+      capitalize(
+        `${label} cannot exceed a exclusive maximum value of ${exclusiveMaximum}`
+      );
+
     yupSchema = yupSchema.concat(
-      yupSchema.max(
-        (value.exclusiveMaximum as number) - 1,
-        `${label} cannot exceed a exclusive maximum value of ${value.exclusiveMaximum}`
-      )
+      yupSchema.max((exclusiveMaximum as number) - 1, message)
     );
   }
 
-  if (isNumber(value.multipleOf)) {
+  if (isNumber(multipleOf)) {
+    const message =
+      getErrorMessage(description, SchemaKeywords.MULTIPLE_OF, [
+        key,
+        { title, multipleOf }
+      ]) || capitalize(`${label} requires a multiple of ${multipleOf}`);
+
     yupSchema = yupSchema.concat(
       yupSchema.test({
         name: "multipleOf",
-        message: `${label} requires a multiple of ${value.multipleOf}`,
+        message,
         test: (field: number | undefined): boolean => {
           if (field === undefined) return true;
-          return field % (value.multipleOf as number) === 0;
+          return field % (multipleOf as number) === 0;
         }
       })
     );
   }
 
+  const constantErrorMessage =
+    getErrorMessage(description, SchemaKeywords.CONST, [
+      key,
+      { const: _const?.toString(), title }
+    ]) || `${label} does not match constant`;
+
   yupSchema = createConstantSchema<Yup.NumberSchema>(yupSchema, [
-    label,
-    value.const as string
+    constantErrorMessage,
+    _const as string
   ]);
+
+  const enumErrorMessage =
+    getErrorMessage(description, SchemaKeywords.ENUM, [
+      key,
+      { enum: _enum?.join(","), title }
+    ]) || `${label} does not match any of the enumerables`;
 
   yupSchema = createEnumSchema<Yup.NumberSchema>(yupSchema, [
-    label,
-    value.enum
+    enumErrorMessage,
+    _enum
   ]);
 
+  const requiredErrorMessage =
+    getErrorMessage(description, SchemaKeywords.REQUIRED, [
+      key,
+      { title, required: required?.join(",") }
+    ]) || `${label} is required`;
+
   yupSchema = createRequiredSchema<Yup.NumberSchema>(yupSchema, [
-    label,
+    requiredErrorMessage,
     { key, required: jsonSchema.required }
   ]);
 

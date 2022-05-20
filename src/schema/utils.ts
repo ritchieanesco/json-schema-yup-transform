@@ -6,8 +6,8 @@ import isNumber from "lodash/isNumber";
 import isBoolean from "lodash/isBoolean";
 import isInteger from "lodash/isInteger";
 import { getRequired } from "./selectors";
-import { DataTypes } from ".";
-import type { JSONSchema } from ".";
+import { DataTypes } from "./types";
+import type { JSONSchema } from "./types";
 
 /**
  * Returns a boolean if ID is a required field

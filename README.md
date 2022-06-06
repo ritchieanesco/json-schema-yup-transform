@@ -74,7 +74,7 @@ The tables below outline which keywords each schema type supports.
 | enum             | :heavy_check_mark: |
 | multipleOf       | :heavy_check_mark: |
 | minimum          | :heavy_check_mark: |
-| exclusiveMaximum | :heavy_check_mark: |
+| exclusiveMinimum | :heavy_check_mark: |
 | maximum          | :heavy_check_mark: |
 | exclusiveMaximum | :heavy_check_mark: |
 

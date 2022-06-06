@@ -96,7 +96,7 @@ export const createBaseNumberSchema = (
       );
 
     Schema = Schema.concat(
-      Schema.min((exclusiveMinimum as number) + 1, message)
+      Schema.moreThan((exclusiveMinimum as number), message)
     );
   }
 
@@ -122,7 +122,7 @@ export const createBaseNumberSchema = (
       );
 
     Schema = Schema.concat(
-      Schema.max((exclusiveMaximum as number) - 1, message)
+      Schema.lessThan((exclusiveMaximum as number), message)
     );
   }
 

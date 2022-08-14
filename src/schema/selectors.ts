@@ -2,8 +2,12 @@ import get from "lodash/get";
 import nth from "lodash/nth";
 import findKey from "lodash/findKey";
 import { DEFINITION_ROOT } from "./constants";
-import type { JSONSchema, JSONSchemaDefinition, JSONSchemaBasicType } from "."
-import { CompositSchemaTypes, isSchemaObject } from ".";
+import type {
+  JSONSchema,
+  JSONSchemaDefinition,
+  JSONSchemaBasicType
+} from "./types";
+import { CompositSchemaTypes, isSchemaObject } from "./types";
 
 /**
  * Retrieve definitions property value
@@ -52,18 +56,16 @@ export const getProperties = (
     }
   | undefined => schema.properties;
 
-export const getPropertyType = (
-  propertyItem: JSONSchema
-): JSONSchema["type"] => propertyItem.type;
+export const getPropertyType = (propertyItem: JSONSchema): JSONSchema["type"] =>
+  propertyItem.type;
 
 export const getCompositionType = (
   propertyItem: JSONSchema
-): CompositSchemaTypes | false | undefined => (
-  propertyItem.anyOf && CompositSchemaTypes.ANYOF
-  || propertyItem.allOf && CompositSchemaTypes.ALLOF
-  || propertyItem.oneOf && CompositSchemaTypes.ONEOF
-  || propertyItem.not && CompositSchemaTypes.NOT
-);
+): CompositSchemaTypes | false | undefined =>
+  (propertyItem.anyOf && CompositSchemaTypes.ANYOF) ||
+  (propertyItem.allOf && CompositSchemaTypes.ALLOF) ||
+  (propertyItem.oneOf && CompositSchemaTypes.ONEOF) ||
+  (propertyItem.not && CompositSchemaTypes.NOT);
 
 /**
  * Retrieve required property value
@@ -89,6 +91,6 @@ const get$RefValue = (ref: string): string => {
  */
 
 export const getItemsArrayItem = (
-  items: (JSONSchemaBasicType)[],
+  items: JSONSchemaBasicType[],
   index: number
 ): JSONSchemaBasicType | undefined => nth(items, index);

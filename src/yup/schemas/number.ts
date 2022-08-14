@@ -95,7 +95,7 @@ export const createBaseNumberSchema = (
       `This field requires a exclusive minimum value of ${exclusiveMinimum}`;
 
     yupSchema = yupSchema.concat(
-      yupSchema.min((exclusiveMinimum as number) + 1, message)
+      yupSchema.moreThan((exclusiveMinimum as number), message)
     );
   }
 
@@ -118,7 +118,7 @@ export const createBaseNumberSchema = (
       ]) ||
       `This field cannot exceed a exclusive maximum value of ${exclusiveMaximum}`;
     yupSchema = yupSchema.concat(
-      yupSchema.max((exclusiveMaximum as number) - 1, message)
+      yupSchema.lessThan((exclusiveMaximum as number), message)
     );
   }
 

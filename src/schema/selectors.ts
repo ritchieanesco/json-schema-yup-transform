@@ -1,7 +1,7 @@
 import { findKey, get, nth } from "lodash";
 import { DEFINITION_ROOT } from "./constants";
-import type { JSONSchema, JSONSchemaDefinition, JSONSchemaBasicType } from "."
-import { CompositSchemaTypes, isSchemaObject } from ".";
+import type { JSONSchema, JSONSchemaDefinition, JSONSchemaBasicType } from "./types"
+import { CompositSchemaTypes, isSchemaObject } from "./types";
 
 /**
  * Retrieve definitions property value
